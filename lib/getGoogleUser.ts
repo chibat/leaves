@@ -1,6 +1,7 @@
 import { getCookies } from "std/http/cookie.ts";
 import { clientId, clientSecret } from "~/lib/env.ts";
 import { getCallbackUrl } from "~/lib/getCallbackUrl.ts";
+import { CacheMap } from "./maps.ts";
 
 export type GoogleUser = {
   id: string;
@@ -13,7 +14,7 @@ export type GoogleUser = {
 
 export async function getGoogleUser(
   request: Request,
-): Promise<{ googleUser?: GoogleUser, access_token?: string }> {
+): Promise<{ googleUser?: GoogleUser; access_token?: string }> {
   const cookies = getCookies(request.headers);
 
   const accessToken = cookies["access"];
@@ -54,13 +55,25 @@ export async function getGoogleUser(
   return {};
 }
 
+const cache = new CacheMap<string, GoogleUser>({
+  max: 5,
+  expireMillis: 1000 * 60,
+  updateExpireWhenGet: false,
+});
+
 async function getUserByAccessToken(accessToken: string): Promise<GoogleUser> {
+  const cacheGoogleUser = cache.get(accessToken);
+  if (cacheGoogleUser) {
+    console.log("#### cache hit");
+    return cacheGoogleUser;
+  }
   const response = await fetch(
     "https://www.googleapis.com/oauth2/v1/userinfo?" +
       new URLSearchParams([["access_token", accessToken]]),
   );
   const json: GoogleUser = await response.json();
   if (response.status === 200) {
+    cache.set(accessToken, json);
     return json;
   }
   throw new Error(JSON.stringify(json));

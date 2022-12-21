@@ -34,7 +34,6 @@ export const handler: Handlers<{ authUrl?: string, user?: GoogleUser }> = {
 };
 
 export default function Home(props: PageProps<{ authUrl?: string, user?: GoogleUser }>) {
-  console.log(props.data);
   return (
     <>
       <Head>
