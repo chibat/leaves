@@ -21,20 +21,19 @@ function getAuthUrl(requestUrl: string): string {
     ]).toString();
 }
 
-export const handler: Handlers<{ authUrl: string, user: GoogleUser | undefined }> = {
+export const handler: Handlers<{ authUrl?: string, user?: GoogleUser }> = {
   async GET(req, ctx) {
-    const result = await getGoogleUser(req);
-    const authUrl = getAuthUrl(req.url);
-    const res = await ctx.render({ authUrl, user: result?.googleUser });
-    if (result?.access_token) {
-      setAccessTokenToCookie(res, result.access_token);
+    const {googleUser, access_token} = await getGoogleUser(req);
+    const authUrl = googleUser ? undefined : getAuthUrl(req.url);
+    const res = await ctx.render({ authUrl, user: googleUser });
+    if (access_token) {
+      setAccessTokenToCookie(res, access_token);
     }
-    console.log(result);
     return res;
   },
 };
 
-export default function Home(props: PageProps<{ authUrl: string, user: GoogleUser | undefined }>) {
+export default function Home(props: PageProps<{ authUrl?: string, user?: GoogleUser }>) {
   console.log(props.data);
   return (
     <>

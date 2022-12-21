@@ -13,7 +13,7 @@ export type GoogleUser = {
 
 export async function getGoogleUser(
   request: Request,
-): Promise<{ googleUser: GoogleUser; access_token: string | null } | null> {
+): Promise<{ googleUser?: GoogleUser, access_token?: string }> {
   const cookies = getCookies(request.headers);
 
   const accessToken = cookies["access"];
@@ -21,7 +21,7 @@ export async function getGoogleUser(
     try {
       const googleUser = await getUserByAccessToken(accessToken);
       if (googleUser) {
-        return { googleUser, access_token: null };
+        return { googleUser };
       }
     } catch (_ignore) {
       // ignore
@@ -51,7 +51,7 @@ export async function getGoogleUser(
       }
     }
   }
-  return null;
+  return {};
 }
 
 async function getUserByAccessToken(accessToken: string): Promise<GoogleUser> {
