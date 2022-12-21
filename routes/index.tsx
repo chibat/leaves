@@ -6,7 +6,7 @@ import { getCallbackUrl } from "../lib/getCallbackUrl.ts";
 import { getGoogleUser, GoogleUser } from "../lib/getGoogleUser.ts";
 import { setAccessTokenToCookie } from "../lib/setAccessTokenToCookie.ts";
 
-export function getAuthUrl(requestUrl: string): string {
+function getAuthUrl(requestUrl: string): string {
   const redirectUri = getCallbackUrl(requestUrl);
   if (!clientId) {
     throw new Error("clientId is undefined");
@@ -33,10 +33,6 @@ export const handler: Handlers<{ authUrl: string, user: GoogleUser | undefined }
     return res;
   },
 };
-
-function signout() {
-  alert('hoge');
-}
 
 export default function Home(props: PageProps<{ authUrl: string, user: GoogleUser | undefined }>) {
   console.log(props.data);
