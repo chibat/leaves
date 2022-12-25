@@ -85,7 +85,7 @@ export default function Header(props: { authUrl?: string, user?: GoogleUser }) {
               <div class="hidden sm:ml-6 sm:block">
                 <div class="flex space-x-4">
                   <a href="#" class="text-gray-500 hover:text-gray-400 py-2">About</a>
-                  <a href="#" class="text-gray-500 hover:text-gray-400 py-2">All</a>
+                  <a href="/" class="text-gray-500 hover:text-gray-400 py-2">All</a>
                   {props.user && <>
                     <a href="#" class="text-gray-500 hover:text-gray-400 py-2">Following</a>
                     <a href="#" class="text-gray-500 hover:text-gray-400 py-2">Likes</a>
@@ -160,7 +160,7 @@ export default function Header(props: { authUrl?: string, user?: GoogleUser }) {
           <div class="sm:hidden" id="mobile-menu">
             <div class="space-y-1 px-2 pt-2 pb-3">
               <a href="#" class="text-gray-500 hover:text-gray-400 block px-3 py-2">About</a>
-              <a href="#" class="text-gray-500 hover:text-gray-400 block px-3 py-2">All</a>
+              <a href="/" class="text-gray-500 hover:text-gray-400 block px-3 py-2">All</a>
               {props.user && <>
                 <a href="#" class="text-gray-500 hover:text-gray-400 block px-3 py-2">Following</a>
                 <a href="#" class="text-gray-500 hover:text-gray-400 block px-3 py-2">Likes</a>

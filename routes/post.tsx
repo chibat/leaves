@@ -24,8 +24,14 @@ function getAuthUrl(requestUrl: string): string {
 export const handler: Handlers<{ authUrl?: string, user?: GoogleUser }> = {
   async GET(req, ctx) {
     const { googleUser, access_token } = await getGoogleUser(req);
-    const authUrl = googleUser ? undefined : getAuthUrl(req.url);
-    const res = await ctx.render({ authUrl, user: googleUser });
+    if (!googleUser) {
+      // return new Response("Unauthorized", { status: 401 });
+      return new Response("", {
+        status: 307,
+        headers: { Location: "/" },
+      });
+    }
+    const res = await ctx.render({ user: googleUser });
     if (access_token) {
       setAccessTokenToCookie(res, access_token);
     }
@@ -33,36 +39,15 @@ export const handler: Handlers<{ authUrl?: string, user?: GoogleUser }> = {
   },
 };
 
-export default function Home(props: PageProps<{ authUrl?: string, user?: GoogleUser }>) {
+export default function Home(props: PageProps<{ user?: GoogleUser }>) {
   return (
     <>
       <Head>
         <title>md-sns</title>
       </Head>
-      <Header authUrl={props.data.authUrl} user={props.data.user} />
+      <Header user={props.data.user} />
       <div class="p-4 mx-auto max-w-screen-md">
-        {props.data.user &&
-          <div class="rounded-xl border-1 border-gray-100 bg-white flex items-start py-4 px-6">
-            <a href="#" class="block flex-shrink-0">
-              <img
-                src={props.data.user?.picture}
-                class="h-14 w-14 rounded-lg object-cover"
-              />
-            </a>
-            <a href="/post" class="w-full">
-              <input
-                readOnly
-                placeholder="Post"
-                class="w-full cursor-pointer mx-3 px-3 py-4 bg-white rounded bg-gray-100 " />
-            </a>
-          </div>
-        }
-        {props.data.user && <>
-          <ul>
-            <li>{props.data.user.name}</li>
-          </ul>
-        </>
-        }
+        <h1>Post</h1>
       </div>
     </>
   );
