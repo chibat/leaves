@@ -4,7 +4,7 @@ import { clientId } from "~/lib/env.ts";
 import { getCallbackUrl } from "~/lib/getCallbackUrl.ts";
 import { getGoogleUser, GoogleUser } from "~/lib/getGoogleUser.ts";
 import { setAccessTokenToCookie } from "~/lib/setAccessTokenToCookie.ts";
-import Header from "../islands/Header.tsx";
+import Header from "~/islands/Header.tsx";
 
 function getAuthUrl(requestUrl: string): string {
   const redirectUri = getCallbackUrl(requestUrl);
@@ -40,23 +40,22 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: GoogleU
         <title>md-sns</title>
       </Head>
       <Header authUrl={props.data.authUrl} user={props.data.user} />
-      <div class="p-4 mx-auto max-w-screen-md">
+      <main className="container">
         {props.data.user &&
-          <div class="rounded-xl border-1 border-gray-100 bg-white flex items-start py-4 px-6">
-            <a href="#" class="block flex-shrink-0">
-              <img
-                src={props.data.user?.picture}
-                class="h-14 w-14 rounded-lg object-cover"
-              />
-            </a>
-            <a href="/post" class="w-full">
-              <input
-                readOnly
-                placeholder="Post"
-                class="w-full cursor-pointer mx-3 px-3 py-4 bg-white rounded bg-gray-100 " />
-            </a>
+          <div className="card mb-3">
+            <div className="card-body">
+              {props.data.user.picture &&
+                <img src={props.data.user.picture} alt="mdo" width="32" height="32" className="rounded-circle me-2" />
+              }
+              <a href="/post">
+                <input className="form-control" type="text" placeholder="Post" aria-label="Post" readOnly style={{ cursor: "pointer", width: "90%", display: "inline" }} ></input>
+              </a>
+            </div>
           </div>
         }
+      </main>
+
+      <div class="p-4 mx-auto max-w-screen-md">
         {props.data.user && <>
           <ul>
             <li>{props.data.user.name}</li>

@@ -1,4 +1,37 @@
-.prose pre code {
-    color: #ccc;
-    background: #2d2d2d;
+
+a {
+  color: blue;
+  text-decoration: none;
+}
+a:hover {
+  /* text-decoration: underline; */
+}
+
+a.noDecoration {
+  color: black;
+  text-decoration: none;
+}
+
+a.noDecoration:hover {
+  color: black;
+  /* text-decoration: underline; */
+}
+
+a.doc {
+  color: blue;
+  text-decoration: none;
+}
+
+body {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+iframe {
+  max-width: 100%;
 }
