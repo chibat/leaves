@@ -2,7 +2,6 @@ import { useSignal } from "@preact/signals";
 import IconBell from "tabler_icons_tsx/tsx/bell.tsx"
 import IconBellRinging from "tabler_icons_tsx/tsx/bell-ringing.tsx"
 import IconLogout from "tabler_icons_tsx/tsx/logout.tsx"
-import IconHeart from "tabler_icons_tsx/tsx/heart.tsx"
 import IconUser from "tabler_icons_tsx/tsx/user.tsx"
 import { GoogleUser } from "~/lib/getGoogleUser.ts";
 import { useEffect, useRef } from "preact/hooks";
