@@ -2,7 +2,7 @@ import { useSignal } from "@preact/signals";
 import { GoogleUser } from "~/lib/getGoogleUser.ts";
 import { useEffect, useRef } from "preact/hooks";
 
-export default function Header(props: { authUrl?: string, user?: GoogleUser }) {
+export default function Header(props: { user?: GoogleUser }) {
   const userMenuRef = useRef<HTMLAnchorElement>(null);
   const mobileMenuRef = useRef<HTMLButtonElement>(null);
   const mobileMenuOpen = useSignal(false);
@@ -52,6 +52,7 @@ export default function Header(props: { authUrl?: string, user?: GoogleUser }) {
           <div>
             <img src="/assets/img/icon-192x192.png" width="32" class="me-2" />
             <a class="fs-4 me-3 noDecoration" href="/">md-sns</a>
+            <a class="me-3 noDecoration" href="/">Home</a>
             {props.user &&
               <>
                 <a class="me-3 noDecoration" href="/following">Following</a>
@@ -78,7 +79,6 @@ export default function Header(props: { authUrl?: string, user?: GoogleUser }) {
                   </a>
                   <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                     <li><a class="dropdown-item" href={`/users/${props.user.id}`}>Profile</a></li>
-                    <li><a class="dropdown-item" href="/likes">Likes</a></li>
                     <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="/signout">Sign out</a></li>
                   </ul>
@@ -88,14 +88,6 @@ export default function Header(props: { authUrl?: string, user?: GoogleUser }) {
           </div>
         </div>
       </header>
-
-      <div class="flex justify-center my-2">
-        {!props.user &&
-          <a href={props.authUrl} >
-            <input type="image" src="/btn_google_signin_dark_pressed_web.png" />
-          </a>
-        }
-      </div>
     </>
   );
 }

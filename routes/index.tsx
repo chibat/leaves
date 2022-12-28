@@ -5,6 +5,7 @@ import { getCallbackUrl } from "~/lib/getCallbackUrl.ts";
 import { getGoogleUser, GoogleUser } from "~/lib/getGoogleUser.ts";
 import { setAccessTokenToCookie } from "~/lib/setAccessTokenToCookie.ts";
 import Header from "~/islands/Header.tsx";
+import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "~/lib/db.ts";
 
 function getAuthUrl(requestUrl: string): string {
   const redirectUri = getCallbackUrl(requestUrl);
@@ -25,6 +26,23 @@ export const handler: Handlers<{ authUrl?: string, user?: GoogleUser }> = {
   async GET(req, ctx) {
     const { googleUser, access_token } = await getGoogleUser(req);
     const authUrl = googleUser ? undefined : getAuthUrl(req.url);
+    if (googleUser) {
+      const appUser = await transaction(async client => {
+        const user = await selectUserByGoogleId(client, googleUser.id);
+        console.log("### debug", user);
+        if (user) {
+          if (user.name !== googleUser.name || user.picture !== googleUser.picture) {
+            await updateUser(client, {id: user.id, name: googleUser.name, picture: googleUser.picture});
+          }
+          return user;
+        }
+        return await upsertUser(client, {
+          googleId: googleUser.id,
+          name: googleUser.name,
+          picture: googleUser.picture,
+        });
+      });
+    }
     const res = await ctx.render({ authUrl, user: googleUser });
     if (access_token) {
       setAccessTokenToCookie(res, access_token);
@@ -39,8 +57,15 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: GoogleU
       <Head>
         <title>md-sns</title>
       </Head>
-      <Header authUrl={props.data.authUrl} user={props.data.user} />
+      <Header user={props.data.user} />
       <main className="container">
+        {!props.data.user &&
+          <div style={{ textAlign: "center" }}>
+            <a href={props.data.authUrl} >
+              <input type="image" src="/btn_google_signin_dark_pressed_web.png" />
+            </a>
+          </div>
+        }
         {props.data.user &&
           <div className="card mb-3">
             <div className="card-body">

@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "start": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$LOCALAPPDATA/Temp --allow-run=$(where deno),$LOCALAPPDATA/Cache/esbuild/bin/esbuild-windows-64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net dev.ts"
+    "start": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$LOCALAPPDATA/Temp --allow-run=$(where deno),$LOCALAPPDATA/Cache/esbuild/bin/esbuild-windows-64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts"
   },
   "importMap": "./import_map.json",
   "compilerOptions": {

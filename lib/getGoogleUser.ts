@@ -1,7 +1,7 @@
 import { getCookies } from "std/http/cookie.ts";
 import { clientId, clientSecret } from "~/lib/env.ts";
 import { getCallbackUrl } from "~/lib/getCallbackUrl.ts";
-import { CacheMap } from "./maps.ts";
+import { CacheMap } from "~/lib/maps.ts";
 
 export type GoogleUser = {
   id: string;
