@@ -1,6 +1,7 @@
 # TODO
 機能追加するとしたら、、
-* star
+* 「投稿しました」のメッセージ
+* アイコン増やす
 * bookmark
 * search
 * tag

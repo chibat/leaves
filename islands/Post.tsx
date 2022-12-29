@@ -4,6 +4,8 @@ import * as hljs from "highlightjs";
 import DOMPurify from "dompurify";
 import { useEffect } from "preact/hooks";
 import { IS_BROWSER } from "$fresh/runtime.ts";
+import { CreatePostRequest, CreatePostResponse } from "~/routes/api/create_post.ts";
+import { request } from "~/lib/request.ts";
 
 if (IS_BROWSER) {
   // https://github.com/cure53/DOMPurify/issues/340#issuecomment-670758980
@@ -17,11 +19,7 @@ if (IS_BROWSER) {
   });
 }
 
-interface CounterProps {
-  start?: number;
-}
-
-export default function Post(props: CounterProps) {
+export default function Post() {
   const preview = useSignal(false);
   const loading = useSignal(false);
   const text = useSignal('');
@@ -43,12 +41,12 @@ export default function Post(props: CounterProps) {
 
   async function post() {
     loading.value = true;
-    // const result = await request<RequestType, ResponseType>("create_post", { source: text });
+    const result = await request<CreatePostRequest, CreatePostResponse>("create_post", { source: text.value });
     loading.value = false;
-  //   if (result.postId) {
-  //     router.push(`/posts/${result.postId}`);
-  //     return;
-  //   }
+    if (result.postId) {
+       location.href = `/posts/${result.postId}`;
+       return;
+     }
   }
 
   return (
