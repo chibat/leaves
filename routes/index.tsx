@@ -1,11 +1,9 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { clientId } from "~/lib/env.ts";
-import { getCallbackUrl } from "~/lib/getCallbackUrl.ts";
-import { getGoogleUser, GoogleUser } from "~/lib/getGoogleUser.ts";
-import { setAccessTokenToCookie } from "~/lib/setAccessTokenToCookie.ts";
+import { getCallbackUrl, getSession } from "~/lib/auth.ts";
 import Header from "~/islands/Header.tsx";
-import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "~/lib/db.ts";
+import { AppUser } from "~/lib/db.ts";
 
 function getAuthUrl(requestUrl: string): string {
   const redirectUri = getCallbackUrl(requestUrl);
@@ -22,36 +20,16 @@ function getAuthUrl(requestUrl: string): string {
     ]).toString();
 }
 
-export const handler: Handlers<{ authUrl?: string, user?: GoogleUser }> = {
+export const handler: Handlers<{ authUrl?: string, user?: AppUser }> = {
   async GET(req, ctx) {
-    const { googleUser, access_token } = await getGoogleUser(req);
-    const authUrl = googleUser ? undefined : getAuthUrl(req.url);
-    if (googleUser) {
-      const appUser = await transaction(async client => {
-        const user = await selectUserByGoogleId(client, googleUser.id);
-        console.log("### debug", user);
-        if (user) {
-          if (user.name !== googleUser.name || user.picture !== googleUser.picture) {
-            await updateUser(client, {id: user.id, name: googleUser.name, picture: googleUser.picture});
-          }
-          return user;
-        }
-        return await upsertUser(client, {
-          googleId: googleUser.id,
-          name: googleUser.name,
-          picture: googleUser.picture,
-        });
-      });
-    }
-    const res = await ctx.render({ authUrl, user: googleUser });
-    if (access_token) {
-      setAccessTokenToCookie(res, access_token);
-    }
+    const session = await getSession(req);
+    const authUrl = session ? undefined : getAuthUrl(req.url);
+    const res = await ctx.render({ authUrl, user: session?.u });
     return res;
   },
 };
 
-export default function Home(props: PageProps<{ authUrl?: string, user?: GoogleUser }>) {
+export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser }>) {
   return (
     <>
       <Head>

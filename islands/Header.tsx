@@ -1,8 +1,8 @@
 import { useSignal } from "@preact/signals";
-import { GoogleUser } from "~/lib/getGoogleUser.ts";
 import { useEffect, useRef } from "preact/hooks";
+import { AppUser } from "~/lib/db.ts";
 
-export default function Header(props: { user?: GoogleUser }) {
+export default function Header(props: { user?: AppUser }) {
   const userMenuRef = useRef<HTMLAnchorElement>(null);
   const mobileMenuRef = useRef<HTMLButtonElement>(null);
   const mobileMenuOpen = useSignal(false);
@@ -50,7 +50,7 @@ export default function Header(props: { user?: GoogleUser }) {
       <header class="py-3 mb-3 border-bottom bg-white">
         <div class="container-fluid d-grid gap-3 align-items-center" style={{ gridTemplateColumns: "1fr 2fr" }}>
           <div>
-            <img src="/assets/img/icon-192x192.png" width="32" class="me-2" />
+            <img src="/assets/img/icon-192x192.png" width="32" class="me-2" alt="md-sns" />
             <a class="fs-4 me-3 noDecoration" href="/">md-sns</a>
             <a class="me-3 noDecoration" href="/">Home</a>
             {props.user &&

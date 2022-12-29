@@ -8,5 +8,11 @@ if (!maybeClientSecret) {
   Deno.exit(2);
 }
 
+const jwkString = Deno.env.get("MDSNS_JWK");
+if (!jwkString) {
+  Deno.exit(3);
+}
+
 export const clientId = maybeClientId;
 export const clientSecret = maybeClientSecret;
+export const jwk = JSON.parse(jwkString);

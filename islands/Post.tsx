@@ -6,6 +6,7 @@ import { useEffect } from "preact/hooks";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
 if (IS_BROWSER) {
+  // https://github.com/cure53/DOMPurify/issues/340#issuecomment-670758980
   DOMPurify.addHook("uponSanitizeElement", (node: any, data) => {
     if (data.tagName === "iframe") {
       const src = node.getAttribute("src") || "";

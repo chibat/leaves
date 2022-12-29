@@ -1,41 +1,94 @@
 import { Handlers } from "$fresh/server.ts";
 import { clientId, clientSecret } from "~/lib/env.ts";
-import { getCallbackUrl } from "~/lib/getCallbackUrl.ts";
-import { getTokenByCode } from "~/lib/getTokenByCode.ts";
+import { getCallbackUrl, JwtType } from "~/lib/auth.ts";
 import { setCookie } from "std/http/cookie.ts";
-import { setAccessTokenToCookie } from "~/lib/setAccessTokenToCookie.ts";
+import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "../lib/db.ts";
+import { serializeJwt } from "~/lib/jwt.ts";
+
+export type Token = { access_token: string; refresh_token: string };
+
+export type GoogleUser = {
+  id: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+  locale: string;
+};
 
 export const handler: Handlers = {
   async GET(req, ctx) {
     const searchParams = new URL(req.url).searchParams;
     const code = searchParams.get("code");
     const res = await ctx.render();
+
     if (code) {
       const redirectUri = getCallbackUrl(req.url);
 
-      const { access_token, refresh_token } = await getTokenByCode(
-        clientId,
-        clientSecret,
-        redirectUri,
-        code,
+      const tokenResponse = await fetch(
+        "https://accounts.google.com/o/oauth2/token",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams([
+            ["client_id", clientId],
+            ["client_secret", clientSecret],
+            ["redirect_uri", redirectUri],
+            ["grant_type", "authorization_code"],
+            ["code", code],
+          ]),
+        },
+      );
+      const { access_token } = await tokenResponse.json() as Token;
+
+      const userResponse = await fetch(
+        "https://www.googleapis.com/oauth2/v1/userinfo?" +
+        new URLSearchParams([["access_token", access_token]]),
+      );
+      const googleUser: GoogleUser = await userResponse.json();
+      if (userResponse.status !== 200) {
+        throw new Error(JSON.stringify(googleUser));
+      }
+
+      await fetch(
+        "https://accounts.google.com/o/oauth2/revoke?" +
+        new URLSearchParams([["token", access_token]]),
       );
 
-      if (access_token) {
-        setAccessTokenToCookie(res, access_token);
-      }
-      if (refresh_token) {
-        setCookie(res.headers, {
-          name: "refresh",
-          value: refresh_token,
-          sameSite: "Strict",
-          httpOnly: true,
-          secure: true,
-          path: "/",
+      const appUser = await transaction(async (client) => {
+        const user = await selectUserByGoogleId(client, googleUser.id);
+        console.log("### debug", user);
+        if (user) {
+          if (
+            user.name !== googleUser.name || user.picture !== googleUser.picture
+          ) {
+            await updateUser(client, {
+              id: user.id,
+              name: googleUser.name,
+              picture: googleUser.picture,
+            });
+          }
+          return user;
+        }
+        return await upsertUser(client, {
+          googleId: googleUser.id,
+          name: googleUser.name,
+          picture: googleUser.picture,
         });
-      }
+      });
+
+      const session = await serializeJwt({ u: appUser } as JwtType);
+      setCookie(res.headers, {
+        name: "session",
+        value: session,
+        sameSite: "Strict",
+        httpOnly: true,
+        secure: true,
+        path: "/",
+      });
     }
     return res;
-  },
+  }
 }
 
 export default function Callback() {
