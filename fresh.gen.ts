@@ -10,7 +10,8 @@ import * as $3 from "./routes/api/joke.ts";
 import * as $4 from "./routes/callback.tsx";
 import * as $5 from "./routes/index.tsx";
 import * as $6 from "./routes/post.tsx";
-import * as $7 from "./routes/signout.tsx";
+import * as $7 from "./routes/posts/[postId]/index.tsx";
+import * as $8 from "./routes/signout.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 import * as $$1 from "./islands/Header.tsx";
 import * as $$2 from "./islands/Post.tsx";
@@ -24,7 +25,8 @@ const manifest = {
     "./routes/callback.tsx": $4,
     "./routes/index.tsx": $5,
     "./routes/post.tsx": $6,
-    "./routes/signout.tsx": $7,
+    "./routes/posts/[postId]/index.tsx": $7,
+    "./routes/signout.tsx": $8,
   },
   islands: {
     "./islands/Counter.tsx": $$0,

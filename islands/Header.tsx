@@ -2,7 +2,7 @@ import { useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
 
-export default function Header(props: { user?: AppUser }) {
+export default function Header(props: { user?: AppUser, authUrl?: string }) {
   const userMenuRef = useRef<HTMLAnchorElement>(null);
   const mobileMenuRef = useRef<HTMLButtonElement>(null);
   const mobileMenuOpen = useSignal(false);
@@ -88,6 +88,13 @@ export default function Header(props: { user?: AppUser }) {
           </div>
         </div>
       </header>
+      {!props.user && props.authUrl &&
+        <div style={{ textAlign: "center" }}>
+          <a href={props.authUrl} >
+            <input type="image" src="/btn_google_signin_dark_pressed_web.png" />
+          </a>
+        </div>
+      }
     </>
   );
 }

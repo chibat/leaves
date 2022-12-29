@@ -1,24 +1,9 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { clientId } from "~/lib/env.ts";
-import { getCallbackUrl, getSession } from "~/lib/auth.ts";
+import { getAuthUrl, getCallbackUrl, getSession } from "~/lib/auth.ts";
 import Header from "~/islands/Header.tsx";
 import { AppUser } from "~/lib/db.ts";
 
-function getAuthUrl(requestUrl: string): string {
-  const redirectUri = getCallbackUrl(requestUrl);
-  if (!clientId) {
-    throw new Error("clientId is undefined");
-  }
-  return "https://accounts.google.com/o/oauth2/auth?" +
-    new URLSearchParams([
-      ["client_id", clientId],
-      ["redirect_uri", redirectUri],
-      ["scope", "https://www.googleapis.com/auth/userinfo.profile"],
-      ["access_type", "offline"],
-      ["response_type", "code"],
-    ]).toString();
-}
 
 export const handler: Handlers<{ authUrl?: string, user?: AppUser }> = {
   async GET(req, ctx) {
@@ -35,15 +20,8 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
       <Head>
         <title>md-sns</title>
       </Head>
-      <Header user={props.data.user} />
+      <Header user={props.data.user} authUrl={props.data.authUrl} />
       <main className="container">
-        {!props.data.user &&
-          <div style={{ textAlign: "center" }}>
-            <a href={props.data.authUrl} >
-              <input type="image" src="/btn_google_signin_dark_pressed_web.png" />
-            </a>
-          </div>
-        }
         {props.data.user &&
           <div className="card mb-3">
             <div className="card-body">
