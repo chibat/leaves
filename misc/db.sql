@@ -20,7 +20,6 @@ CREATE TABLE post (
  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX post_user_id ON post(user_id);
-ALTER TABLE post drop COLUMN likes;
 
 DROP TABLE comment;
 CREATE TABLE comment (
@@ -55,10 +54,6 @@ CREATE TABLE notification (
  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX notification_user_id ON notification(user_id);
-ALTER TABLE notification ADD COLUMN type notification_type;
-UPDATE notification SET type='follow' WHERE type IS NULL AND post_id IS NULL;
-UPDATE notification SET type='comment' WHERE type IS NULL AND post_id IS NOT NULL;
-ALTER TABLE notification ALTER COLUMN type SET NOT NULL;
 
 DROP TABLE likes;
 CREATE TABLE likes (
