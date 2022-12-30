@@ -1,4 +1,4 @@
-import { HandlerContext, Handlers } from "$fresh/server.ts";
+import { Handlers } from "$fresh/server.ts";
 import { insertPost, pool } from "~/lib/db.ts";
 import { getSession } from "~/lib/auth.ts";
 
@@ -6,7 +6,7 @@ export type CreatePostRequest = { source: string };
 export type CreatePostResponse = { postId: number };
 
 export const handler: Handlers = {
-  async POST(request: Request, _ctx: HandlerContext): Promise<Response> {
+  async POST(request) {
     console.log(request.url);
 
     const session = await getSession(request);
