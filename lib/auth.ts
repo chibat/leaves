@@ -5,16 +5,30 @@ import { clientId } from "~/lib/env.ts";
 
 export type JwtType = { u: AppUser };
 
-export async function getSession(req: Request) {
-    const cookies = getCookies(req.headers);
-    const sessionString = cookies["session"];
-    return sessionString ? await deserializeJwt(sessionString) as JwtType : undefined;
+export async function getSession(req: Request): Promise<JwtType | undefined> {
+  const cookies = getCookies(req.headers);
+  const sessionString = cookies["session"];
+  // return sessionString ? await deserializeJwt(sessionString) as JwtType : undefined;
+  // TODO debug
+  return {
+    u: {
+      id: 1,
+      google_id: "1",
+      name: "Tomofumi Chiba",
+      picture:
+        "https://lh3.googleusercontent.com/a/AEdFTp50r3WlI_9VqwRr7RLSwnbZFqhStQRokJ4JdIoPeBU=s96-c",
+      notification: false,
+      created_at: "2022-12-28T14:30:11.171Z",
+      updated_at: "2022-12-28T14:30:11.171Z",
+    },
+  };
 }
 
 export function getCallbackUrl(requestUrl: string) {
   console.log(`${requestUrl} requestUrl`);
   const url = new URL(requestUrl);
-  return (url.hostname === "localhost" ? "http" : "https") + "://" + url.host + "/callback";
+  return (url.hostname === "localhost" ? "http" : "https") + "://" + url.host +
+    "/callback";
 }
 
 export function getAuthUrl(requestUrl: string): string {
