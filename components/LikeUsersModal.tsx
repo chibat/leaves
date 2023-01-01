@@ -1,8 +1,8 @@
 import { useEffect, useState } from "preact/hooks";
-import Users from '~/components/users.tsx'
 import { request } from '~/lib/request.ts'
 
 import type { RequestType as LikeUsersRequest, ResponseType as LikeUsersResponse } from "~/routes/api/get_like_users.ts";
+import Users from "~/components/Users.tsx";
 
 export default function LikeUsersModal(props: { postId: number, modal: boolean, setModal: (modal: boolean) => void }) {
 
@@ -23,30 +23,30 @@ export default function LikeUsersModal(props: { postId: number, modal: boolean, 
   }, []);
 
   return (
-    <ReactModal
-      isOpen={props.modal}
-      contentLabel="Likes"
-      onRequestClose={closeModal}
-      className="modal-dialog"
+    <div
+      // isOpen={props.modal}
+      // contentLabel="Likes"
+      // onRequestClose={closeModal}
+      class="modal-dialog"
     >
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">Likes</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeModal}></button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Likes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeModal}></button>
         </div>
-        <div className="modal-body">
+        <div class="modal-body">
           {loading &&
-            <div className="d-flex justify-content-center">
-              <div className="spinner-border" role="status">
-                <span className="visually-hidden">Loading...</span>
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
               </div>
             </div>
           }
           <Users users={users} />
         </div>
-        <div className="modal-footer">
-          <button className="btn btn-secondary" onClick={closeModal}>Close</button>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onClick={closeModal}>Close</button>
         </div>
       </div>
-    </ReactModal>);
+    </div>);
 }

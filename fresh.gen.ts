@@ -13,16 +13,20 @@ import * as $6 from "./routes/api/delete_comment.ts";
 import * as $7 from "./routes/api/delete_follow.ts";
 import * as $8 from "./routes/api/delete_like.ts";
 import * as $9 from "./routes/api/delete_post.ts";
-import * as $10 from "./routes/api/joke.ts";
-import * as $11 from "./routes/api/update_post.ts";
-import * as $12 from "./routes/callback.tsx";
-import * as $13 from "./routes/index.tsx";
-import * as $14 from "./routes/post.tsx";
-import * as $15 from "./routes/posts/[postId]/index.tsx";
-import * as $16 from "./routes/signout.tsx";
+import * as $10 from "./routes/api/get_comments.ts";
+import * as $11 from "./routes/api/get_like_users.ts";
+import * as $12 from "./routes/api/is_liked.ts";
+import * as $13 from "./routes/api/joke.ts";
+import * as $14 from "./routes/api/update_post.ts";
+import * as $15 from "./routes/callback.tsx";
+import * as $16 from "./routes/index.tsx";
+import * as $17 from "./routes/post.tsx";
+import * as $18 from "./routes/posts/[postId]/index.tsx";
+import * as $19 from "./routes/signout.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 import * as $$1 from "./islands/Header.tsx";
 import * as $$2 from "./islands/NewPost.tsx";
+import * as $$3 from "./islands/Post.tsx";
 
 const manifest = {
   routes: {
@@ -36,18 +40,22 @@ const manifest = {
     "./routes/api/delete_follow.ts": $7,
     "./routes/api/delete_like.ts": $8,
     "./routes/api/delete_post.ts": $9,
-    "./routes/api/joke.ts": $10,
-    "./routes/api/update_post.ts": $11,
-    "./routes/callback.tsx": $12,
-    "./routes/index.tsx": $13,
-    "./routes/post.tsx": $14,
-    "./routes/posts/[postId]/index.tsx": $15,
-    "./routes/signout.tsx": $16,
+    "./routes/api/get_comments.ts": $10,
+    "./routes/api/get_like_users.ts": $11,
+    "./routes/api/is_liked.ts": $12,
+    "./routes/api/joke.ts": $13,
+    "./routes/api/update_post.ts": $14,
+    "./routes/callback.tsx": $15,
+    "./routes/index.tsx": $16,
+    "./routes/post.tsx": $17,
+    "./routes/posts/[postId]/index.tsx": $18,
+    "./routes/signout.tsx": $19,
   },
   islands: {
     "./islands/Counter.tsx": $$0,
     "./islands/Header.tsx": $$1,
     "./islands/NewPost.tsx": $$2,
+    "./islands/Post.tsx": $$3,
   },
   baseUrl: import.meta.url,
   config,
