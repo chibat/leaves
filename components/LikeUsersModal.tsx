@@ -25,7 +25,7 @@ export function LikeUsersModal(props: { postId: number, setModal: (modal: boolea
 
   return (
     <div class="d-block modal" tabIndex={-1}>
-      <div class="modal-dialog">
+      <div class="modal-dialog" style={{ boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)" }}>
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Likes</h5>
