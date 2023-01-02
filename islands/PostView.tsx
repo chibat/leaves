@@ -12,9 +12,8 @@ import { request } from "~/lib/request.ts";
 import { useEffect, useState } from "preact/hooks";
 import * as hljs from "highlightjs";
 import { Head } from "$fresh/runtime.ts";
-import LikeUsersModal from "~/components/LikeUsersModal.tsx";
+import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { markedWithSanitaize } from "~/lib/utils.ts";
-import { marked } from "marked";
 
 export default function PostView(props: { post: Post, user?: AppUser }) {
   const user = props.user;
@@ -215,10 +214,10 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                 </div>
               }
             </div>
+            {modal &&
+              <LikeUsersModal postId={post.id} modal={modal} setModal={setModal} />
+            }
           </div>
-          {modal &&
-            <LikeUsersModal postId={post.id} modal={modal} setModal={setModal} />
-          }
         </>
       }
     </>
