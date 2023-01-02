@@ -5,6 +5,8 @@ export function defaultString(str: string | null | undefined): string {
   return str ? str : "";
 }
 
+marked.setOptions({ breaks: true });
+
 export function markedWithSanitaize(value: string): string {
   if (!value) {
     return "";

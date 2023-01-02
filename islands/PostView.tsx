@@ -117,57 +117,65 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
             <meta name="twitter:site" content="@tomofummy" />
             <meta name="twitter:image" content={post.picture} />
           </Head>
-          <div className="card mb-3">
-            <div className="card-header bg-transparent d-flex justify-content-between">
+          <div class="card mb-3">
+            <div class="card-header bg-transparent d-flex justify-content-between">
               <div>
-                <img src={post.picture} alt="mdo" width="32" height="32" className="rounded-circle" />
-                <a href={`/users/${post.user_id}`} className="ms-2 me-2 noDecoration">{post.name}</a>
+                <img src={post.picture} alt="mdo" width="32" height="32" class="rounded-circle" />
+                <a href={`/users/${post.user_id}`} class="ms-2 me-2 noDecoration">{post.name}</a>
                 {new Date(post.updated_at).toLocaleString()}
               </div>
               {user?.id === post.user_id &&
                 <div>
                   <a href={`/posts/${post.id}/edit`}><img src="/assets/img/pencil-fill.svg" alt="Edit" width="20" height="20"></img></a>
-                  <a href={void (0)} className="ms-2" onClick={deletePost}><img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img></a>
+                  <a href={void (0)} class="ms-2" style={{ cursor: "pointer" }} onClick={deletePost}>
+                    <img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img>
+                  </a>
                 </div>
               }
             </div>
-            <div className="card-body">
-              <span dangerouslySetInnerHTML={{ __html: marked(post.source) }}></span>
+            <div class="card-body">
+              <span dangerouslySetInnerHTML={{ __html: post.source }}></span>
             </div>
-            <div className="card-footer bg-transparent">
-              <div className="mb-3">
+            <div class="card-footer bg-transparent">
+              <div class="mb-3">
                 {requesting &&
-                  <div className="spinner-grow spinner-grow-sm ms-3" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                  <div class="spinner-grow spinner-grow-sm ms-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
                   </div>
                 }
                 {user && !requesting && liked &&
-                  <a href={void (0)} onClick={() => cancelLike(post.id)} className="ms-3"><img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img></a>
+                  <a href={void (0)} onClick={() => cancelLike(post.id)} class="ms-3" style={{ cursor: "pointer" }}>
+                    <img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img>
+                  </a>
                 }
                 {user && !requesting && !liked &&
-                  <a href={void (0)} onClick={() => like(post.id)} className="ms-3"><img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img></a>
+                  <a href={void (0)} onClick={() => like(post.id)} class="ms-3" style={{ cursor: "pointer" }}>
+                    <img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img>
+                  </a>
                 }
                 {Number(likes) > 0 &&
-                  <a href={void (0)} className="noDecoration ms-2" onClick={() => setModal(true)}>{likes} Like{likes === "1" ? "" : "s"}</a>
+                  <a href={void (0)} class="noDecoration ms-2" style={{ cursor: "pointer" }} onClick={() => setModal(true)}>{likes} Like{likes === "1" ? "" : "s"}</a>
                 }
               </div>
               {commentLoading &&
-                <div className="d-flex justify-content-center">
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
                   </div>
                 </div>
               }
               {comments && comments.map(comment =>
-                <div className="border-bottom ms-4">
-                  <div className="d-flex justify-content-between">
+                <div class="border-bottom ms-4">
+                  <div class="d-flex justify-content-between">
                     <div>
-                      <img src={comment.picture} alt="mdo" width="32" height="32" className="rounded-circle" />
-                      <a href={`/users/${comment.user_id}`} className="ms-2 me-2 noDecoration">{comment.name}</a>
+                      <img src={comment.picture} alt="mdo" width="32" height="32" class="rounded-circle" />
+                      <a href={`/users/${comment.user_id}`} class="ms-2 me-2 noDecoration">{comment.name}</a>
                       {new Date(comment.updated_at).toLocaleString()}
                     </div>
                     {user?.id === comment.user_id &&
-                      <a href={void (0)} className="ms-2" onClick={() => deleteComment(comment.id)}><img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img></a>
+                      <a href={void (0)} class="ms-2" style={{ cursor: "pointer" }} onClick={() => deleteComment(comment.id)}>
+                        <img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img>
+                      </a>
                     }
                   </div>
                   <div>
@@ -176,18 +184,18 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                 </div>
               )}
               {user &&
-                <div className="ms-4 mt-2">
-                  <div className="">
-                    <ul className="nav nav-tabs">
-                      <li className="nav-item">
-                        <a className={flag ? "nav-link active" : "nav-link"} onClick={displayEdit}>Edit</a>
+                <div class="ms-4 mt-2">
+                  <div class="">
+                    <ul class="nav nav-tabs">
+                      <li class="nav-item">
+                        <a class={flag ? "nav-link active" : "nav-link"} style={{ cursor: "pointer" }} onClick={displayEdit}>Edit</a>
                       </li>
-                      <li className="nav-item">
-                        <a className={!flag ? "nav-link active" : "nav-link"} onClick={displayPreview}>Preview</a>
+                      <li class="nav-item">
+                        <a class={!flag ? "nav-link active" : "nav-link"} style={{ cursor: "pointer" }} onClick={displayPreview}>Preview</a>
                       </li>
                     </ul>
                     {flag &&
-                      <textarea className="form-control mt-3" style={{ height: "250px" }} maxLength={5000} value={source} onChange={(event) =>
+                      <textarea class="form-control mt-3" style={{ height: "250px" }} maxLength={5000} value={source} onChange={(event) =>
                         setSource((event.target as any).value)
                       } placeholder="Write a comment with markdown">
                       </textarea>
@@ -196,10 +204,10 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                       <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(source) }}></span>
                     }
                   </div>
-                  <div className="mt-2">
-                    <button className="btn btn-primary" onClick={reply} disabled={loading || source.length === 0}>
+                  <div class="mt-2">
+                    <button class="btn btn-primary" onClick={reply} disabled={loading || source.length === 0}>
                       {loading &&
-                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                       }
                       Reply
                     </button>

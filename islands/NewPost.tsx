@@ -23,6 +23,7 @@ export default function Post() {
   const preview = useSignal(false);
   const loading = useSignal(false);
   const text = useSignal('');
+  const html = useSignal('');
 
   useEffect(() => {
     console.log("### ", IS_BROWSER);
@@ -30,9 +31,15 @@ export default function Post() {
     (hljs as any).highlightAll();
   });
 
+  useEffect(
+    () => {
+      html.value = markedWithSanitaize(text.value);
+    }, [text.value]
+  );
+
   async function post() {
     loading.value = true;
-    const result = await request<CreatePostRequest, CreatePostResponse>("create_post", { source: text.value });
+    const result = await request<CreatePostRequest, CreatePostResponse>("create_post", { source: html.value });
     loading.value = false;
     if (result.postId) {
       location.href = `/posts/${result.postId}`;
@@ -58,7 +65,7 @@ export default function Post() {
               placeholder="Write with markdown"></textarea>
           }
           {preview.value &&
-            <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(text.value) }}></span>
+            <span dangerouslySetInnerHTML={{ __html: html.value }}></span>
           }
         </div>
         <div class="card-footer text-end bg-transparent">
