@@ -12,13 +12,13 @@ export const handler: Handlers = {
     if (!session) {
       return Response.json(null, { status: 401 });
     }
-    const result = await pool(async (client) => {
-      const results = await selectLikes(client, {
+    const results = await pool((client) =>
+      selectLikes(client, {
         userId: session.u.id,
         postIds: [params.postId],
-      }); // TODO: to one postId
-      return Response.json(results.length === 1);
-    });
-    return Response.json(result);
+      }) // TODO: to one postId
+    );
+    console.log("results", results);
+    return Response.json(results.length === 1);
   },
 };

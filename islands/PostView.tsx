@@ -9,13 +9,14 @@ import type { RequestType as CommentsRequest, ResponseType as CommentsResponse }
 import type { RequestType as IsLikedRequest } from "~/routes/api/is_liked.ts";
 
 import { request } from "~/lib/request.ts";
-import { marked } from "marked";
 import { useEffect, useState } from "preact/hooks";
-import hljs from "highlightjs";
+import * as hljs from "highlightjs";
 import { Head } from "$fresh/runtime.ts";
 import LikeUsersModal from "~/components/LikeUsersModal.tsx";
+import { markedWithSanitaize } from "~/lib/utils.ts";
+import { marked } from "marked";
 
-export default function Post(props: { post: Post, user?: AppUser }) {
+export default function PostView(props: { post: Post, user?: AppUser }) {
   const user = props.user;
   const post = props.post;
 
@@ -28,8 +29,6 @@ export default function Post(props: { post: Post, user?: AppUser }) {
   const [commentLoading, setCommentLoading] = useState<boolean>(true);
   const [requesting, setRequesting] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
-
-  await selectPost(post.id);
 
   function displayEdit() {
     setFlag(true);
@@ -93,7 +92,7 @@ export default function Post(props: { post: Post, user?: AppUser }) {
     setLikes(post.likes);
     (async () => {
       const _liked = await request<IsLikedRequest, boolean>("is_liked", { postId: post.id });
-      console.log(_liked);
+      console.log("###", _liked);
       setLiked(_liked);
       await readComments();
     })();
@@ -172,7 +171,7 @@ export default function Post(props: { post: Post, user?: AppUser }) {
                     }
                   </div>
                   <div>
-                    <span dangerouslySetInnerHTML={{ __html: marked(comment.source) }}></span>
+                    <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(comment.source) }}></span>
                   </div>
                 </div>
               )}
@@ -194,7 +193,7 @@ export default function Post(props: { post: Post, user?: AppUser }) {
                       </textarea>
                     }
                     {!flag &&
-                      <span dangerouslySetInnerHTML={{ __html: marked(source) }}></span>
+                      <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(source) }}></span>
                     }
                   </div>
                   <div className="mt-2">

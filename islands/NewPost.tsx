@@ -1,11 +1,11 @@
 import { useSignal } from "@preact/signals";
-import { marked } from 'marked'
 import * as hljs from "highlightjs";
 import DOMPurify from "dompurify";
 import { useEffect } from "preact/hooks";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 import { CreatePostRequest, CreatePostResponse } from "~/routes/api/create_post.ts";
 import { request } from "~/lib/request.ts";
+import { markedWithSanitaize } from "~/lib/utils.ts";
 
 if (IS_BROWSER) {
   // https://github.com/cure53/DOMPurify/issues/340#issuecomment-670758980
@@ -23,7 +23,6 @@ export default function Post() {
   const preview = useSignal(false);
   const loading = useSignal(false);
   const text = useSignal('');
-  const html = useSignal('');
 
   useEffect(() => {
     console.log("### ", IS_BROWSER);
@@ -31,22 +30,14 @@ export default function Post() {
     (hljs as any).highlightAll();
   });
 
-  useEffect(() => {
-    html.value = DOMPurify.sanitize(marked(text.value), {
-      ADD_TAGS: ["iframe"], //or ALLOWED_TAGS
-      ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "scrolling"],//or //or ALLOWED_ATR
-    });
-    console.log("useEffect text", html.value);
-  }, [text.value]);
-
   async function post() {
     loading.value = true;
     const result = await request<CreatePostRequest, CreatePostResponse>("create_post", { source: text.value });
     loading.value = false;
     if (result.postId) {
-       location.href = `/posts/${result.postId}`;
-       return;
-     }
+      location.href = `/posts/${result.postId}`;
+      return;
+    }
   }
 
   return (
@@ -55,10 +46,10 @@ export default function Post() {
         <div className="card-body">
           <ul className="nav nav-tabs">
             <li className="nav-item">
-              <a className={!preview.value ? "nav-link active" : "nav-link"} style={{cursor: "pointer"}} onClick={() => preview.value = false}>Edit</a>
+              <a className={!preview.value ? "nav-link active" : "nav-link"} style={{ cursor: "pointer" }} onClick={() => preview.value = false}>Edit</a>
             </li>
             <li className="nav-item">
-              <a className={preview.value ? "nav-link active" : "nav-link"} style={{cursor: "pointer"}} onClick={() => preview.value = true}>Preview</a>
+              <a className={preview.value ? "nav-link active" : "nav-link"} style={{ cursor: "pointer" }} onClick={() => preview.value = true}>Preview</a>
             </li>
           </ul>
           {!preview.value &&
@@ -67,7 +58,7 @@ export default function Post() {
               placeholder="Write with markdown"></textarea>
           }
           {preview.value &&
-            <span dangerouslySetInnerHTML={{ __html: html.value }}></span>
+            <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(text.value) }}></span>
           }
         </div>
         <div class="card-footer text-end bg-transparent">
