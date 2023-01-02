@@ -153,7 +153,9 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                   </a>
                 }
                 {Number(likes) > 0 &&
-                  <a href={void (0)} class="noDecoration ms-2" style={{ cursor: "pointer" }} onClick={() => setModal(true)}>{likes} Like{likes === "1" ? "" : "s"}</a>
+                  <a href={void (0)} class="noDecoration ms-2" style={{ cursor: "pointer" }} onClick={() => setModal(true)}>
+                    {likes} Like{likes === "1" ? "" : "s"}
+                  </a>
                 }
               </div>
               {commentLoading &&
@@ -215,7 +217,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
               }
             </div>
             {modal &&
-              <LikeUsersModal postId={post.id} modal={modal} setModal={setModal} />
+              <LikeUsersModal postId={post.id} setModal={setModal} />
             }
           </div>
         </>
