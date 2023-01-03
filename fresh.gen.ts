@@ -22,8 +22,9 @@ import * as $15 from "./routes/api/update_post.ts";
 import * as $16 from "./routes/callback.tsx";
 import * as $17 from "./routes/index.tsx";
 import * as $18 from "./routes/post.tsx";
-import * as $19 from "./routes/posts/[postId]/index.tsx";
-import * as $20 from "./routes/signout.tsx";
+import * as $19 from "./routes/posts/[postId]/edit.tsx";
+import * as $20 from "./routes/posts/[postId]/index.tsx";
+import * as $21 from "./routes/signout.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 import * as $$1 from "./islands/Header.tsx";
 import * as $$2 from "./islands/NewPost.tsx";
@@ -50,8 +51,9 @@ const manifest = {
     "./routes/callback.tsx": $16,
     "./routes/index.tsx": $17,
     "./routes/post.tsx": $18,
-    "./routes/posts/[postId]/index.tsx": $19,
-    "./routes/signout.tsx": $20,
+    "./routes/posts/[postId]/edit.tsx": $19,
+    "./routes/posts/[postId]/index.tsx": $20,
+    "./routes/signout.tsx": $21,
   },
   islands: {
     "./islands/Counter.tsx": $$0,

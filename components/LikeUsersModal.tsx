@@ -3,7 +3,6 @@ import { request } from '~/lib/request.ts'
 
 import type { RequestType as LikeUsersRequest, ResponseType as LikeUsersResponse } from "~/routes/api/get_like_users.ts";
 import Users from "~/components/Users.tsx";
-import { createRef } from "preact";
 
 export function LikeUsersModal(props: { postId: number, setModal: (modal: boolean) => void }) {
 
