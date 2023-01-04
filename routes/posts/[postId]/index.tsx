@@ -3,9 +3,15 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import Header from "~/islands/Header.tsx";
 import { getAuthUrl, getSession } from "~/lib/auth.ts";
 import { AppUser, pool, Post, selectPost } from "~/lib/db.ts";
-import PostView from "~/islands/PostView.tsx"
+import PostView from "~/islands/PostView.tsx";
 
-export const handler: Handlers<{ authUrl?: string, user?: AppUser, post: Post }> = {
+type PageType = {
+  authUrl?: string;
+  user?: AppUser;
+  post: Post;
+};
+
+export const handler: Handlers<PageType> = {
   async GET(req, ctx) {
     const postId = Number(ctx.params.postId);
     const post = await pool((client) => selectPost(client, postId));
@@ -21,7 +27,9 @@ export const handler: Handlers<{ authUrl?: string, user?: AppUser, post: Post }>
   },
 };
 
-export default function Page(props: PageProps<{ user?: AppUser, authUrl: string, post: Post }>) {
+export default function Page(
+  props: PageProps<PageType>,
+) {
   const user = props.data.user;
   return (
     <>
