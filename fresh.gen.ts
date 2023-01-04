@@ -27,8 +27,9 @@ import * as $20 from "./routes/posts/new.tsx";
 import * as $21 from "./routes/signout.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 import * as $$1 from "./islands/Header.tsx";
-import * as $$2 from "./islands/PostNew.tsx";
-import * as $$3 from "./islands/PostView.tsx";
+import * as $$2 from "./islands/PostEdit.tsx";
+import * as $$3 from "./islands/PostNew.tsx";
+import * as $$4 from "./islands/PostView.tsx";
 
 const manifest = {
   routes: {
@@ -58,8 +59,9 @@ const manifest = {
   islands: {
     "./islands/Counter.tsx": $$0,
     "./islands/Header.tsx": $$1,
-    "./islands/PostNew.tsx": $$2,
-    "./islands/PostView.tsx": $$3,
+    "./islands/PostEdit.tsx": $$2,
+    "./islands/PostNew.tsx": $$3,
+    "./islands/PostView.tsx": $$4,
   },
   baseUrl: import.meta.url,
   config,

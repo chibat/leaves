@@ -3,10 +3,11 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { AppUser, pool, Post, selectPost } from "~/lib/db.ts";
 import Header from "~/islands/Header.tsx";
 import { getAuthUrl, getSession } from "~/lib/auth.ts";
+import PostEdit from "~/islands/PostEdit.tsx";
 
 type PageType = {
   authUrl?: string;
-  user?: AppUser;
+  user: AppUser;
   post: Post;
 };
 
@@ -42,7 +43,7 @@ export default function Page(props: PageProps<PageType>) {
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
       <div class="p-4 mx-auto max-w-screen-md">
-        edit
+        <PostEdit post={props.data.post} />
       </div>
     </>
   );
