@@ -1,9 +1,39 @@
 import { Head } from "$fresh/runtime.ts";
-import { PageProps } from "$fresh/server.ts";
-import { AppUser } from "~/lib/db.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { AppUser, pool, Post, selectPost } from "~/lib/db.ts";
 import Header from "~/islands/Header.tsx";
+import { getAuthUrl, getSession } from "~/lib/auth.ts";
 
-export default function Page(props: PageProps<{ user?: AppUser, authUrl: string }>) {
+type PageType = {
+  authUrl?: string;
+  user?: AppUser;
+  post: Post;
+};
+
+export const handler: Handlers<PageType> = {
+  async GET(req, ctx) {
+
+    const session = await getSession(req);
+    if (!session) {
+      return new Response("", {
+        status: 307,
+        headers: { Location: "/" },
+      });
+    }
+    const authUrl = session ? undefined : getAuthUrl(req.url);
+
+    const postId = Number(ctx.params.postId);
+    const post = await pool((client) => selectPost(client, postId));
+    if (!post) {
+      return ctx.renderNotFound();
+    }
+
+    const res = await ctx.render({ user: session?.u, authUrl, post });
+    return res;
+  },
+};
+
+export default function Page(props: PageProps<PageType>) {
   const user = props.data.user;
   return (
     <>

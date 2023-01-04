@@ -21,13 +21,13 @@ import * as $14 from "./routes/api/joke.ts";
 import * as $15 from "./routes/api/update_post.ts";
 import * as $16 from "./routes/callback.tsx";
 import * as $17 from "./routes/index.tsx";
-import * as $18 from "./routes/post.tsx";
-import * as $19 from "./routes/posts/[postId]/edit.tsx";
-import * as $20 from "./routes/posts/[postId]/index.tsx";
+import * as $18 from "./routes/posts/[postId]/edit.tsx";
+import * as $19 from "./routes/posts/[postId]/index.tsx";
+import * as $20 from "./routes/posts/new.tsx";
 import * as $21 from "./routes/signout.tsx";
 import * as $$0 from "./islands/Counter.tsx";
 import * as $$1 from "./islands/Header.tsx";
-import * as $$2 from "./islands/NewPost.tsx";
+import * as $$2 from "./islands/PostNew.tsx";
 import * as $$3 from "./islands/PostView.tsx";
 
 const manifest = {
@@ -50,15 +50,15 @@ const manifest = {
     "./routes/api/update_post.ts": $15,
     "./routes/callback.tsx": $16,
     "./routes/index.tsx": $17,
-    "./routes/post.tsx": $18,
-    "./routes/posts/[postId]/edit.tsx": $19,
-    "./routes/posts/[postId]/index.tsx": $20,
+    "./routes/posts/[postId]/edit.tsx": $18,
+    "./routes/posts/[postId]/index.tsx": $19,
+    "./routes/posts/new.tsx": $20,
     "./routes/signout.tsx": $21,
   },
   islands: {
     "./islands/Counter.tsx": $$0,
     "./islands/Header.tsx": $$1,
-    "./islands/NewPost.tsx": $$2,
+    "./islands/PostNew.tsx": $$2,
     "./islands/PostView.tsx": $$3,
   },
   baseUrl: import.meta.url,
