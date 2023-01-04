@@ -20,7 +20,8 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   const post = props.post;
 
   const [flag, setFlag] = useState<boolean>(true);
-  const [source, setSource] = useState<string>("");
+  const [commentSource, setCommentSource] = useState<string>("");
+  const [postSource, setPostSource] = useState<string>("");
   const [likes, setLikes] = useState<string>('0');
   const [liked, setLiked] = useState<boolean>();
   const [comments, setComments] = useState<CommentsResponse>();
@@ -28,6 +29,10 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   const [commentLoading, setCommentLoading] = useState<boolean>(true);
   const [requesting, setRequesting] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    setPostSource(markedWithSanitaize(post.source));
+  }, []);
 
   function displayEdit() {
     setFlag(true);
@@ -60,9 +65,9 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
 
   async function reply() {
     setLoading(true);
-    await request<CreateRequest, CreateResponse>("create_comment", { postId: post.id, source });
+    await request<CreateRequest, CreateResponse>("create_comment", { postId: post.id, source: commentSource });
     await readComments();
-    setSource("");
+    setCommentSource("");
     setLoading(false);
   }
 
@@ -129,7 +134,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
               }
             </div>
             <div class="card-body">
-              <span dangerouslySetInnerHTML={{ __html: post.source }}></span>
+              <span dangerouslySetInnerHTML={{ __html: postSource }}></span>
             </div>
             <div class="card-footer bg-transparent">
               <div class="mb-3">
@@ -192,17 +197,17 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                       </li>
                     </ul>
                     {flag &&
-                      <textarea class="form-control mt-3" style={{ height: "250px" }} maxLength={5000} value={source} onChange={(event) =>
-                        setSource((event.target as any).value)
+                      <textarea class="form-control mt-3" style={{ height: "250px" }} maxLength={5000} value={commentSource} onChange={(event) =>
+                        setCommentSource((event.target as any).value)
                       } placeholder="Write a comment with markdown">
                       </textarea>
                     }
                     {!flag &&
-                      <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(source) }}></span>
+                      <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(commentSource) }}></span>
                     }
                   </div>
                   <div class="mt-2">
-                    <button class="btn btn-primary" onClick={reply} disabled={loading || source.length === 0}>
+                    <button class="btn btn-primary" onClick={reply} disabled={loading || commentSource.length === 0}>
                       {loading &&
                         <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                       }
