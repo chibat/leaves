@@ -3,6 +3,7 @@ import {
   PoolClient,
   Transaction,
 } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
+import { PAGE_ROWS } from "~/lib/constants.ts";
 
 export type Client = PoolClient | Transaction;
 
@@ -49,8 +50,6 @@ export type AppNotification = {
   name?: string; // app_user
 };
 
-export const PAGE_ROWS = 5;
-
 const connectionPool = new Pool(
   {
     tls: {
@@ -81,7 +80,7 @@ export async function transaction<T>(
   handler: (client: Client) => Promise<T>,
 ): Promise<T> {
   const client = await connectionPool.connect();
-  const transaction = client.createTransaction("T2");
+  const transaction = client.createTransaction(crypto.randomUUID());
   try {
     await transaction.begin();
     const result = await handler(transaction);
@@ -217,12 +216,12 @@ export async function selectPostByGtId(
   client: Client,
   gtId: number,
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`SELECT * FROM (
+  const result = await client.queryObject<Post>(`SELECT * FROM (
         ${SELECT_POST}
         WHERE p.id > ${gtId}
         ORDER BY p.id LIMIT ${PAGE_ROWS}
       ) s ORDER BY id DESC
-    `;
+    `);
   return result.rows;
 }
 
@@ -270,10 +269,10 @@ export async function selectFollowingUsersPosts(
   client: Client,
   userId: number,
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`
+  const result = await client.queryObject<Post>(`
       ${SELECT_POST}
       WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${userId})
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`;
+      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
   return result.rows;
 }
 
@@ -281,12 +280,12 @@ export async function selectFollowingUsersPostByLtId(
   client: Client,
   params: { ltId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`
+  const result = await client.queryObject<Post>(`
       ${SELECT_POST}
       WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${params.userId})
       AND p.id < ${params.ltId}
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `;
+    `);
   return result.rows;
 }
 
@@ -294,13 +293,13 @@ export async function selectFollowingUsersPostByGtId(
   client: Client,
   params: { gtId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`SELECT * FROM (
+  const result = await client.queryObject<Post>(`SELECT * FROM (
         ${SELECT_POST}
         WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${params.userId})
         AND p.id > ${params.gtId}
         ORDER BY p.id LIMIT ${PAGE_ROWS}
       ) s ORDER BY id DESC
-    `;
+    `);
   return result.rows;
 }
 
@@ -308,10 +307,10 @@ export async function selectLikedPosts(
   client: Client,
   userId: number,
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`
+  const result = await client.queryObject<Post>(`
       ${SELECT_POST}
       WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = ${userId} ORDER BY post_id DESC)
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`;
+      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
   return result.rows;
 }
 
@@ -319,11 +318,11 @@ export async function selectLikedPostsByLtId(
   client: Client,
   params: { ltId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`
+  const result = await client.queryObject<Post>(`
       ${SELECT_POST}
       WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = ${params.userId} AND post_id < ${params.ltId} ORDER BY post_id DESC)
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `;
+    `);
   return result.rows;
 }
 

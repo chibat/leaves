@@ -3,7 +3,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { getAuthUrl, getSession } from "~/lib/auth.ts";
 import Header from "~/islands/Header.tsx";
 import { AppUser } from "~/lib/db.ts";
-
+import HomePosts from "~/islands/AllPosts.tsx";
 
 export const handler: Handlers<{ authUrl?: string, user?: AppUser }> = {
   async GET(req, ctx) {
@@ -19,6 +19,13 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
     <>
       <Head>
         <title>md-sns</title>
+        <meta property="og:url" content="https://md-sns.herokuapp.com/"></meta>
+        <meta property="og:title" content="md-sns"></meta>
+        <meta property="og:image" content="https://md-sns.herokuapp.com/assets/img/icon-192x192.png" />
+        <meta name="twitter:card" content="summary"></meta>
+        <meta name="twitter:site" content="@tomofummy" />
+        <meta name="twitter:creator" content="@tomofummy" />
+        <meta name="twitter:image" content="https://md-sns.herokuapp.com/assets/img/icon-192x192.png" />
       </Head>
       <Header user={props.data.user} authUrl={props.data.authUrl} />
       <main className="container">
@@ -34,16 +41,8 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
             </div>
           </div>
         }
+        <HomePosts />
       </main>
-
-      <div class="p-4 mx-auto max-w-screen-md">
-        {props.data.user && <>
-          <ul>
-            <li>{props.data.user.name}</li>
-          </ul>
-        </>
-        }
-      </div>
     </>
   );
 }

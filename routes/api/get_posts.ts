@@ -13,7 +13,7 @@ import {
   selectUserPostByLtId,
   selectUserPosts,
 } from "~/lib/db.ts";
-import { Handlers } from "https://deno.land/x/fresh@1.1.2/server.ts";
+import { Handlers } from "$fresh/server.ts";
 import { getSession } from "~/lib/auth.ts";
 
 export type RequestType = {
@@ -50,32 +50,30 @@ async function execute(
       } else {
         posts = await selectUserPosts(client, params.userId);
       }
-    } else if (params.followig) {
+    } else if (params.followig && session) {
       // following user only
-      if (session) {
-        const userId = session.u.id;
-        if (params.direction === "next" && params.postId) {
-          posts = await selectFollowingUsersPostByLtId(client, {
-            ltId: params.postId,
-            userId,
-          });
-        } else if (params.direction === "previous" && params.postId) {
-          posts = await selectFollowingUsersPostByGtId(client, {
-            gtId: params.postId,
-            userId,
-          });
-        } else {
-          posts = await selectFollowingUsersPosts(client, userId);
-        }
+      const userId = session.u.id;
+      if (params.direction === "next" && params.postId) {
+        posts = await selectFollowingUsersPostByLtId(client, {
+          ltId: params.postId,
+          userId,
+        });
+      } else if (params.direction === "previous" && params.postId) {
+        posts = await selectFollowingUsersPostByGtId(client, {
+          gtId: params.postId,
+          userId,
+        });
       } else {
-        // all user
-        if (params.direction === "next" && params.postId) {
-          posts = await selectPostByLtId(client, params.postId);
-        } else if (params.direction === "previous" && params.postId) {
-          posts = await selectPostByGtId(client, params.postId);
-        } else {
-          posts = await selectPosts(client);
-        }
+        posts = await selectFollowingUsersPosts(client, userId);
+      }
+    } else {
+      // all user
+      if (params.direction === "next" && params.postId) {
+        posts = await selectPostByLtId(client, params.postId);
+      } else if (params.direction === "previous" && params.postId) {
+        posts = await selectPostByGtId(client, params.postId);
+      } else {
+        posts = await selectPosts(client);
       }
     }
 

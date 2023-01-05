@@ -30,12 +30,13 @@ import * as $23 from "./routes/posts/[postId]/index.tsx";
 import * as $24 from "./routes/posts/new.tsx";
 import * as $25 from "./routes/signout.tsx";
 import * as $26 from "./routes/users/[userId].tsx";
-import * as $$0 from "./islands/Counter.tsx";
-import * as $$1 from "./islands/Header.tsx";
-import * as $$2 from "./islands/PostEdit.tsx";
-import * as $$3 from "./islands/PostNew.tsx";
-import * as $$4 from "./islands/PostView.tsx";
-import * as $$5 from "./islands/UserPosts.tsx";
+import * as $$0 from "./islands/AllPosts.tsx";
+import * as $$1 from "./islands/Counter.tsx";
+import * as $$2 from "./islands/Header.tsx";
+import * as $$3 from "./islands/PostEdit.tsx";
+import * as $$4 from "./islands/PostNew.tsx";
+import * as $$5 from "./islands/PostView.tsx";
+import * as $$6 from "./islands/UserPosts.tsx";
 
 const manifest = {
   routes: {
@@ -68,12 +69,13 @@ const manifest = {
     "./routes/users/[userId].tsx": $26,
   },
   islands: {
-    "./islands/Counter.tsx": $$0,
-    "./islands/Header.tsx": $$1,
-    "./islands/PostEdit.tsx": $$2,
-    "./islands/PostNew.tsx": $$3,
-    "./islands/PostView.tsx": $$4,
-    "./islands/UserPosts.tsx": $$5,
+    "./islands/AllPosts.tsx": $$0,
+    "./islands/Counter.tsx": $$1,
+    "./islands/Header.tsx": $$2,
+    "./islands/PostEdit.tsx": $$3,
+    "./islands/PostNew.tsx": $$4,
+    "./islands/PostView.tsx": $$5,
+    "./islands/UserPosts.tsx": $$6,
   },
   baseUrl: import.meta.url,
   config,
