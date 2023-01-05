@@ -37,9 +37,9 @@ export default function Page(
         <title>md-sns</title>
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
-      <div class="p-4 mx-auto max-w-screen-md">
+      <main className="container">
         <PostView post={props.data.post} user={user} />
-      </div>
+      </main>
     </>
   );
 }

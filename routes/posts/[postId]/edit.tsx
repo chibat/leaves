@@ -42,9 +42,9 @@ export default function Page(props: PageProps<PageType>) {
         <title>md-sns</title>
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
-      <div class="p-4 mx-auto max-w-screen-md">
+      <main className="container">
         <PostEdit post={props.data.post} />
-      </div>
+      </main>
     </>
   );
 }

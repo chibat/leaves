@@ -27,9 +27,9 @@ export default function Page(props: PageProps<{ user?: AppUser }>) {
         <title>md-sns</title>
       </Head>
       <Header user={props.data.user} />
-      <div class="p-4 mx-auto max-w-screen-md">
+      <main className="container">
         <PostNew />
-      </div>
+      </main>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { getAuthUrl, getCallbackUrl, getSession } from "~/lib/auth.ts";
+import { getAuthUrl, getSession } from "~/lib/auth.ts";
 import Header from "~/islands/Header.tsx";
 import { AppUser } from "~/lib/db.ts";
 

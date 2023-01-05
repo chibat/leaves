@@ -9,7 +9,7 @@ export type Client = PoolClient | Transaction;
 export type AppUser = {
   id: number;
   google_id?: string;
-  name?: string;
+  name: string;
   picture?: string;
   notification: boolean;
   updated_at?: string;
@@ -243,12 +243,12 @@ export async function selectUserPostByLtId(
   client: Client,
   params: { ltId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`
+  const result = await client.queryObject<Post>(`
       ${SELECT_POST}
       WHERE p.user_id = ${params.userId}
       AND p.id < ${params.ltId}
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `;
+    `);
   return result.rows;
 }
 
@@ -256,13 +256,13 @@ export async function selectUserPostByGtId(
   client: Client,
   params: { gtId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>`SELECT * FROM (
+  const result = await client.queryObject<Post>(`SELECT * FROM (
         ${SELECT_POST}
         WHERE p.user_id = ${params.userId}
         AND p.id > ${params.gtId}
         ORDER BY p.id LIMIT ${PAGE_ROWS}
       ) s ORDER BY id DESC
-    `;
+    `);
   return result.rows;
 }
 
