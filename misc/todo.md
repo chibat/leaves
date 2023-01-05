@@ -1,5 +1,6 @@
 # TODO
 
+- 一覧にコメントするアイコン
 - prepared statement 見直し
 - 0 の時、モーダルを出さない。
 - app_user から不要なカラムを削除。消せるの account くらいか。残したいか。
