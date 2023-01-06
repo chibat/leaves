@@ -1,9 +1,7 @@
 import { Handlers } from "$fresh/server.ts";
 import { clientId, clientSecret } from "~/lib/env.ts";
-import { getCallbackUrl, JwtType } from "~/lib/auth.ts";
-import { setCookie } from "std/http/cookie.ts";
+import { getCallbackUrl, setSession } from "~/lib/auth.ts";
 import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "../lib/db.ts";
-import { serializeJwt } from "~/lib/jwt.ts";
 
 export type Token = { access_token: string; refresh_token: string };
 
@@ -57,7 +55,7 @@ export const handler: Handlers = {
 
       const appUser = await transaction(async (client) => {
         const user = await selectUserByGoogleId(client, googleUser.id);
-        console.log("### debug", user);
+        console.log("### debug", googleUser);
         if (user) {
           if (
             user.name !== googleUser.name || user.picture !== googleUser.picture
@@ -77,15 +75,7 @@ export const handler: Handlers = {
         });
       });
 
-      const session = await serializeJwt({ u: appUser } as JwtType);
-      setCookie(res.headers, {
-        name: "session",
-        value: session,
-        sameSite: "Strict",
-        httpOnly: true,
-        secure: true,
-        path: "/",
-      });
+      await setSession(res, { u: appUser });
     }
     return res;
   }

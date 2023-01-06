@@ -1,5 +1,5 @@
-import { getCookies } from "std/http/cookie.ts";
-import { deserializeJwt } from "~/lib/jwt.ts";
+import { getCookies, setCookie } from "std/http/cookie.ts";
+import { deserializeJwt, serializeJwt } from "~/lib/jwt.ts";
 import { AppUser } from "~/lib/db.ts";
 import { clientId } from "~/lib/env.ts";
 
@@ -27,6 +27,18 @@ export async function getSession(req: Request): Promise<JwtType | undefined> {
   return sessionString
     ? await deserializeJwt(sessionString) as JwtType
     : undefined;
+}
+
+export async function setSession(response: Response, data: JwtType) {
+  const session = await serializeJwt(data);
+  setCookie(response.headers, {
+    name: "session",
+    value: session,
+    sameSite: "Strict",
+    httpOnly: true,
+    secure: true,
+    path: "/",
+  });
 }
 
 export function getCallbackUrl(requestUrl: string) {
