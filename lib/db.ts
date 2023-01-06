@@ -499,7 +499,7 @@ export async function judgeFollowing(
   return result.rows.length === 1;
 }
 
-export async function selectNotifications(
+export async function selectNotificationsWithUpdate(
   client: Client,
   userId: number,
 ): Promise<Array<AppNotification>> {

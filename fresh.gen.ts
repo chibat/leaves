@@ -28,11 +28,12 @@ import * as $21 from "./routes/callback.tsx";
 import * as $22 from "./routes/following.tsx";
 import * as $23 from "./routes/index.tsx";
 import * as $24 from "./routes/likes.tsx";
-import * as $25 from "./routes/posts/[postId]/edit.tsx";
-import * as $26 from "./routes/posts/[postId]/index.tsx";
-import * as $27 from "./routes/posts/new.tsx";
-import * as $28 from "./routes/signout.tsx";
-import * as $29 from "./routes/users/[userId].tsx";
+import * as $25 from "./routes/notification.tsx";
+import * as $26 from "./routes/posts/[postId]/edit.tsx";
+import * as $27 from "./routes/posts/[postId]/index.tsx";
+import * as $28 from "./routes/posts/new.tsx";
+import * as $29 from "./routes/signout.tsx";
+import * as $30 from "./routes/users/[userId].tsx";
 import * as $$0 from "./islands/AllPosts.tsx";
 import * as $$1 from "./islands/Counter.tsx";
 import * as $$2 from "./islands/FollowingPosts.tsx";
@@ -70,11 +71,12 @@ const manifest = {
     "./routes/following.tsx": $22,
     "./routes/index.tsx": $23,
     "./routes/likes.tsx": $24,
-    "./routes/posts/[postId]/edit.tsx": $25,
-    "./routes/posts/[postId]/index.tsx": $26,
-    "./routes/posts/new.tsx": $27,
-    "./routes/signout.tsx": $28,
-    "./routes/users/[userId].tsx": $29,
+    "./routes/notification.tsx": $25,
+    "./routes/posts/[postId]/edit.tsx": $26,
+    "./routes/posts/[postId]/index.tsx": $27,
+    "./routes/posts/new.tsx": $28,
+    "./routes/signout.tsx": $29,
+    "./routes/users/[userId].tsx": $30,
   },
   islands: {
     "./islands/AllPosts.tsx": $$0,

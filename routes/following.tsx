@@ -7,15 +7,19 @@ import { getAuthUrl, getSession } from "../lib/auth.ts";
 
 type PageType = {
   loginUser?: AppUser,
-  authUrl?: string
 }
 
 export const handler: Handlers<PageType> = {
   async GET(req, ctx) {
     // TODO セッションがなければトップへ
     const session = await getSession(req);
-    const authUrl = session ? undefined : getAuthUrl(req.url);
-    const res = await ctx.render({ loginUser: session?.u, authUrl });
+    if (!session) {
+      return new Response("", {
+        status: 307,
+        headers: { Location: "/" },
+      });
+    }
+    const res = await ctx.render({ loginUser: session?.u });
     return res;
   },
 };
@@ -29,7 +33,7 @@ export default function Page(props: PageProps<PageType>) {
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
       </Head>
-      <Header user={props.data.loginUser} authUrl={props.data.authUrl} />
+      <Header user={props.data.loginUser} />
       <main class="container">
         <FollowingPosts />
       </main>

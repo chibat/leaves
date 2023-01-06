@@ -7,7 +7,6 @@ export default function Header(props: { user?: AppUser, authUrl?: string }) {
   const mobileMenuRef = useRef<HTMLButtonElement>(null);
   const mobileMenuOpen = useSignal(false);
   const userMenuOpen = useSignal(false);
-  const notification = useSignal(false);
 
   useEffect(() => {
     const el = userMenuRef.current;
@@ -65,10 +64,10 @@ export default function Header(props: { user?: AppUser, authUrl?: string }) {
             {props.user &&
               <>
                 <a href="/notification">
-                  {!notification.value &&
+                  {!props.user.notification &&
                     <img alt="bell" src="/assets/img/bell.png" width="20px" class="me-3" />
                   }
-                  {notification.value &&
+                  {props.user.notification &&
                     <img alt="bell" src="/assets/img/bell2.png" width="20px" class="me-3" />
                   }
                 </a>
