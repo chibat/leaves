@@ -36,7 +36,7 @@ export default function Post() {
     const result = await request<CreatePostRequest, CreatePostResponse>("create_post", { source: text.value });
     loading.value = false;
     if (result.postId) {
-      location.href = `/posts/${result.postId}`;
+      location.href = `/posts/${result.postId}?posted`;
       return;
     }
   }

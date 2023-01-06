@@ -1,9 +1,9 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import FollowingPosts from "~/islands/FollowingPosts.tsx";
 import { AppUser } from "~/lib/db.ts";
 import Header from "~/islands/Header.tsx";
 import { getAuthUrl, getSession } from "../lib/auth.ts";
+import LikePosts from "~/islands/LikePosts.tsx";
 
 type PageType = {
   loginUser?: AppUser,
@@ -31,10 +31,9 @@ export default function Page(props: PageProps<PageType>) {
       </Head>
       <Header user={props.data.loginUser} authUrl={props.data.authUrl} />
       <main class="container">
-        <FollowingPosts />
+        <LikePosts />
       </main>
     </>
   );
 }
-
 

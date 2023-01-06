@@ -31,7 +31,7 @@ export default function Edit(props: { post: Post }) {
       setLoading(true);
       await request<UpdateRequest, UpdateResponse>("update_post", { postId: postId, source: text });
       setLoading(false);
-      location.href = `/posts/${postId}`;
+      location.href = `/posts/${postId}?updated`;
     }
   }
 

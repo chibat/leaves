@@ -19,26 +19,29 @@ import * as $12 from "./routes/api/get_follow_info.ts";
 import * as $13 from "./routes/api/get_follower_users.ts";
 import * as $14 from "./routes/api/get_following_users.ts";
 import * as $15 from "./routes/api/get_like_users.ts";
-import * as $16 from "./routes/api/get_posts.ts";
-import * as $17 from "./routes/api/is_liked.ts";
-import * as $18 from "./routes/api/joke.ts";
-import * as $19 from "./routes/api/update_post.ts";
-import * as $20 from "./routes/callback.tsx";
-import * as $21 from "./routes/following.tsx";
-import * as $22 from "./routes/index.tsx";
-import * as $23 from "./routes/posts/[postId]/edit.tsx";
-import * as $24 from "./routes/posts/[postId]/index.tsx";
-import * as $25 from "./routes/posts/new.tsx";
-import * as $26 from "./routes/signout.tsx";
-import * as $27 from "./routes/users/[userId].tsx";
+import * as $16 from "./routes/api/get_liked_posts.ts";
+import * as $17 from "./routes/api/get_posts.ts";
+import * as $18 from "./routes/api/is_liked.ts";
+import * as $19 from "./routes/api/joke.ts";
+import * as $20 from "./routes/api/update_post.ts";
+import * as $21 from "./routes/callback.tsx";
+import * as $22 from "./routes/following.tsx";
+import * as $23 from "./routes/index.tsx";
+import * as $24 from "./routes/likes.tsx";
+import * as $25 from "./routes/posts/[postId]/edit.tsx";
+import * as $26 from "./routes/posts/[postId]/index.tsx";
+import * as $27 from "./routes/posts/new.tsx";
+import * as $28 from "./routes/signout.tsx";
+import * as $29 from "./routes/users/[userId].tsx";
 import * as $$0 from "./islands/AllPosts.tsx";
 import * as $$1 from "./islands/Counter.tsx";
 import * as $$2 from "./islands/FollowingPosts.tsx";
 import * as $$3 from "./islands/Header.tsx";
-import * as $$4 from "./islands/PostEdit.tsx";
-import * as $$5 from "./islands/PostNew.tsx";
-import * as $$6 from "./islands/PostView.tsx";
-import * as $$7 from "./islands/UserPosts.tsx";
+import * as $$4 from "./islands/LikePosts.tsx";
+import * as $$5 from "./islands/PostEdit.tsx";
+import * as $$6 from "./islands/PostNew.tsx";
+import * as $$7 from "./islands/PostView.tsx";
+import * as $$8 from "./islands/UserPosts.tsx";
 
 const manifest = {
   routes: {
@@ -58,28 +61,31 @@ const manifest = {
     "./routes/api/get_follower_users.ts": $13,
     "./routes/api/get_following_users.ts": $14,
     "./routes/api/get_like_users.ts": $15,
-    "./routes/api/get_posts.ts": $16,
-    "./routes/api/is_liked.ts": $17,
-    "./routes/api/joke.ts": $18,
-    "./routes/api/update_post.ts": $19,
-    "./routes/callback.tsx": $20,
-    "./routes/following.tsx": $21,
-    "./routes/index.tsx": $22,
-    "./routes/posts/[postId]/edit.tsx": $23,
-    "./routes/posts/[postId]/index.tsx": $24,
-    "./routes/posts/new.tsx": $25,
-    "./routes/signout.tsx": $26,
-    "./routes/users/[userId].tsx": $27,
+    "./routes/api/get_liked_posts.ts": $16,
+    "./routes/api/get_posts.ts": $17,
+    "./routes/api/is_liked.ts": $18,
+    "./routes/api/joke.ts": $19,
+    "./routes/api/update_post.ts": $20,
+    "./routes/callback.tsx": $21,
+    "./routes/following.tsx": $22,
+    "./routes/index.tsx": $23,
+    "./routes/likes.tsx": $24,
+    "./routes/posts/[postId]/edit.tsx": $25,
+    "./routes/posts/[postId]/index.tsx": $26,
+    "./routes/posts/new.tsx": $27,
+    "./routes/signout.tsx": $28,
+    "./routes/users/[userId].tsx": $29,
   },
   islands: {
     "./islands/AllPosts.tsx": $$0,
     "./islands/Counter.tsx": $$1,
     "./islands/FollowingPosts.tsx": $$2,
     "./islands/Header.tsx": $$3,
-    "./islands/PostEdit.tsx": $$4,
-    "./islands/PostNew.tsx": $$5,
-    "./islands/PostView.tsx": $$6,
-    "./islands/UserPosts.tsx": $$7,
+    "./islands/LikePosts.tsx": $$4,
+    "./islands/PostEdit.tsx": $$5,
+    "./islands/PostNew.tsx": $$6,
+    "./islands/PostView.tsx": $$7,
+    "./islands/UserPosts.tsx": $$8,
   },
   baseUrl: import.meta.url,
   config,

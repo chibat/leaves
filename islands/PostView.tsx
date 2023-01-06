@@ -14,6 +14,9 @@ import * as hljs from "highlightjs";
 import { Head } from "$fresh/runtime.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { markedWithSanitaize } from "~/lib/utils.ts";
+import { useSignal } from "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/dist/signals";
+
+type bootstrap = any;
 
 export default function PostView(props: { post: Post, user?: AppUser }) {
   const user = props.user;
@@ -29,6 +32,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   const [commentLoading, setCommentLoading] = useState<boolean>(true);
   const [requesting, setRequesting] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
+  const message = useSignal("");
 
   useEffect(() => {
     setPostSource(markedWithSanitaize(post.source));
@@ -96,6 +100,14 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
       setLiked(_liked);
       await readComments();
     })();
+    const searchParams = new URLSearchParams(location.search)
+    if (searchParams.has("posted")) {
+      message.value = "Posted.";
+      history.replaceState(null, '', location.pathname);
+    } else if (searchParams.has("updated")) {
+      message.value = "Updated.";
+      history.replaceState(null, '', location.pathname);
+    }
   }, []);
 
   useEffect(() => {
@@ -104,7 +116,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   });
 
   return (
-    <>
+    <div>
       {post &&
         <>
           <Head>
@@ -117,6 +129,12 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
             <meta name="twitter:site" content="@tomofummy" />
             <meta name="twitter:image" content={post.picture} />
           </Head>
+          {message.value &&
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              {message.value}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          }
           <div class="card mb-3">
             <div class="card-header bg-transparent d-flex justify-content-between">
               <div>
@@ -223,6 +241,6 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
           </div>
         </>
       }
-    </>
+    </div>
   );
 }

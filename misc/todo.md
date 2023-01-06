@@ -1,8 +1,9 @@
 # TODO
 
 - 一覧にコメントするアイコン
+- 一覧から Like
 - prepared statement 見直し
-- 0 の時、モーダルを出さない。
+- 0 following, followers の時、モーダルを出さない。
 - app_user から不要なカラムを削除。消せるの account くらいか。残したいか。
 - DB 再作成
 - header の + アイコンで post ページへ。

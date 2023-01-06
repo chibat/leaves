@@ -206,7 +206,9 @@
     "https://esm.sh/v96/preact@10.11.0/src/jsx.d.ts": "c423715fd7992b2e1446fea11d2d04e8adbd66c1edca1ce5e85f90e0d26a2eb2",
     "https://esm.sh/v99/@preact/signals-core@1.0.1/X-ZS8q/deno/signals-core.js": "cceff90da93a32d4885f394e83c5073b124c455e08cd95a8167503d7f962a743",
     "https://esm.sh/v99/@preact/signals-core@1.0.1/X-ZS8q/dist/signals-core.d.ts": "7a2bc0ea4bb4197fe888236017e1429cb3129ca64eb37146f11f102d9513c54d",
+    "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/deno/dist/signals.js": "f91393b574a69090d4b73ce8437e299b68b63d183a6284899a1f2c390e00b267",
     "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/deno/signals.js": "464a574f4493b079bcc66c1518968c4da2c81e2fbe2ab05b6aa10836d8b7c60d",
+    "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/dist/signals": "f42957574d53d4625d3df68053e43b16872b7ac392072214ea8a5cd80fc0c6ce",
     "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/dist/signals.d.ts": "f4fbae092f6622b348cc45503aef1a2076ea0c4bf37ab78a691a77220217a027"
   }
 }
