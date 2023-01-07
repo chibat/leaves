@@ -188,7 +188,8 @@ export async function selectPost(
 ): Promise<Post | null> {
   const result = await client.queryObject<Post>(
     `${SELECT_POST}
-      WHERE p.id=${id}`,
+      WHERE p.id=$1`,
+    [id],
   );
   return result.rowCount ? result.rows[0] : null;
 }
@@ -207,8 +208,9 @@ export async function selectPostByLtId(
   const result = await client.queryObject<Post>(
     `
       ${SELECT_POST}
-      WHERE p.id < ${ltId}
+      WHERE p.id < $1
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
+    [ltId],
   );
   return result.rows;
 }
@@ -220,8 +222,9 @@ export async function selectUserPosts(
   const result = await client.queryObject<Post>(
     `
       ${SELECT_POST}
-      WHERE p.user_id = ${userId}
+      WHERE p.user_id = $1
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
+    [userId],
   );
   return result.rows;
 }
@@ -230,12 +233,15 @@ export async function selectUserPostByLtId(
   client: Client,
   params: { ltId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(`
+  const result = await client.queryObject<Post>(
+    `
       ${SELECT_POST}
-      WHERE p.user_id = ${params.userId}
-      AND p.id < ${params.ltId}
+      WHERE p.user_id = $1
+      AND p.id < $2
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `);
+    `,
+    [params.userId, params.ltId],
+  );
   return result.rows;
 }
 
@@ -243,10 +249,13 @@ export async function selectFollowingUsersPosts(
   client: Client,
   userId: number,
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(`
+  const result = await client.queryObject<Post>(
+    `
       ${SELECT_POST}
-      WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${userId})
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
+      WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = $1)
+      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
+    [userId],
+  );
   return result.rows;
 }
 
@@ -254,12 +263,15 @@ export async function selectFollowingUsersPostByLtId(
   client: Client,
   params: { ltId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(`
+  const result = await client.queryObject<Post>(
+    `
       ${SELECT_POST}
-      WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${params.userId})
-      AND p.id < ${params.ltId}
+      WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = $1)
+      AND p.id < $2
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `);
+    `,
+    [params.userId, params.ltId],
+  );
   return result.rows;
 }
 
@@ -267,10 +279,13 @@ export async function selectLikedPosts(
   client: Client,
   userId: number,
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(`
+  const result = await client.queryObject<Post>(
+    `
       ${SELECT_POST}
-      WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = ${userId} ORDER BY post_id DESC)
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
+      WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = $1 ORDER BY post_id DESC)
+      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
+    [userId],
+  );
   return result.rows;
 }
 
@@ -278,11 +293,14 @@ export async function selectLikedPostsByLtId(
   client: Client,
   params: { ltId: number; userId: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(`
+  const result = await client.queryObject<Post>(
+    `
       ${SELECT_POST}
-      WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = ${params.userId} AND post_id < ${params.ltId} ORDER BY post_id DESC)
+      WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = $1 AND post_id < $2 ORDER BY post_id DESC)
       ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `);
+    `,
+    [params.userId, params.ltId],
+  );
   return result.rows;
 }
 
