@@ -14,7 +14,7 @@ export const handler: Handlers = {
       (await pool((client) => selectFollowingUsers(client, params.userId))).map(
         (appUser) => {
           return {
-            userId: appUser.id,
+            id: appUser.id,
             name: defaultString(appUser.name),
             picture: defaultString(appUser.picture),
           };

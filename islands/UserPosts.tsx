@@ -132,7 +132,7 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
               <a class="noDecoration" href="/likes">Likes</a>
             }
           </div>
-          <Posts posts={posts} />
+          <Posts posts={posts} user={loginUser} />
           <br />
           <br />
         </>

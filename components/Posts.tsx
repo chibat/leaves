@@ -37,12 +37,14 @@ export default function Posts(props: Props) {
     await request<LikeRequest, LikeResponse>("create_like", { postId: post.id });
     post.liked = true;
     post.likes = "" + (Number(post.likes) + 1);
+    props.posts.value = [...props.posts.value];
   }
 
   async function cancelLike(post: ResponsePost) {
     await request<CancelLikeRequest, CancelLikeResponse>("delete_like", { postId: post.id });
     post.liked = false;
     post.likes = "" + (Number(post.likes) - 1);
+    props.posts.value = [...props.posts.value];
   }
 
   function openModal(postId: number) {
