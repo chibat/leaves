@@ -29,7 +29,7 @@ export const handler: Handlers<PageType> = {
       return ctx.renderNotFound();
     }
 
-    const res = await ctx.render({ user: session?.u, authUrl, post });
+    const res = await ctx.render({ user: session?.user, authUrl, post });
     return res;
   },
 };

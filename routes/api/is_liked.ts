@@ -14,7 +14,7 @@ export const handler: Handlers = {
     }
     const results = await pool((client) =>
       selectLikes(client, {
-        userId: session.u.id,
+        userId: session.user.id,
         postIds: [params.postId],
       }) // TODO: to one postId
     );

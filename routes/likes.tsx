@@ -2,7 +2,7 @@ import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { AppUser } from "~/lib/db.ts";
 import Header from "~/islands/Header.tsx";
-import { getAuthUrl, getSession } from "../lib/auth.ts";
+import { getSession } from "~/lib/auth.ts";
 import LikePosts from "~/islands/LikePosts.tsx";
 
 type PageType = {
@@ -11,7 +11,6 @@ type PageType = {
 
 export const handler: Handlers<PageType> = {
   async GET(req, ctx) {
-    // TODO セッションがなければトップへ
     const session = await getSession(req);
     if (!session) {
       return new Response("", {
@@ -19,7 +18,7 @@ export const handler: Handlers<PageType> = {
         headers: { Location: "/" },
       });
     }
-    const res = await ctx.render({ loginUser: session?.u });
+    const res = await ctx.render({ loginUser: session.user });
     return res;
   },
 };

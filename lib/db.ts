@@ -4,6 +4,7 @@ import {
   Transaction,
 } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
 import { PAGE_ROWS } from "~/lib/constants.ts";
+import { SessionType } from "~/lib/auth.ts";
 
 export type Client = PoolClient | Transaction;
 
@@ -593,4 +594,58 @@ export async function selectLikeUsers(
       IN (SELECT user_id FROM likes WHERE post_id = ${postId} ORDER BY created_at DESC)
     `;
   return result.rows;
+}
+
+export async function selectSession(
+  client: Client,
+  sessionId: string,
+): Promise<AppUser | undefined> {
+  const result = await client.queryObject<AppUser>`
+  SELECT * FROM app_user u WHERE EXISTS (SELECT 1 FROM app_session WHERE user_id = u.id AND id = ${sessionId})
+`;
+  return result.rowCount ? result.rows[0] : undefined;
+}
+
+export async function insertSession(
+  client: Client,
+  userId: number,
+): Promise<string> {
+  const result = await client.queryObject<{ id: string }>`
+      INSERT INTO app_session (user_id)
+      VALUES (${userId})
+      RETURNING id
+    `;
+  const sessionId = result.rows[0].id;
+  await deleteExpiredSession(client, userId);
+  return sessionId;
+}
+
+export async function deleteSession(
+  client: Client,
+  session: SessionType,
+): Promise<void> {
+  await client.queryObject<void>`
+  DELETE FROM app_session WHERE id = ${session.id}
+`;
+  await deleteExpiredSession(client, session.user.id);
+}
+
+/**
+ * 作成後、1ヶ月経過しているセッションを削除する
+ * TODO セッション取得時に updated_at を更新するか？
+ *
+ * @param client
+ * @param userId
+ */
+export async function deleteExpiredSession(
+  client: Client,
+  userId: number,
+): Promise<void> {
+  try {
+    await client.queryObject<void>`
+  DELETE FROM app_session WHERE user_id = ${userId} AND updated_at < NOW() - CAST('1 months' AS INTERVAL)
+`;
+  } catch (ignore) {
+    console.error(ignore);
+  }
 }

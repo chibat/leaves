@@ -21,7 +21,7 @@ export const handler: Handlers = {
     if (requestJson.source.length > 10000) {
       return Response.json(null, { status: 400 });
     }
-    const userId = session.u.id;
+    const userId = session.user.id;
     const postId = await pool((client) =>
       insertPost(client, {
         userId,

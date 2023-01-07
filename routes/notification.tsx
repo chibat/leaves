@@ -1,6 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
-import { getSession, setSession } from "~/lib/auth.ts";
+import { getSession } from "~/lib/auth.ts";
 import { AppNotification, AppUser, selectNotificationsWithUpdate, transaction } from "~/lib/db.ts";
 import Header from "~/islands/Header.tsx";
 
@@ -18,10 +18,9 @@ export const handler: Handlers<PageType> = {
         headers: { Location: "/" },
       });
     }
-    const notifications = await transaction(client => selectNotificationsWithUpdate(client, session.u.id));
-    session.u.notification = false;
-    const res = await ctx.render({ loginUser: session.u, notifications });
-    await setSession(res, session);
+    const notifications = await transaction(client => selectNotificationsWithUpdate(client, session.user.id));
+    session.user.notification = false;
+    const res = await ctx.render({ loginUser: session.user, notifications });
     return res;
   },
 };

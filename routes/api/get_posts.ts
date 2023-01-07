@@ -52,7 +52,7 @@ async function execute(
       }
     } else if (params.followig && session) {
       // following user only
-      const userId = session.u.id;
+      const userId = session.user.id;
       if (params.direction === "next" && params.postId) {
         posts = await selectFollowingUsersPostByLtId(client, {
           ltId: params.postId,
@@ -79,7 +79,7 @@ async function execute(
 
     const likedPostIds = session
       ? await selectLikes(client, {
-        userId: session.u.id,
+        userId: session.user.id,
         postIds: posts.map((post) => post.id),
       })
       : [];

@@ -17,7 +17,7 @@ export const handler: Handlers = {
       await pool((client) =>
         deleteComment(client, {
           id: requestJson.commentId,
-          userId: session.u.id,
+          userId: session.user.id,
         })
       );
     }

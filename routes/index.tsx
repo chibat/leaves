@@ -9,7 +9,7 @@ export const handler: Handlers<{ authUrl?: string, user?: AppUser }> = {
   async GET(req, ctx) {
     const session = await getSession(req);
     const authUrl = session ? undefined : getAuthUrl(req.url);
-    const res = await ctx.render({ authUrl, user: session?.u });
+    const res = await ctx.render({ authUrl, user: session?.user });
     return res;
   },
 };

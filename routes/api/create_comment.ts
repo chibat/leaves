@@ -22,7 +22,7 @@ export const handler: Handlers = {
       await pool((client) =>
         insertComment(client, {
           postId: requestJson.postId,
-          userId: session.u.id,
+          userId: session.user.id,
           source: requestJson.source,
         })
       );

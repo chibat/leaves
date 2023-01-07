@@ -21,6 +21,15 @@ CREATE TABLE post (
 );
 CREATE INDEX post_user_id ON post(user_id);
 
+DROP TABLE app_session;
+CREATE TABLE app_session (
+ id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+ user_id INTEGER NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
+ updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX app_session_user_id ON app_session(user_id);
+
 DROP TABLE comment;
 CREATE TABLE comment (
  id SERIAL PRIMARY KEY,

@@ -21,12 +21,10 @@ export const handler: Handlers = {
     const params: RequestType = await request.json();
 
     const session = await getSession(request);
-    const user = session ? session.u : null;
-
-    if (!user) {
-      // TODO 権限なしエラー
+    if (!session) {
       return Response.json(null, { status: 401 });
     }
+    const user = session.user;
 
     const { posts, likedPostIds } = await pool(async (client) => {
       let posts;

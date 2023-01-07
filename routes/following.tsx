@@ -3,7 +3,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import FollowingPosts from "~/islands/FollowingPosts.tsx";
 import { AppUser } from "~/lib/db.ts";
 import Header from "~/islands/Header.tsx";
-import { getAuthUrl, getSession } from "../lib/auth.ts";
+import { getSession } from "~/lib/auth.ts";
 
 type PageType = {
   loginUser?: AppUser,
@@ -19,7 +19,7 @@ export const handler: Handlers<PageType> = {
         headers: { Location: "/" },
       });
     }
-    const res = await ctx.render({ loginUser: session?.u });
+    const res = await ctx.render({ loginUser: session.user });
     return res;
   },
 };

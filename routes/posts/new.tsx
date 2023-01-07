@@ -15,7 +15,7 @@ export const handler: Handlers<{ authUrl?: string, user?: AppUser }> = {
         headers: { Location: "/" },
       });
     }
-    const res = await ctx.render({ user: session.u });
+    const res = await ctx.render({ user: session.user });
     return res;
   },
 };

@@ -18,7 +18,7 @@ export const handler: Handlers = {
     if (requestJson) {
       await pool((client) =>
         insertLike(client, {
-          userId: session.u.id,
+          userId: session.user.id,
           postId: requestJson.postId,
         })
       );

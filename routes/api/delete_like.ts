@@ -16,7 +16,7 @@ export const handler: Handlers = {
     if (requestJson) {
       await pool((client) =>
         deleteLike(client, {
-          userId: session.u.id,
+          userId: session.user.id,
           postId: requestJson.postId,
         })
       );

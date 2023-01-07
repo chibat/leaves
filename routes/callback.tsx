@@ -1,6 +1,6 @@
 import { Handlers } from "$fresh/server.ts";
 import { clientId, clientSecret } from "~/lib/env.ts";
-import { getCallbackUrl, setSession } from "~/lib/auth.ts";
+import { createSession, getCallbackUrl } from "~/lib/auth.ts";
 import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "../lib/db.ts";
 
 export type Token = { access_token: string; refresh_token: string };
@@ -75,7 +75,7 @@ export const handler: Handlers = {
         });
       });
 
-      await setSession(res, { u: appUser });
+      await createSession(res, appUser.id);
     }
     return res;
   }

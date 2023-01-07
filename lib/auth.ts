@@ -1,16 +1,18 @@
 import { getCookies, setCookie } from "std/http/cookie.ts";
-import { deserializeJwt, serializeJwt } from "~/lib/jwt.ts";
-import { AppUser } from "~/lib/db.ts";
+import { AppUser, insertSession, pool, selectSession } from "~/lib/db.ts";
 import { clientId } from "~/lib/env.ts";
 
-export type JwtType = { u: AppUser };
+export type SessionType = { id: string; user: AppUser };
 
 const debug = false;
 
-export async function getSession(req: Request): Promise<JwtType | undefined> {
+export async function getSession(
+  req: Request,
+): Promise<SessionType | undefined> {
   if (debug) {
     return {
-      u: {
+      id: "47fe0ced-6569-45f6-88e6-d02cfdefb72b",
+      user: {
         id: 1,
         google_id: "1",
         name: "Tomofumi Chiba",
@@ -23,17 +25,22 @@ export async function getSession(req: Request): Promise<JwtType | undefined> {
     };
   }
   const cookies = getCookies(req.headers);
-  const sessionString = cookies["session"];
-  return sessionString
-    ? await deserializeJwt(sessionString) as JwtType
-    : undefined;
+  const sessionId = cookies["session"];
+  if (!sessionId) {
+    return undefined;
+  }
+  const user = await pool((client) => selectSession(client, sessionId));
+  if (!user) {
+    return undefined;
+  }
+  return { id: sessionId, user };
 }
 
-export async function setSession(response: Response, data: JwtType) {
-  const session = await serializeJwt(data);
+export async function createSession(response: Response, userId: number) {
+  const sessionId = await pool((client) => insertSession(client, userId));
   setCookie(response.headers, {
     name: "session",
-    value: session,
+    value: sessionId,
     sameSite: "Strict",
     httpOnly: true,
     secure: true,

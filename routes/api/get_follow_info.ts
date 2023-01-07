@@ -24,7 +24,7 @@ export const handler: Handlers = {
         const session = await getSession(request);
         if (session) {
           return await judgeFollowing(client, {
-            userId: session.u.id,
+            userId: session.user.id,
             followingUserId: params.userId,
           });
         }

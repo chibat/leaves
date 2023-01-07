@@ -16,7 +16,7 @@ export const handler: Handlers = {
     const requestJson: RequestType = await request.json();
     if (requestJson) {
       await pool((client) =>
-        deletePost(client, { id: requestJson.postId, userId: session.u.id })
+        deletePost(client, { id: requestJson.postId, userId: session.user.id })
       );
       const responseJson: ResponseType = { postId: requestJson.postId };
       return Response.json(responseJson);
