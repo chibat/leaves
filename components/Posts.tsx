@@ -9,10 +9,10 @@ import type { ResponsePost } from "~/lib/types.ts";
 import { useState, useEffect } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
 import { markedWithSanitaize } from "~/lib/utils.ts";
+import { Signal } from "@preact/signals-core";
 
 type Props = {
-  posts: ResponsePost[],
-  setPosts: (posts: ResponsePost[]) => void;
+  posts: Signal<ResponsePost[]>,
   user?: AppUser,
 }
 
@@ -39,7 +39,6 @@ export default function Posts(props: Props) {
     await request<LikeRequest, LikeResponse>("create_like", { postId: post.id });
     post.liked = true;
     post.likes = "" + (Number(post.likes) + 1);
-    props.setPosts([...props.posts]);
     setRequesting(false);
   }
 
@@ -48,7 +47,6 @@ export default function Posts(props: Props) {
     await request<CancelLikeRequest, CancelLikeResponse>("delete_like", { postId: post.id });
     post.liked = false;
     post.likes = "" + (Number(post.likes) - 1);
-    props.setPosts([...props.posts]);
     setRequesting(false);
   }
 
@@ -62,10 +60,7 @@ export default function Posts(props: Props) {
 
   return (
     <>
-      <head>
-        <title>md-sns</title>
-      </head>
-      {props.posts && props.posts.map(post =>
+      {props.posts.value && props.posts.value.map(post =>
         <div class="card mb-3" key={post.id}>
           <div class="card-header bg-transparent d-flex justify-content-between">
             <div>
