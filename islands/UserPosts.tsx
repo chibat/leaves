@@ -126,8 +126,12 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
             </>
           }
           <div class="mb-3">
-            <a class="noDecoration me-3" onClick={displayFollowingUsers} style={{ cursor: "pointer" }}>{following} Following</a>
-            <a class="noDecoration me-3" onClick={displayFollowerUsers} style={{ cursor: "pointer" }}>{followers} Follower{followers === "1" ? "" : "s"}</a>
+            {following === "0" ? <span class="me-3">0 Following</span> :
+              <a class="noDecoration me-3" onClick={displayFollowingUsers} style={{ cursor: "pointer" }}>{following} Following</a>
+            }
+            {followers === "0" ? <span class="me-3">0 Followers</span> :
+              <a class="noDecoration me-3" onClick={displayFollowerUsers} style={{ cursor: "pointer" }}>{followers} Follower{followers === "1" ? "" : "s"}</a>
+            }
             {(loginUser && props.pageUser.id === loginUser.id) &&
               <a class="noDecoration" href="/likes">Likes</a>
             }
