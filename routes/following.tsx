@@ -28,10 +28,7 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>md-sns</title>
-        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
-        <meta name="twitter:card" content="summary"></meta>
-        <meta name="twitter:site" content="@tomofummy" />
+        <title>Following - md-sns</title>
       </Head>
       <Header user={props.data.loginUser} />
       <main class="container">

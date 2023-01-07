@@ -31,10 +31,18 @@ export default function Page(
   props: PageProps<PageType>,
 ) {
   const user = props.data.user;
+  const post = props.data.post;
   return (
     <>
       <Head>
-        <title>md-sns</title>
+        <title>Post {post.id} - md-sns</title>
+        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
+        <meta property="og:title" content={`md-sns: Post ${post.id}`}></meta>
+        <meta property="og:description" content={post.source?.substring(0, 1000)?.replaceAll("\n", " ")}></meta>
+        <meta property="og:image" content={post.picture} />
+        <meta name="twitter:card" content="summary"></meta>
+        <meta name="twitter:site" content="@tomofummy" />
+        <meta name="twitter:image" content={post.picture} />
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
       <main className="container">

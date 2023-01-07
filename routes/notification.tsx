@@ -29,7 +29,7 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>md-sns</title>
+        <title>Notification - md-sns</title>
       </Head>
       <Header user={props.data.loginUser} />
       <main class="container">

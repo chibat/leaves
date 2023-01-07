@@ -1,4 +1,3 @@
-DROP TABLE app_user;
 CREATE TABLE app_user (
 id SERIAL PRIMARY KEY,
 google_id TEXT,
@@ -11,7 +10,6 @@ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 CONSTRAINT app_user_google_id UNIQUE(google_id)
 );
 
-DROP TABLE post;
 CREATE TABLE post (
  id SERIAL PRIMARY KEY,
  user_id INTEGER REFERENCES app_user(id) ON DELETE CASCADE,
@@ -21,7 +19,6 @@ CREATE TABLE post (
 );
 CREATE INDEX post_user_id ON post(user_id);
 
-DROP TABLE app_session;
 CREATE TABLE app_session (
  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
  user_id INTEGER NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
@@ -30,7 +27,6 @@ CREATE TABLE app_session (
 );
 CREATE INDEX app_session_user_id ON app_session(user_id);
 
-DROP TABLE comment;
 CREATE TABLE comment (
  id SERIAL PRIMARY KEY,
  post_id INTEGER REFERENCES post(id) ON DELETE CASCADE,
@@ -41,7 +37,6 @@ CREATE TABLE comment (
 );
 CREATE INDEX comment_post_id ON comment(post_id);
 
-DROP TABLE follow;
 CREATE TABLE follow (
  user_id INTEGER REFERENCES app_user(id) ON DELETE CASCADE,
  following_user_id INTEGER,
@@ -52,7 +47,6 @@ CREATE TABLE follow (
 
 CREATE TYPE notification_type AS ENUM ('follow', 'like', 'comment');
 
-DROP TABLE notification;
 CREATE TABLE notification (
  id SERIAL PRIMARY KEY,
  user_id INTEGER REFERENCES app_user(id) ON DELETE CASCADE,
@@ -64,7 +58,6 @@ CREATE TABLE notification (
 );
 CREATE INDEX notification_user_id ON notification(user_id);
 
-DROP TABLE likes;
 CREATE TABLE likes (
  user_id INTEGER REFERENCES app_user(id) ON DELETE CASCADE,
  post_id INTEGER REFERENCES post(id) ON DELETE CASCADE,

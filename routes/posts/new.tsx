@@ -24,7 +24,7 @@ export default function Page(props: PageProps<{ user?: AppUser }>) {
   return (
     <>
       <Head>
-        <title>md-sns</title>
+        <title>New - md-sns</title>
       </Head>
       <Header user={props.data.user} />
       <main className="container">
