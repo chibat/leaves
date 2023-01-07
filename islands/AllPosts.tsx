@@ -6,8 +6,9 @@ import type { ResponsePost } from "~/lib/types.ts";
 import type { RequestType, ResponseType } from "~/routes/api/get_posts.ts";
 import { PAGE_ROWS } from "~/lib/constants.ts";
 import { useSignal } from "@preact/signals";
+import { AppUser } from "~/lib/db.ts";
 
-export default function AllPosts() {
+export default function AllPosts(props: { loginUser?: AppUser }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const loading = useSignal<boolean>(false);
@@ -18,7 +19,7 @@ export default function AllPosts() {
       if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
-        request<RequestType, ResponseType>("get_posts", { postId, direction: "next" }).then(results => {
+        request<RequestType, ResponseType>("get_posts", { postId }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }
@@ -42,7 +43,7 @@ export default function AllPosts() {
 
   return (
     <div>
-      <Posts posts={posts} />
+      <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />
       {loading.value &&

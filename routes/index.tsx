@@ -3,7 +3,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { getAuthUrl, getSession } from "~/lib/auth.ts";
 import Header from "~/islands/Header.tsx";
 import { AppUser } from "~/lib/db.ts";
-import HomePosts from "~/islands/AllPosts.tsx";
+import AllPosts from "~/islands/AllPosts.tsx";
 
 export const handler: Handlers<{ authUrl?: string, user?: AppUser }> = {
   async GET(req, ctx) {
@@ -41,7 +41,7 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
             </div>
           </div>
         }
-        <HomePosts />
+        <AllPosts loginUser={props.data.user} />
       </main>
     </>
   );

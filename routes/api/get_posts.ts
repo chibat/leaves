@@ -2,14 +2,11 @@ import { ResponsePost } from "~/lib/types.ts";
 import {
   pool,
   Post,
-  selectFollowingUsersPostByGtId,
   selectFollowingUsersPostByLtId,
   selectFollowingUsersPosts,
   selectLikes,
-  selectPostByGtId,
   selectPostByLtId,
   selectPosts,
-  selectUserPostByGtId,
   selectUserPostByLtId,
   selectUserPosts,
 } from "~/lib/db.ts";
@@ -18,7 +15,6 @@ import { getSession } from "~/lib/auth.ts";
 
 export type RequestType = {
   postId?: number;
-  direction?: "next" | "previous";
   userId?: number;
   followig?: boolean;
 };
@@ -37,14 +33,9 @@ async function execute(
     let posts: Post[] = [];
     if (params.userId) {
       // specified user only
-      if (params.direction === "next" && params.postId) {
+      if (params.postId) {
         posts = await selectUserPostByLtId(client, {
           ltId: params.postId,
-          userId: params.userId,
-        });
-      } else if (params.direction === "previous" && params.postId) {
-        posts = await selectUserPostByGtId(client, {
-          gtId: params.postId,
           userId: params.userId,
         });
       } else {
@@ -53,14 +44,9 @@ async function execute(
     } else if (params.followig && session) {
       // following user only
       const userId = session.user.id;
-      if (params.direction === "next" && params.postId) {
+      if (params.postId) {
         posts = await selectFollowingUsersPostByLtId(client, {
           ltId: params.postId,
-          userId,
-        });
-      } else if (params.direction === "previous" && params.postId) {
-        posts = await selectFollowingUsersPostByGtId(client, {
-          gtId: params.postId,
           userId,
         });
       } else {
@@ -68,10 +54,8 @@ async function execute(
       }
     } else {
       // all user
-      if (params.direction === "next" && params.postId) {
+      if (params.postId) {
         posts = await selectPostByLtId(client, params.postId);
-      } else if (params.direction === "previous" && params.postId) {
-        posts = await selectPostByGtId(client, params.postId);
       } else {
         posts = await selectPosts(client);
       }

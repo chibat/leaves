@@ -18,7 +18,6 @@ type Props = {
 
 export default function Posts(props: Props) {
 
-  const [requesting, setRequesting] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
   const [selectedPostId, setSelectedPostId] = useState<number>();
 
@@ -35,19 +34,15 @@ export default function Posts(props: Props) {
   }
 
   async function like(post: ResponsePost) {
-    setRequesting(true);
     await request<LikeRequest, LikeResponse>("create_like", { postId: post.id });
     post.liked = true;
     post.likes = "" + (Number(post.likes) + 1);
-    setRequesting(false);
   }
 
   async function cancelLike(post: ResponsePost) {
-    setRequesting(true);
     await request<CancelLikeRequest, CancelLikeResponse>("delete_like", { postId: post.id });
     post.liked = false;
     post.likes = "" + (Number(post.likes) - 1);
-    setRequesting(false);
   }
 
   function openModal(postId: number) {
@@ -56,7 +51,7 @@ export default function Posts(props: Props) {
   }
 
   const user = props.user;
-  console.debug("start ");
+  console.debug("start ", user);
 
   return (
     <>
@@ -86,16 +81,15 @@ export default function Posts(props: Props) {
               {Number(post.comments) > 0 &&
                 <a class="ms-2 noDecoration" href={`/posts/${post.id}`}>{post.comments} Comment{post.comments === "1" ? "" : "s"}</a>
               }
-              {requesting &&
-                <div class="spinner-grow spinner-grow-sm ms-3" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
+              {user && post.liked &&
+                <a href={void (0)} onClick={() => cancelLike(post)} class="ms-3" style={{ cursor: "pointer" }}>
+                  <img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img>
+                </a>
               }
-              {user && !requesting && post.liked &&
-                <a href={void (0)} onClick={() => cancelLike(post)} class="ms-3"><img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img></a>
-              }
-              {user && !requesting && !post.liked &&
-                <a href={void (0)} onClick={() => like(post)} class="ms-3"><img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img></a>
+              {user && !post.liked &&
+                <a href={void (0)} onClick={() => like(post)} class="ms-3" style={{ cursor: "pointer" }}>
+                  <img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img>
+                </a>
               }
               {Number(post.likes) > 0 &&
                 <a href={void (0)} class="noDecoration ms-2" onClick={() => openModal(post.id)} style={{ cursor: "pointer" }}>{post.likes} Like{post.likes === "1" ? "" : "s"}</a>

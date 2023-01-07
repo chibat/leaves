@@ -17,7 +17,7 @@ export default function LikePosts() {
       if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
-        request<RequestType, ResponseType>("get_liked_posts", { postId, direction: "next" }).then(results => {
+        request<RequestType, ResponseType>("get_liked_posts", { postId, }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }

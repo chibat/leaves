@@ -3,7 +3,6 @@ import { ResponsePost } from "~/lib/types.ts";
 import {
   pool,
   selectLikedPosts,
-  selectLikedPostsByGtId,
   selectLikedPostsByLtId,
   selectLikes,
 } from "~/lib/db.ts";
@@ -11,7 +10,6 @@ import { Handlers } from "$fresh/server.ts";
 
 export type RequestType = {
   postId?: number;
-  direction?: "next" | "previous";
 };
 
 export type ResponseType = Array<ResponsePost>;
@@ -28,15 +26,10 @@ export const handler: Handlers = {
 
     const { posts, likedPostIds } = await pool(async (client) => {
       let posts;
-      if (params.direction === "next" && params.postId) {
+      if (params.postId) {
         posts = await selectLikedPostsByLtId(client, {
           userId: user.id,
           ltId: params.postId,
-        });
-      } else if (params.direction === "previous" && params.postId) {
-        posts = await selectLikedPostsByGtId(client, {
-          userId: user.id,
-          gtId: params.postId,
         });
       } else {
         posts = await selectLikedPosts(client, user.id);

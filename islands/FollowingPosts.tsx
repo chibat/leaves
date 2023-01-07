@@ -5,8 +5,9 @@ import { PAGE_ROWS } from "~/lib/constants.ts";
 import { RequestType, ResponseType } from "~/routes/api/get_posts.ts";
 import Posts from "~/components/Posts.tsx";
 import { useSignal } from "@preact/signals";
+import { AppUser } from "~/lib/db.ts";
 
-export default function FollowingPosts() {
+export default function FollowingPosts(props: { loginUser?: AppUser }) {
   console.debug("start ");
 
   const posts = useSignal<Array<ResponsePost>>([]);
@@ -18,7 +19,7 @@ export default function FollowingPosts() {
       if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         setLoading(true);
-        request<RequestType, ResponseType>("get_posts", { postId, direction: "next", followig: true }).then(results => {
+        request<RequestType, ResponseType>("get_posts", { postId, followig: true }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }
@@ -43,7 +44,7 @@ export default function FollowingPosts() {
   return (
     <div>
       <h1>Following</h1>
-      <Posts posts={posts} />
+      <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />
       {loading &&

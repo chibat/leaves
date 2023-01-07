@@ -39,7 +39,7 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
       if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
-        request<RequestType, ResponseType>("get_posts", { postId, userId, direction: "next" }).then(results => {
+        request<RequestType, ResponseType>("get_posts", { postId, userId }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }
