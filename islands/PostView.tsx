@@ -121,7 +121,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
         <>
           <Head>
             <title>Post {post.id} - md-sns</title>
-            <meta property="og:url" content="https://md-sns.herokuapp.com/"></meta>
+            <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
             <meta property="og:title" content={`md-sns: Post ${post.id}`}></meta>
             <meta property="og:description" content={post.source?.substring(0, 1000)?.replaceAll("\n", " ")}></meta>
             <meta property="og:image" content={post.picture} />

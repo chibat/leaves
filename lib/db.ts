@@ -1,8 +1,4 @@
-import {
-  Pool,
-  PoolClient,
-  Transaction,
-} from "https://deno.land/x/postgres@v0.17.0/mod.ts";
+import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
 import { PAGE_ROWS } from "~/lib/constants.ts";
 import { SessionType } from "~/lib/auth.ts";
 
@@ -62,7 +58,7 @@ const connectionPool = new Pool(
       ],
     },
   },
-  3,
+  5,
   true,
 );
 

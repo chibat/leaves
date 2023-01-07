@@ -30,7 +30,7 @@ export default function Page(props: PageProps<PageType>) {
     <>
       <Head>
         <title>md-sns</title>
-        <meta property="og:url" content="https://md-sns.herokuapp.com/"></meta>
+        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
         <meta property="og:title" content={`${props.data.pageUser.name} - md-sns`}></meta>
         <meta property="og:description" content={props.data.pageUser.name}></meta>
         <meta property="og:image" content={props.data.pageUser.picture} />

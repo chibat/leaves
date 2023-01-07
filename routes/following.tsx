@@ -29,7 +29,7 @@ export default function Page(props: PageProps<PageType>) {
     <>
       <Head>
         <title>md-sns</title>
-        <meta property="og:url" content="https://md-sns.herokuapp.com/"></meta>
+        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
       </Head>

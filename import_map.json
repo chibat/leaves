@@ -1,5 +1,7 @@
 {
   "imports": {
+    "std/": "https://deno.land/std@0.168.0/",
+    "postgres/": "https://deno.land/x/postgres@v0.17.0/",
     "$fresh/": "https://deno.land/x/fresh@1.1.2/",
     "preact": "https://esm.sh/preact@10.11.0",
     "preact/": "https://esm.sh/preact@10.11.0/",
@@ -7,7 +9,6 @@
     "@preact/signals": "https://esm.sh/*@preact/signals@1.0.3",
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.0.1",
     "~/": "./",
-    "std/": "https://deno.land/std@0.168.0/",
     "highlightjs": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js",
     "dompurify": "https://esm.sh/dompurify@2.4.1",
     "marked": "https://esm.sh/marked@4.2.5"

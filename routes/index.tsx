@@ -19,13 +19,13 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
     <>
       <Head>
         <title>md-sns</title>
-        <meta property="og:url" content="https://md-sns.herokuapp.com/"></meta>
+        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
         <meta property="og:title" content="md-sns"></meta>
-        <meta property="og:image" content="https://md-sns.herokuapp.com/assets/img/icon-192x192.png" />
+        <meta property="og:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:creator" content="@tomofummy" />
-        <meta name="twitter:image" content="https://md-sns.herokuapp.com/assets/img/icon-192x192.png" />
+        <meta name="twitter:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
       </Head>
       <Header user={props.data.user} authUrl={props.data.authUrl} />
       <main className="container">
