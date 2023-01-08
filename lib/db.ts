@@ -1,6 +1,7 @@
 import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
 import { PAGE_ROWS } from "~/lib/constants.ts";
 import { SessionType } from "~/lib/auth.ts";
+import * as uuid from "std/uuid/mod.ts";
 
 export type Client = PoolClient | Transaction;
 
@@ -583,6 +584,9 @@ export async function selectSession(
   client: Client,
   sessionId: string,
 ): Promise<AppUser | undefined> {
+  if (!uuid.validate(sessionId)) {
+    return undefined;
+  }
   const result = await client.queryObject<AppUser>`
   SELECT * FROM app_user u WHERE EXISTS (SELECT 1 FROM app_session WHERE user_id = u.id AND id = ${sessionId})
 `;
