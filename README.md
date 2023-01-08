@@ -1,5 +1,7 @@
 # md-sns
 
+[![Made with Fresh](https://fresh.deno.dev/fresh-badge.svg)](https://fresh.deno.dev)
+
 Source code for https://md-sns.deno.dev/ .
 
 ## References
