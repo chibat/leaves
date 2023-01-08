@@ -51,13 +51,13 @@ export default function Header(props: { user?: AppUser, authUrl?: string }) {
           <div>
             <img src="/assets/img/icon-192x192.png" width="39" class="me-2" alt="md-sns" />
             <a class="fs-4 me-3 noDecoration" href="/">md-sns</a>
-            <a class="me-3 noDecoration" href="/">Home</a>
+            <a class="me-3 noDecoration" href="/">All</a>
             {props.user &&
               <a class="me-3 noDecoration" href="/following">Following</a>
             }
+            <a class="me-3 noDecoration" href="/about">About</a>
           </div>
           <div class="d-flex align-items-center ms-auto">
-            <a class="me-3 noDecoration" href="/about">About</a>
             <a class="noDecoration" href="/posts/new" title="New Post">
               <span class="me-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
