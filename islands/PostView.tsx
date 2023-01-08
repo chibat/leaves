@@ -92,11 +92,9 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   }
 
   useEffect(() => {
-    console.debug("useEffect");
     setLikes(post.likes);
     (async () => {
       const _liked = await request<IsLikedRequest, boolean>("is_liked", { postId: post.id });
-      console.log("###", _liked);
       setLiked(_liked);
       await readComments();
     })();
@@ -111,7 +109,6 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   }, []);
 
   useEffect(() => {
-    console.debug("useEffect");
     (hljs as any).highlightAll();
   });
 

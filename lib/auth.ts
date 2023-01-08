@@ -49,7 +49,6 @@ export async function createSession(response: Response, userId: number) {
 }
 
 export function getCallbackUrl(requestUrl: string) {
-  console.log(`${requestUrl} requestUrl`);
   const url = new URL(requestUrl);
   return (url.hostname === "localhost" ? "http" : "https") + "://" + url.host +
     "/callback";

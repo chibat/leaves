@@ -8,7 +8,6 @@ export type ResponseType = Array<AppUser>;
 
 export const handler: Handlers = {
   async POST(request) {
-    console.log(request.url);
     const params: RequestType = await request.json();
     const results =
       (await pool((client) => selectFollowingUsers(client, params.userId))).map(

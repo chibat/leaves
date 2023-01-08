@@ -6,7 +6,6 @@ export type RequestType = { postId: number };
 
 export const handler: Handlers = {
   async POST(request) {
-    console.log(request.url);
     const params: RequestType = await request.json();
     const session = await getSession(request);
     if (!session) {
@@ -18,7 +17,6 @@ export const handler: Handlers = {
         postIds: [params.postId],
       }) // TODO: to one postId
     );
-    console.log("results", results);
     return Response.json(results.length === 1);
   },
 };

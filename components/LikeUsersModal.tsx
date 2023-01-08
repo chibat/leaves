@@ -13,10 +13,8 @@ export function LikeUsersModal(props: { postId: number, setModal: (modal: boolea
     props.setModal(false);
   }
   useEffect(() => {
-    console.log("useEffect LikeUsersModal");
     setLoading(true);
     request<LikeUsersRequest, LikeUsersResponse>("get_like_users", { postId: props.postId }).then(a => {
-      console.log(users);
       setLoading(false);
       setUsers(a);
     });

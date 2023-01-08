@@ -19,7 +19,6 @@ export const handler: Handlers<PageType> = {
       return ctx.renderNotFound();
     }
 
-    console.log(postId);
     const session = await getSession(req);
     const authUrl = session ? undefined : getAuthUrl(req.url);
     const res = await ctx.render({ user: session?.user, authUrl, post });

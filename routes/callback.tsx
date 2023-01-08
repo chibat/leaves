@@ -55,7 +55,6 @@ export const handler: Handlers = {
 
       const appUser = await transaction(async (client) => {
         const user = await selectUserByGoogleId(client, googleUser.id);
-        console.log("### debug", googleUser);
         if (user) {
           if (
             user.name !== googleUser.name || user.picture !== googleUser.picture

@@ -31,7 +31,7 @@ export default function Page(props: PageProps<PageType>) {
       </Head>
       <Header user={props.data.loginUser} />
       <main class="container">
-        <LikePosts />
+        <LikePosts loginUser={props.data.loginUser} />
       </main>
     </>
   );

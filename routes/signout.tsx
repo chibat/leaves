@@ -7,7 +7,6 @@ export const handler: Handlers = {
   async GET(request) {
     const session = await getSession(request);
     if (session) {
-      console.info(session);
       await pool(client => deleteSession(client, session));
     }
     const response = new Response("", {

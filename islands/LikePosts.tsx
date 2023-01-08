@@ -5,8 +5,9 @@ import { PAGE_ROWS } from "~/lib/constants.ts";
 import { request } from "~/lib/request.ts";
 import { RequestType, ResponseType } from "~/routes/api/get_liked_posts.ts";
 import { useSignal } from "@preact/signals";
+import { AppUser } from "~/lib/db.ts";
 
-export default function LikePosts() {
+export default function LikePosts(props: { loginUser?: AppUser }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const loading = useSignal<boolean>(false);
@@ -42,7 +43,7 @@ export default function LikePosts() {
   return (
     <div>
       <h1>Likes</h1>
-      <Posts posts={posts} />
+      <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />
       {loading.value &&

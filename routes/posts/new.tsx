@@ -28,6 +28,7 @@ export default function Page(props: PageProps<{ user?: AppUser }>) {
       </Head>
       <Header user={props.data.user} />
       <main className="container">
+        <h1>New Post</h1>
         <PostNew />
       </main>
     </>

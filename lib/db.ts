@@ -68,6 +68,10 @@ export async function pool<T>(
   const client = await connectionPool.connect();
   try {
     return handler(client);
+  } catch (error) {
+    await client.end();
+    console.error(error);
+    throw error;
   } finally {
     client.release();
   }
@@ -85,6 +89,8 @@ export async function transaction<T>(
     return result;
   } catch (error) {
     await transaction.rollback();
+    await client.end();
+    console.error(error);
     throw error;
   } finally {
     client.release();
@@ -332,7 +338,7 @@ export async function insertComment(
   `;
     }
   } catch (error) {
-    console.warn(error);
+    console.error(error);
   }
 }
 
@@ -382,7 +388,7 @@ export async function insertFollow(
       WHERE id = ${params.followingUserId}
     `;
   } catch (error) {
-    console.warn(error);
+    console.error(error);
   }
 }
 
@@ -479,7 +485,7 @@ export async function selectNotificationsWithUpdate(
         WHERE id = ${userId}
       `;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 
   return result.rows;
@@ -513,7 +519,7 @@ export async function insertLike(
         `;
     }
   } catch (error) {
-    console.warn(error);
+    console.error(error);
   }
 }
 

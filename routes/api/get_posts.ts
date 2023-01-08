@@ -25,8 +25,6 @@ async function execute(
   params: RequestType,
   request: Request,
 ): Promise<ResponseType> {
-  console.log(JSON.stringify(params));
-
   const session = await getSession(request);
 
   const { posts, likedPostIds } = await pool(async (client) => {

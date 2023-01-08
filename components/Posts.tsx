@@ -22,7 +22,6 @@ export default function Posts(props: Props) {
   const [selectedPostId, setSelectedPostId] = useState<number>();
 
   useEffect(() => {
-    console.debug("useEffect");
     (hljs as any).highlightAll();
   });
 
@@ -53,7 +52,6 @@ export default function Posts(props: Props) {
   }
 
   const user = props.user;
-  console.debug("start ", user);
 
   return (
     <>

@@ -8,7 +8,6 @@ import { useSignal } from "@preact/signals";
 import { AppUser } from "~/lib/db.ts";
 
 export default function FollowingPosts(props: { loginUser?: AppUser }) {
-  console.debug("start ");
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const allLoaded = useSignal(false);

@@ -7,8 +7,6 @@ export type ResponseType = {};
 
 export const handler: Handlers = {
   async POST(request: Request) {
-    console.log(request.url);
-
     const session = await getSession(request);
     if (!session) {
       return Response.json(null, { status: 401 });

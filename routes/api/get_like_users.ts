@@ -8,7 +8,6 @@ export type ResponseType = Array<{ id: number; name: string; picture: string }>;
 
 export const handler: Handlers = {
   async POST(request) {
-    console.log(request.url);
     const params: RequestType = await request.json();
     const results =
       (await pool((client) => selectLikeUsers(client, params.postId))).map(

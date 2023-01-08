@@ -1,33 +1,17 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
-import DOMPurify from "dompurify";
 import { useEffect } from "preact/hooks";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 import { CreatePostRequest, CreatePostResponse } from "~/routes/api/create_post.ts";
 import { request } from "~/lib/request.ts";
 import { markedWithSanitaize } from "~/lib/utils.ts";
 
-if (IS_BROWSER) {
-  // https://github.com/cure53/DOMPurify/issues/340#issuecomment-670758980
-  DOMPurify.addHook("uponSanitizeElement", (node: any, data) => {
-    if (data.tagName === "iframe") {
-      const src = node.getAttribute("src") || "";
-      if (!src.startsWith("https://www.youtube.com/embed/")) {
-        return node.parentNode.removeChild(node);
-      }
-    }
-  });
-}
-
 export default function Post() {
   const preview = useSignal(false);
   const loading = useSignal(false);
   const text = useSignal('');
-  const html = useSignal('');
 
   useEffect(() => {
-    console.log("### ", IS_BROWSER);
-    console.log("useEffect Post");
     (hljs as any).highlightAll();
   });
 
