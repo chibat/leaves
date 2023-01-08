@@ -27,15 +27,17 @@ import * as $20 from "./routes/api/joke.ts";
 import * as $21 from "./routes/api/update_post.ts";
 import * as $22 from "./routes/auth.tsx";
 import * as $23 from "./routes/callback.tsx";
-import * as $24 from "./routes/following.tsx";
-import * as $25 from "./routes/index.tsx";
-import * as $26 from "./routes/likes.tsx";
-import * as $27 from "./routes/notification.tsx";
-import * as $28 from "./routes/posts/[postId]/edit.tsx";
-import * as $29 from "./routes/posts/[postId]/index.tsx";
-import * as $30 from "./routes/posts/new.tsx";
-import * as $31 from "./routes/signout.tsx";
-import * as $32 from "./routes/users/[userId].tsx";
+import * as $24 from "./routes/directory/[userId].tsx";
+import * as $25 from "./routes/directory/index.tsx";
+import * as $26 from "./routes/following.tsx";
+import * as $27 from "./routes/index.tsx";
+import * as $28 from "./routes/likes.tsx";
+import * as $29 from "./routes/notification.tsx";
+import * as $30 from "./routes/posts/[postId]/edit.tsx";
+import * as $31 from "./routes/posts/[postId]/index.tsx";
+import * as $32 from "./routes/posts/new.tsx";
+import * as $33 from "./routes/signout.tsx";
+import * as $34 from "./routes/users/[userId].tsx";
 import * as $$0 from "./islands/AllPosts.tsx";
 import * as $$1 from "./islands/Counter.tsx";
 import * as $$2 from "./islands/FollowingPosts.tsx";
@@ -72,15 +74,17 @@ const manifest = {
     "./routes/api/update_post.ts": $21,
     "./routes/auth.tsx": $22,
     "./routes/callback.tsx": $23,
-    "./routes/following.tsx": $24,
-    "./routes/index.tsx": $25,
-    "./routes/likes.tsx": $26,
-    "./routes/notification.tsx": $27,
-    "./routes/posts/[postId]/edit.tsx": $28,
-    "./routes/posts/[postId]/index.tsx": $29,
-    "./routes/posts/new.tsx": $30,
-    "./routes/signout.tsx": $31,
-    "./routes/users/[userId].tsx": $32,
+    "./routes/directory/[userId].tsx": $24,
+    "./routes/directory/index.tsx": $25,
+    "./routes/following.tsx": $26,
+    "./routes/index.tsx": $27,
+    "./routes/likes.tsx": $28,
+    "./routes/notification.tsx": $29,
+    "./routes/posts/[postId]/edit.tsx": $30,
+    "./routes/posts/[postId]/index.tsx": $31,
+    "./routes/posts/new.tsx": $32,
+    "./routes/signout.tsx": $33,
+    "./routes/users/[userId].tsx": $34,
   },
   islands: {
     "./islands/AllPosts.tsx": $$0,

@@ -69,7 +69,7 @@ export async function pool<T>(
   try {
     return handler(client);
   } catch (error) {
-    await client.end();
+    await connectionPool.initialized();
     console.error(error);
     throw error;
   } finally {
@@ -89,7 +89,7 @@ export async function transaction<T>(
     return result;
   } catch (error) {
     await transaction.rollback();
-    await client.end();
+    await connectionPool.initialized();
     console.error(error);
     throw error;
   } finally {
@@ -140,6 +140,15 @@ export async function selectUser(
       SELECT * FROM app_user WHERE id = ${userId}
     `;
   return result.rowCount ? result.rows[0] : null;
+}
+
+export async function selectUsers(
+  client: Client,
+): Promise<number[]> {
+  const result = await client.queryObject<AppUser>`
+      SELECT id FROM app_user order by id
+    `;
+  return result.rows.map((row) => row.id);
 }
 
 export async function insertPost(
@@ -201,6 +210,16 @@ export async function selectPosts(client: Client): Promise<Array<Post>> {
     `${SELECT_POST} ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
   );
   return result.rows;
+}
+
+export async function selectPostIds(
+  client: Client,
+  userId: number,
+): Promise<Array<number>> {
+  const result = await client.queryObject<
+    Post
+  >`SELECT id FROM post WHERE user_id = ${userId} ORDER BY id DESC LIMIT 1000`;
+  return result.rows.map((row) => row.id);
 }
 
 export async function selectPostByLtId(
