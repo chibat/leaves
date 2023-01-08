@@ -33,6 +33,10 @@ export default function Posts(props: Props) {
   }
 
   async function like(post: ResponsePost) {
+    if (!props.user) {
+      location.href = "/auth";
+      return;
+    }
     await request<LikeRequest, LikeResponse>("create_like", { postId: post.id });
     post.liked = true;
     post.likes = "" + (Number(post.likes) + 1);
@@ -73,29 +77,25 @@ export default function Posts(props: Props) {
           <div class="card-body">
             <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(post.source) }}></span>
           </div>
-          {(user || Number(post.comments) > 0 || Number(post.likes) > 0) &&
-            <div class="card-footer bg-transparent">
-              {user &&
-                <a class="btn btn-outline-secondary btn-sm" href={`/posts/${post.id}`}>Comment</a>
-              }
-              {Number(post.comments) > 0 &&
-                <a class="ms-2 noDecoration" href={`/posts/${post.id}`}>{post.comments} Comment{post.comments === "1" ? "" : "s"}</a>
-              }
-              {user && post.liked &&
-                <a href={void (0)} onClick={() => cancelLike(post)} class="ms-3" style={{ cursor: "pointer" }}>
-                  <img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img>
-                </a>
-              }
-              {user && !post.liked &&
-                <a href={void (0)} onClick={() => like(post)} class="ms-3" style={{ cursor: "pointer" }}>
-                  <img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img>
-                </a>
-              }
-              {Number(post.likes) > 0 &&
-                <a href={void (0)} class="noDecoration ms-2" onClick={() => openModal(post.id)} style={{ cursor: "pointer" }}>{post.likes} Like{post.likes === "1" ? "" : "s"}</a>
-              }
-            </div>
-          }
+          <div class="card-footer bg-transparent">
+            <a class="btn btn-outline-secondary btn-sm" href={user ? `/posts/${post.id}` : "/auth"}>Comment</a>
+            {Number(post.comments) > 0 &&
+              <a class="ms-2 noDecoration" href={`/posts/${post.id}`}>{post.comments} Comment{post.comments === "1" ? "" : "s"}</a>
+            }
+            {user && post.liked &&
+              <a href={void (0)} onClick={() => cancelLike(post)} class="ms-3" style={{ cursor: "pointer" }}>
+                <img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img>
+              </a>
+            }
+            {!post.liked &&
+              <a href={void (0)} onClick={() => like(post)} class="ms-3" style={{ cursor: "pointer" }}>
+                <img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img>
+              </a>
+            }
+            {Number(post.likes) > 0 &&
+              <a href={void (0)} class="noDecoration ms-2" onClick={() => openModal(post.id)} style={{ cursor: "pointer" }}>{post.likes} Like{post.likes === "1" ? "" : "s"}</a>
+            }
+          </div>
         </div>
       )}
       {modal && selectedPostId &&

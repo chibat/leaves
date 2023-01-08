@@ -11,12 +11,9 @@ import type { RequestType as IsLikedRequest } from "~/routes/api/is_liked.ts";
 import { request } from "~/lib/request.ts";
 import { useEffect, useState } from "preact/hooks";
 import * as hljs from "highlightjs";
-import { Head } from "$fresh/runtime.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { markedWithSanitaize } from "~/lib/utils.ts";
 import { useSignal } from "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/dist/signals";
-
-type bootstrap = any;
 
 export default function PostView(props: { post: Post, user?: AppUser }) {
   const user = props.user;
@@ -76,6 +73,10 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   }
 
   async function like(postId: number) {
+    if (!props.user) {
+      location.href = "/auth";
+      return;
+    }
     setRequesting(true);
     await request<LikeRequest, LikeResponse>("create_like", { postId });
     setLiked(true);
@@ -154,7 +155,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                     <img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img>
                   </a>
                 }
-                {user && !requesting && !liked &&
+                {!requesting && !liked &&
                   <a href={void (0)} onClick={() => like(post.id)} class="ms-3" style={{ cursor: "pointer" }}>
                     <img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img>
                   </a>

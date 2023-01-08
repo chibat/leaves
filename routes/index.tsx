@@ -29,18 +29,16 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
       </Head>
       <Header user={props.data.user} authUrl={props.data.authUrl} />
       <main className="container">
-        {props.data.user &&
-          <div className="card mb-3">
-            <div className="card-body">
-              {props.data.user.picture &&
-                <img src={props.data.user.picture} alt="mdo" width="32" height="32" className="rounded-circle me-2" />
-              }
-              <a href="/posts/new">
-                <input className="form-control" type="text" placeholder="Post" aria-label="Post" readOnly style={{ cursor: "pointer", width: "90%", display: "inline" }} ></input>
-              </a>
-            </div>
+        <div className="card mb-3">
+          <div className="card-body">
+            {props.data.user?.picture &&
+              <img src={props.data.user.picture} alt="mdo" width="32" height="32" className="rounded-circle me-2" />
+            }
+            <a href="/posts/new">
+              <input className="form-control" type="text" placeholder="Post" aria-label="Post" readOnly style={{ cursor: "pointer", width: "90%", display: "inline" }} ></input>
+            </a>
           </div>
-        }
+        </div>
         <AllPosts loginUser={props.data.user} />
       </main>
     </>

@@ -1,7 +1,6 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect } from "preact/hooks";
-import { IS_BROWSER } from "$fresh/runtime.ts";
 import { CreatePostRequest, CreatePostResponse } from "~/routes/api/create_post.ts";
 import { request } from "~/lib/request.ts";
 import { markedWithSanitaize } from "~/lib/utils.ts";

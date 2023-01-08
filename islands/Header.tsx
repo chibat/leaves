@@ -58,22 +58,22 @@ export default function Header(props: { user?: AppUser, authUrl?: string }) {
           </div>
           <div class="d-flex align-items-center ms-auto">
             <a class="me-3 noDecoration" href="/about">About</a>
+            <a class="noDecoration" href="/posts/new" title="New Post">
+              <span class="me-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
+                  <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
+                </svg>
+              </span>
+            </a>
             {props.user &&
               <>
-                <a href="/notification">
+                <a href="/notification" title="Notification">
                   {!props.user.notification &&
                     <img alt="bell" src="/assets/img/bell.png" width="20px" class="me-3" />
                   }
                   {props.user.notification &&
                     <img alt="bell" src="/assets/img/bell2.png" width="20px" class="me-3" />
                   }
-                </a>
-                <a class="noDecoration" href="/posts/new">
-                  <span class="me-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
-                      <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
-                    </svg>
-                  </span>
                 </a>
                 <div class="flex-shrink-0 dropdown">
                   <a href={void (0)} class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false"
