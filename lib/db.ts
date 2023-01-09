@@ -70,7 +70,8 @@ export async function pool<T>(
   try {
     return handler(client);
   } catch (error) {
-    await connectionPool.initialized();
+    console.info(JSON.stringify(error));
+    await client.end();
     console.error(error);
     throw error;
   } finally {
@@ -90,7 +91,8 @@ export async function transaction<T>(
     return result;
   } catch (error) {
     await transaction.rollback();
-    await connectionPool.initialized();
+    console.info(JSON.stringify(error));
+    await client.end();
     console.error(error);
     throw error;
   } finally {

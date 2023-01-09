@@ -33,7 +33,11 @@ export default function Page(props: PageProps<PageType>) {
         <h1>About</h1>
         <ul>
           <li>本サイトは、<a href="https://chibat.github.io/" target="_blank" class="doc">@chibat</a> によるポートフォリオです。</li>
-          <li>Markdown で投稿できる SNS のようなものを作成してみました。</li>
+          <li>Markdown で投稿できる SNS のようなものを作成してみました。
+            <ul>
+              <li>iframe での埋め込みコードは、YouTube と <a href="https://ogp.deno.dev/" target="blank">Open Graph Preview</a> のみサポートしています。</li>
+            </ul>
+          </li>
           <li>Production Runtime（次の無料枠を利用しています）
             <ul>
               <li><a href="https://deno.com/deploy" target="_blank">Deno Deploy</a>(TypeScript at the Edge)</li>

@@ -18,6 +18,7 @@ CREATE TABLE post (
  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX post_user_id ON post(user_id);
+CREATE INDEX post_source_index ON post USING pgroonga (source);
 
 CREATE TABLE app_session (
  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),

@@ -96,7 +96,9 @@ export default function Posts(props: Props) {
             {user && user.id === post.user_id &&
               <div>
                 <a href={`/posts/${post.id}/edit`}><img src="/assets/img/pencil-fill.svg" alt="Edit" width="20" height="20"></img></a>
-                <a href={void (0)} class="ms-2" onClick={() => deletePost(post.id)}><img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img></a>
+                <a href={void (0)} class="ms-2" style={{ cursor: "pointer" }} onClick={() => deletePost(post.id)}>
+                  <img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img>
+                </a>
               </div>
             }
           </div>
