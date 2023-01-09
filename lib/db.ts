@@ -328,6 +328,47 @@ export async function selectLikedPostsByLtId(
   return result.rows;
 }
 
+export async function selectPostsBySearchWord(
+  client: Client,
+  searchWord: string,
+): Promise<Array<Post>> {
+  if (searchWord.trim().length === 0) {
+    return [];
+  }
+  const result = await client.queryObject<Post>(
+    `
+    ${SELECT_POST}
+    WHERE source &@~ $1
+    ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
+    `,
+    [searchWord.trim()],
+  );
+  return result.rows;
+}
+
+export async function selectPostsBySearchWordAndLtId(
+  client: Client,
+  params: {
+    searchWord: string;
+    postId: number;
+  },
+): Promise<Array<Post>> {
+  const searchWord = params.searchWord.trim();
+  if (searchWord.trim().length === 0) {
+    return [];
+  }
+  const result = await client.queryObject<Post>(
+    `
+    ${SELECT_POST}
+    WHERE source &@~ $1
+    AND p.id < $2
+    ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
+    `,
+    [searchWord.trim(), params.postId],
+  );
+  return result.rows;
+}
+
 export async function insertComment(
   client: Client,
   params: { postId: number; userId: number; source: string },

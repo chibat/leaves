@@ -25,8 +25,8 @@ export default function FollowingPosts(props: { loginUser?: AppUser }) {
           if (results.length < PAGE_ROWS) {
             allLoaded.value = true;
           }
+          setLoading(false);
         });
-        setLoading(false);
       }
     });
     const bottom = document.getElementById("bottom");

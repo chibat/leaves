@@ -36,8 +36,9 @@ import * as $29 from "./routes/notification.tsx";
 import * as $30 from "./routes/posts/[postId]/edit.tsx";
 import * as $31 from "./routes/posts/[postId]/index.tsx";
 import * as $32 from "./routes/posts/new.tsx";
-import * as $33 from "./routes/signout.tsx";
-import * as $34 from "./routes/users/[userId].tsx";
+import * as $33 from "./routes/search.tsx";
+import * as $34 from "./routes/signout.tsx";
+import * as $35 from "./routes/users/[userId].tsx";
 import * as $$0 from "./islands/AllPosts.tsx";
 import * as $$1 from "./islands/FollowingPosts.tsx";
 import * as $$2 from "./islands/Header.tsx";
@@ -45,7 +46,8 @@ import * as $$3 from "./islands/LikePosts.tsx";
 import * as $$4 from "./islands/PostEdit.tsx";
 import * as $$5 from "./islands/PostNew.tsx";
 import * as $$6 from "./islands/PostView.tsx";
-import * as $$7 from "./islands/UserPosts.tsx";
+import * as $$7 from "./islands/SearchedPosts.tsx";
+import * as $$8 from "./islands/UserPosts.tsx";
 
 const manifest = {
   routes: {
@@ -82,8 +84,9 @@ const manifest = {
     "./routes/posts/[postId]/edit.tsx": $30,
     "./routes/posts/[postId]/index.tsx": $31,
     "./routes/posts/new.tsx": $32,
-    "./routes/signout.tsx": $33,
-    "./routes/users/[userId].tsx": $34,
+    "./routes/search.tsx": $33,
+    "./routes/signout.tsx": $34,
+    "./routes/users/[userId].tsx": $35,
   },
   islands: {
     "./islands/AllPosts.tsx": $$0,
@@ -93,7 +96,8 @@ const manifest = {
     "./islands/PostEdit.tsx": $$4,
     "./islands/PostNew.tsx": $$5,
     "./islands/PostView.tsx": $$6,
-    "./islands/UserPosts.tsx": $$7,
+    "./islands/SearchedPosts.tsx": $$7,
+    "./islands/UserPosts.tsx": $$8,
   },
   baseUrl: import.meta.url,
   config,

@@ -25,8 +25,8 @@ export default function LikePosts(props: { loginUser?: AppUser }) {
           if (results.length < PAGE_ROWS) {
             allLoaded.value = true;
           }
+          loading.value = false;
         });
-        loading.value = false;
       }
     });
     const bottom = document.getElementById("bottom");

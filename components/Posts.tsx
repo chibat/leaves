@@ -56,10 +56,11 @@ export default function Posts(props: Props) {
   }
 
   const user = props.user;
+  const posts = props.posts.value;
 
   return (
     <>
-      {props.posts.value && props.posts.value.map(post =>
+      {posts && posts.map(post =>
         <div class="card mb-3" key={post.id}>
           <div class="card-header bg-transparent d-flex justify-content-between">
             <div>
@@ -95,10 +96,10 @@ export default function Posts(props: Props) {
             </div>
             {user && user.id === post.user_id &&
               <div>
-                <a href={`/posts/${post.id}/edit`}><img src="/assets/img/pencil-fill.svg" alt="Edit" width="20" height="20"></img></a>
-                <a href={void (0)} class="ms-2" style={{ cursor: "pointer" }} onClick={() => deletePost(post.id)}>
+                <a href={void (0)} class="me-2" style={{ cursor: "pointer" }} onClick={() => deletePost(post.id)}>
                   <img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img>
                 </a>
+                <a href={`/posts/${post.id}/edit`}><img src="/assets/img/pencil-fill.svg" alt="Edit" width="20" height="20"></img></a>
               </div>
             }
           </div>

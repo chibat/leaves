@@ -1,25 +1,25 @@
 import { useEffect } from "preact/hooks";
 import Posts from "~/components/Posts.tsx";
-import { request } from "~/lib/request.ts";
-
-import type { ResponsePost } from "~/lib/types.ts";
-import type { RequestType, ResponseType } from "~/routes/api/get_posts.ts";
+import { ResponsePost } from "~/lib/types.ts";
 import { PAGE_ROWS } from "~/lib/constants.ts";
+import { request } from "~/lib/request.ts";
+import { RequestType, ResponseType } from "~/routes/api/get_posts.ts";
 import { useSignal } from "@preact/signals";
 import { AppUser } from "~/lib/db.ts";
 
-export default function AllPosts(props: { loginUser?: AppUser }) {
+export default function SearchedPosts(props: { searchWord: string, loginUser?: AppUser }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const loading = useSignal<boolean>(false);
   const allLoaded = useSignal(false);
+  const notFound = useSignal(false);
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
       if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
-        request<RequestType, ResponseType>("get_posts", { postId }).then(results => {
+        request<RequestType, ResponseType>("get_posts", { postId, searchWord: props.searchWord }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }
@@ -27,6 +27,9 @@ export default function AllPosts(props: { loginUser?: AppUser }) {
             allLoaded.value = true;
           }
           loading.value = false;
+          if (!postId && results.length === 0) {
+            notFound.value = true;
+          }
         });
       }
     });
@@ -43,6 +46,7 @@ export default function AllPosts(props: { loginUser?: AppUser }) {
 
   return (
     <div>
+      {notFound.value && <span>Not Found</span>}
       <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />
@@ -53,7 +57,7 @@ export default function AllPosts(props: { loginUser?: AppUser }) {
           </div>
         </div>
       }
-      <div id="bottom">&nbsp;</div>
+      <div id="bottom"></div>
     </div>
   );
 }

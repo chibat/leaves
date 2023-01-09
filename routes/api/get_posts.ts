@@ -7,6 +7,8 @@ import {
   selectLikes,
   selectPostByLtId,
   selectPosts,
+  selectPostsBySearchWord,
+  selectPostsBySearchWordAndLtId,
   selectUserPostByLtId,
   selectUserPosts,
 } from "~/lib/db.ts";
@@ -17,6 +19,7 @@ export type RequestType = {
   postId?: number;
   userId?: number;
   followig?: boolean;
+  searchWord?: string;
 };
 
 export type ResponseType = Array<ResponsePost>;
@@ -49,6 +52,15 @@ async function execute(
         });
       } else {
         posts = await selectFollowingUsersPosts(client, userId);
+      }
+    } else if (params.searchWord) {
+      if (params.postId) {
+        posts = await selectPostsBySearchWordAndLtId(client, {
+          searchWord: params.searchWord,
+          postId: params.postId,
+        });
+      } else {
+        posts = await selectPostsBySearchWord(client, params.searchWord);
       }
     } else {
       // all user

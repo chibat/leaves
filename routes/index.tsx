@@ -28,14 +28,14 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
         <meta name="twitter:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
       </Head>
       <Header user={props.data.user} authUrl={props.data.authUrl} />
-      <main className="container">
-        <div className="card mb-3">
-          <div className="card-body">
+      <main class="container">
+        <div class="card mb-3">
+          <div class="card-body">
             {props.data.user?.picture &&
-              <img src={props.data.user.picture} alt="mdo" width="32" height="32" className="rounded-circle me-2" />
+              <img src={props.data.user.picture} alt="mdo" width="32" height="32" class="rounded-circle me-2" />
             }
             <a href="/posts/new">
-              <input className="form-control" type="text" placeholder="Post" aria-label="Post" readOnly style={{ cursor: "pointer", width: "90%", display: "inline" }} ></input>
+              <input class="form-control" type="text" placeholder="Post" aria-label="Post" readOnly style={{ cursor: "pointer", width: "90%", display: "inline" }} ></input>
             </a>
           </div>
         </div>
