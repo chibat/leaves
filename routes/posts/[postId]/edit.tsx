@@ -42,7 +42,7 @@ export default function Page(props: PageProps<PageType>) {
         <title>Edit - md-sns</title>
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
-      <main className="container">
+      <main class="container">
         <h1>Edit Post</h1>
         <PostEdit post={props.data.post} />
       </main>

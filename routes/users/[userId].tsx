@@ -29,7 +29,7 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>md-sns</title>
+        <title>{props.data.pageUser.name} - md-sns</title>
         <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
         <meta property="og:title" content={`${props.data.pageUser.name} - md-sns`}></meta>
         <meta property="og:description" content={props.data.pageUser.name}></meta>
@@ -40,6 +40,7 @@ export default function Page(props: PageProps<PageType>) {
       </Head>
       <Header user={props.data.loginUser} authUrl={props.data.authUrl} />
       <main class="container">
+        <h1><img src={props.data.pageUser.picture} class="img-thumbnail" alt="" /> {props.data.pageUser.name}</h1>
         <UserPosts pageUser={props.data.pageUser} loginUser={props.data.loginUser} />
       </main>
     </>

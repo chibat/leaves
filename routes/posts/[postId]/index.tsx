@@ -44,7 +44,7 @@ export default function Page(
         <meta name="twitter:image" content={post.picture} />
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
-      <main className="container">
+      <main class="container">
         <PostView post={props.data.post} user={user} />
       </main>
     </>

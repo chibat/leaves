@@ -15,7 +15,7 @@ export default function FollowingPosts(props: { loginUser?: AppUser }) {
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
-      if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
+      if (!allLoaded.value && !loading && entries[0].intersectionRatio !== 0) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         setLoading(true);
         request<RequestType, ResponseType>("get_posts", { postId, followig: true }).then(results => {

@@ -16,7 +16,7 @@ export default function AllPosts(props: { loginUser?: AppUser }) {
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
-      if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
+      if (!loading.value && entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
         request<RequestType, ResponseType>("get_posts", { postId }).then(results => {

@@ -8,7 +8,6 @@ type PageType = {
 export const handler: Handlers<PageType> = {
   async GET(_req, ctx) {
     const userId = Number(ctx.params.userId);
-    console.log(userId);
     const postIds = await pool((client) => selectPostIds(client, userId));
     const res = await ctx.render({ postIds });
     return res;
@@ -16,10 +15,8 @@ export const handler: Handlers<PageType> = {
 };
 
 export default function Page(props: PageProps<PageType>) {
-  const userId = Number(props.params.userId);
-  console.log(userId);
   return (
-    <main className="container">
+    <main class="container">
       <h6>Posts</h6>
       {
         props.data.postIds.map(postId => <><a href={`/posts/${postId}`}>{postId}</a>&nbsp;</>)

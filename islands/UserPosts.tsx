@@ -36,7 +36,7 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
     });
 
     const io = new IntersectionObserver(entries => {
-      if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
+      if (!allLoaded.value && !loading.value && entries[0].intersectionRatio !== 0) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
         request<RequestType, ResponseType>("get_posts", { postId, userId }).then(results => {
@@ -46,8 +46,8 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
           if (results.length < PAGE_ROWS) {
             allLoaded.value = true;
           }
+          loading.value = false;
         });
-        loading.value = false;
       }
     });
     const bottom = document.getElementById("bottom");
@@ -88,16 +88,9 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
 
   return (
     <div>
-      {loading.value &&
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      }
+
       {!loading.value &&
         <>
-          <h1><img src={props.pageUser.picture} class="img-thumbnail" alt="" /> {props.pageUser.name}</h1>
           {(loginUser && props.pageUser.id !== loginUser.id) &&
             <>
               {!isFollowing &&
@@ -136,18 +129,25 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
               <a class="noDecoration" href="/likes">Likes</a>
             }
           </div>
-          <Posts posts={posts} user={loginUser} />
-          <br />
-          <br />
         </>
       }
-      <div id="bottom"></div>
       {followingModal &&
         <FollowingUsersModal userId={userId} setModal={setFollowingModal} />
       }
       {followerModal &&
         <FollowerUsersModal userId={userId} setModal={setFollowerModal} />
       }
+      <Posts posts={posts} user={loginUser} />
+      <br />
+      <br />
+      {loading.value &&
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      }
+      <div id="bottom">&nbsp;</div>
     </div>
   );
 }

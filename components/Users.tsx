@@ -8,11 +8,11 @@ export default function Users(props: Props) {
   return (
     <>
       {props.users.map(user =>
-        <div className="mb-3" key={user.id}>
+        <div class="mb-3" key={user.id}>
           {user.picture &&
-            <img src={user.picture} alt="mdo" width="32" height="32" className="rounded-circle me-2" />
+            <img src={user.picture} alt="mdo" width="32" height="32" class="rounded-circle me-2" />
           }
-          <a href={`/users/${user.id}`} className="noDecoration">{user.name}</a>
+          <a href={`/users/${user.id}`} class="noDecoration">{user.name}</a>
         </div>
       )}
     </>
