@@ -136,9 +136,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
             </div>
             <div class="card-body">
               <span dangerouslySetInnerHTML={{ __html: postSource }}></span>
-            </div>
-            <div class="card-footer bg-transparent">
-              <div class="mb-3 d-flex justify-content-between">
+              <div class="d-flex justify-content-between">
                 <div>
                   {requesting &&
                     <div class="spinner-grow spinner-grow-sm ms-3" role="status">
@@ -170,6 +168,8 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                   </div>
                 }
               </div>
+            </div>
+            <div class="card-footer bg-transparent">
               {commentLoading &&
                 <div class="d-flex justify-content-center">
                   <div class="spinner-border" role="status">
