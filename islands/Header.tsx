@@ -1,48 +1,6 @@
-import { useSignal } from "@preact/signals";
-import { useEffect, useRef } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
 
 export default function Header(props: { user?: AppUser, authUrl?: string }) {
-  const userMenuRef = useRef<HTMLAnchorElement>(null);
-  const mobileMenuRef = useRef<HTMLButtonElement>(null);
-  const mobileMenuOpen = useSignal(false);
-  const userMenuOpen = useSignal(false);
-
-  useEffect(() => {
-    const el = userMenuRef.current;
-    if (!el) return;
-    const hundleClickOutside = (e: MouseEvent) => {
-      if (!el?.contains(e.target as Node)) {
-        // outside
-        userMenuOpen.value = false;
-      } else {
-        // inside
-        userMenuOpen.value = !userMenuOpen.value;
-      }
-    };
-    document.addEventListener("click", hundleClickOutside);
-    return () => {
-      document.removeEventListener("click", hundleClickOutside);
-    };
-  }, [userMenuRef]);
-
-  useEffect(() => {
-    const el = mobileMenuRef.current;
-    if (!el) return;
-    const hundleClickOutside = (e: MouseEvent) => {
-      if (!el?.contains(e.target as Node)) {
-        // outside
-        mobileMenuOpen.value = false;
-      } else {
-        // inside
-        mobileMenuOpen.value = !mobileMenuOpen.value;
-      }
-    };
-    document.addEventListener("click", hundleClickOutside);
-    return () => {
-      document.removeEventListener("click", hundleClickOutside);
-    };
-  }, [mobileMenuRef]);
 
   return (
     <>

@@ -10,6 +10,14 @@ export default function App({ Component }: AppProps) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossOrigin="anonymous" />
         <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/tomorrow-night.min.css" />
         <link rel="stylesheet" href="/app.css" />
+        {/* <script async src="https://www.googletagmanager.com/gtag/js?id=G-SZVLRW13Y8"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-SZVLRW13Y8');
+        </script> */}
       </Head>
       <Component />
       <footer class="container d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
