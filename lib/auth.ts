@@ -41,7 +41,7 @@ export async function createSession(response: Response, userId: number) {
   setCookie(response.headers, {
     name: "session",
     value: sessionId,
-    sameSite: "Strict",
+    sameSite: "Lax",
     httpOnly: true,
     secure: true,
     path: "/",
