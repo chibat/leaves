@@ -52,6 +52,7 @@ export default function Page(props: PageProps<PageType>) {
             </ul>
           </li>
           <li><a href="https://github.com/chibat/md-sns7" target="_blank" class="doc">ソースコード</a></li>
+          <li><a href="https://zenn.dev/chiba/articles/md-sns-deno-fresh" target="_blank">Zenn 記事</a></li>
         </ul>
       </main>
     </>

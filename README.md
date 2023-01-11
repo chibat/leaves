@@ -4,6 +4,8 @@
 
 Source code for https://md-sns.deno.dev/ .
 
+[Zenn article](https://zenn.dev/chiba/articles/md-sns-deno-fresh)
+
 ## References
 
 - https://supabase.com/docs/guides/database
