@@ -57,7 +57,7 @@ export default function SearchedPosts(props: { searchWord: string, loginUser?: A
           </div>
         </div>
       }
-      <div id="bottom"></div>
+      <div id="bottom">&nbsp;</div>
     </div>
   );
 }
