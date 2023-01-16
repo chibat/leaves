@@ -4,7 +4,7 @@ import { clientId } from "~/lib/env.ts";
 
 export type SessionType = { id: string; user: AppUser };
 
-const debug = false;
+const debug = Deno.env.get("HOSTNAME")?.startsWith("codespaces-");
 
 export async function getSession(
   req: Request,
