@@ -1,3 +1,7 @@
+:root {
+	--nc-bg-2: #F6F8FA;
+	--nc-bg-3: #E5E7EB;
+}
 
 a {
   color: blue;
@@ -34,4 +38,30 @@ img {
 
 iframe {
   max-width: 100%;
+}
+
+.post table {
+	/* border-collapse sets the table's elements to share borders, rather than floating as separate "boxes". */
+	border-collapse: collapse;
+	width: 100%
+}
+
+.post td,th {
+	border: 1px solid var(--nc-bg-3);
+	text-align: left;
+	padding: .5rem;
+}
+
+.post th {
+	background: var(--nc-bg-2);
+}
+
+.post tr:nth-child(even) {
+	/* Set every other cell slightly darker. Improves readability. */
+	background: var(--nc-bg-2);
+}
+
+.post table caption {
+	font-weight: bold;
+	margin-bottom: .5rem;
 }

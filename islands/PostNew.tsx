@@ -42,7 +42,7 @@ export default function Post() {
               placeholder="Write with markdown"></textarea>
           }
           {preview.value &&
-            <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(text.value) }}></span>
+            <span class="post" dangerouslySetInnerHTML={{ __html: markedWithSanitaize(text.value) }}></span>
           }
         </div>
         <div class="card-footer text-end bg-transparent">

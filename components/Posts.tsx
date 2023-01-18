@@ -72,7 +72,7 @@ export default function Posts(props: Props) {
             </div>
           </div>
           <div class="card-body">
-            <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(post.source) }}></span>
+            <span class="post" dangerouslySetInnerHTML={{ __html: markedWithSanitaize(post.source) }}></span>
             <div class="d-flex justify-content-between">
               <div>
                 <a class="btn btn-outline-secondary btn-sm" href={user ? `/posts/${post.id}` : "/auth"}>Comment</a>

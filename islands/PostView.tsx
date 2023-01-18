@@ -135,7 +135,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
               </div>
             </div>
             <div class="card-body">
-              <span dangerouslySetInnerHTML={{ __html: postSource }}></span>
+              <span class="post" dangerouslySetInnerHTML={{ __html: postSource }}></span>
               <div class="d-flex justify-content-between">
                 <div>
                   {requesting &&
@@ -192,7 +192,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                     }
                   </div>
                   <div>
-                    <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(comment.source) }}></span>
+                    <span class="post" dangerouslySetInnerHTML={{ __html: markedWithSanitaize(comment.source) }}></span>
                   </div>
                 </div>
               )}
@@ -214,7 +214,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                       </textarea>
                     }
                     {!flag &&
-                      <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(commentSource) }}></span>
+                      <span class="post" dangerouslySetInnerHTML={{ __html: markedWithSanitaize(commentSource) }}></span>
                     }
                   </div>
                   <div class="mt-2">

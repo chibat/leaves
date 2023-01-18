@@ -56,7 +56,7 @@ export default function Edit(props: { post: Post }) {
             </textarea>
           }
           {!flag &&
-            <span dangerouslySetInnerHTML={{ __html: markedWithSanitaize(text.value) }}></span>
+            <span class="post" dangerouslySetInnerHTML={{ __html: markedWithSanitaize(text.value) }}></span>
           }
         </div>
         <div class="card-footer bg-transparent">
