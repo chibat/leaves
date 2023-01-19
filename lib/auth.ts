@@ -4,26 +4,9 @@ import { clientId } from "~/lib/env.ts";
 
 export type SessionType = { id: string; user: AppUser };
 
-const debug = Deno.env.get("HOSTNAME")?.startsWith("codespaces-");
-
 export async function getSession(
   req: Request,
 ): Promise<SessionType | undefined> {
-  if (debug) {
-    return {
-      id: "47fe0ced-6569-45f6-88e6-d02cfdefb72b",
-      user: {
-        id: 1,
-        google_id: "1",
-        name: "Tomofumi Chiba",
-        picture:
-          "https://lh3.googleusercontent.com/a/AEdFTp50r3WlI_9VqwRr7RLSwnbZFqhStQRokJ4JdIoPeBU=s96-c",
-        notification: false,
-        created_at: "2022-12-28T14:30:11.171Z",
-        updated_at: "2022-12-28T14:30:11.171Z",
-      },
-    };
-  }
   const cookies = getCookies(req.headers);
   const sessionId = cookies["session"];
   if (!sessionId) {

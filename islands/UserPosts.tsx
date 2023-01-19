@@ -22,8 +22,8 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
   const posts = useSignal<Array<ResponsePost>>([]);
   const loading = useSignal<boolean>(false);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
-  const [following, setFollowing] = useState<string>('0');
-  const [followers, setFollowers] = useState<string>('0');
+  const [following, setFollowing] = useState<string>('');
+  const [followers, setFollowers] = useState<string>('');
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
@@ -119,12 +119,16 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
             </>
           }
           <div class="mb-3">
-            {following === "0" ? <span class="me-3">0 Following</span> :
-              <a class="noDecoration me-3" onClick={displayFollowingUsers} style={{ cursor: "pointer" }}>{following} Following</a>
-            }
-            {followers === "0" ? <span class="me-3">0 Followers</span> :
-              <a class="noDecoration me-3" onClick={displayFollowerUsers} style={{ cursor: "pointer" }}>{followers} Follower{followers === "1" ? "" : "s"}</a>
-            }
+            {following
+              && (following === "0"
+                ? <span class="me-3">0 Following</span>
+                : <a class="noDecoration me-3" onClick={displayFollowingUsers} style={{ cursor: "pointer" }}>{following} Following</a>
+              )}
+            {followers
+              && (followers === "0"
+                ? <span class="me-3">0 Followers</span>
+                : <a class="noDecoration me-3" onClick={displayFollowerUsers} style={{ cursor: "pointer" }}>{followers} Follower{followers === "1" ? "" : "s"}</a>
+              )}
             {(loginUser && props.pageUser.id === loginUser.id) &&
               <a class="noDecoration" href="/likes">Likes</a>
             }
