@@ -40,7 +40,7 @@ export default function Page(props: PageProps<PageType>) {
       <main class="container">
         <h1>Search</h1>
         <form class="mb-3" method="GET" action="/search">
-          <input class="form-control" type="text" name="value" value={searchParams} placeholder="Input search words" />
+          <input class="form-control" type="text" name="value" value={searchParams} placeholder="Input search words" autoFocus />
         </form>
         {searchParams &&
           <SearchedPosts searchWord={searchParams} loginUser={props.data.loginUser} />

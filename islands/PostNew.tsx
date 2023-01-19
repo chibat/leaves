@@ -37,7 +37,7 @@ export default function Post() {
             </li>
           </ul>
           {!preview.value &&
-            <textarea class="form-control mt-3" style={{ height: "500px" }} maxLength={10000} value={text.value}
+            <textarea class="form-control mt-3" style={{ height: "500px" }} maxLength={10000} value={text.value} autofocus
               onChange={e => text.value = (e.target as any).value}
               placeholder="Write with markdown"></textarea>
           }
