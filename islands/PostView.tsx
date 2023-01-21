@@ -196,8 +196,8 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                   </div>
                 </div>
               )}
-              {user &&
-                <div class="ms-4 mt-2">
+              <div class="ms-4 mt-2">
+                {user && <>
                   <div class="">
                     <ul class="nav nav-tabs">
                       <li class="nav-item">
@@ -224,9 +224,12 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                       }
                       Reply
                     </button>
-                  </div>
-                </div>
-              }
+                  </div></>
+                }
+                {!user &&
+                  <a class="btn btn-outline-secondary btn-sm" href="/auth">Comment</a>
+                }
+              </div>
             </div>
             {modal &&
               <LikeUsersModal postId={post.id} setModal={setModal} />
