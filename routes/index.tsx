@@ -18,7 +18,7 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
   return (
     <>
       <Head>
-        <title>md-sns</title>
+        <title>md-sns - SNS with Markdown</title>
         <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
         <meta property="og:title" content="md-sns"></meta>
         <meta property="og:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
