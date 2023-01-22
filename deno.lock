@@ -208,9 +208,6 @@
     "https://esm.sh/v102/preact@10.11.0/hooks/src/index.d.ts": "5c29febb624fc25d71cb0e125848c9b711e233337a08f7eacfade38fd4c14cc3",
     "https://esm.sh/v102/preact@10.11.0/jsx-runtime/src/index.d.ts": "e153460ed2b3fe2ad8b93696ecd48fbf73cd628b0b0ea6692b71804a3af69dfd",
     "https://esm.sh/v102/preact@10.11.0/src/index.d.ts": "1a5c331227be54be6515b0c92a469d352834fa413963ae84a39a05a3177111f6",
-    "https://esm.sh/v102/preact@10.11.0/src/jsx.d.ts": "c423715fd7992b2e1446fea11d2d04e8adbd66c1edca1ce5e85f90e0d26a2eb2",
-    "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/deno/dist/signals.js": "f91393b574a69090d4b73ce8437e299b68b63d183a6284899a1f2c390e00b267",
-    "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/dist/signals": "f42957574d53d4625d3df68053e43b16872b7ac392072214ea8a5cd80fc0c6ce",
-    "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/dist/signals.d.ts": "f4fbae092f6622b348cc45503aef1a2076ea0c4bf37ab78a691a77220217a027"
+    "https://esm.sh/v102/preact@10.11.0/src/jsx.d.ts": "c423715fd7992b2e1446fea11d2d04e8adbd66c1edca1ce5e85f90e0d26a2eb2"
   }
 }

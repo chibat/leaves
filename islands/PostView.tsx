@@ -13,7 +13,7 @@ import { useEffect, useState } from "preact/hooks";
 import * as hljs from "highlightjs";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { markedWithSanitaize } from "~/lib/utils.ts";
-import { useSignal } from "https://esm.sh/v99/@preact/signals@1.0.3/X-ZS8q/dist/signals";
+import { useSignal } from "@preact/signals";
 
 export default function PostView(props: { post: Post, user?: AppUser }) {
   const user = props.user;
