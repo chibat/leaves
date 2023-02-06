@@ -12,6 +12,7 @@
     "@trpc/server": "https://esm.sh/v89/@trpc/server@10.9.0",
     "@trpc/server/": "https://esm.sh/v89/@trpc/server@10.9.0/",
     "@trpc/client": "https://esm.sh/v89/@trpc/client@10.9.0?deps=@trpc/server@10.9.0",
+    "zod": "https://deno.land/x/zod@v3.20.2/mod.ts",
 
     "~/": "./",
     "highlightjs": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js",

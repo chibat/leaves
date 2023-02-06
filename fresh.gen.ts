@@ -16,15 +16,15 @@ import * as $9 from "./routes/api/delete_comment.ts";
 import * as $10 from "./routes/api/delete_follow.ts";
 import * as $11 from "./routes/api/delete_like.ts";
 import * as $12 from "./routes/api/delete_post.ts";
-import * as $13 from "./routes/api/get_comments.ts";
-import * as $14 from "./routes/api/get_follow_info.ts";
-import * as $15 from "./routes/api/get_follower_users.ts";
-import * as $16 from "./routes/api/get_following_users.ts";
-import * as $17 from "./routes/api/get_like_users.ts";
-import * as $18 from "./routes/api/get_liked_posts.ts";
-import * as $19 from "./routes/api/get_posts.ts";
-import * as $20 from "./routes/api/is_liked.ts";
-import * as $21 from "./routes/api/joke.ts";
+import * as $13 from "./routes/api/get_follow_info.ts";
+import * as $14 from "./routes/api/get_follower_users.ts";
+import * as $15 from "./routes/api/get_following_users.ts";
+import * as $16 from "./routes/api/get_like_users.ts";
+import * as $17 from "./routes/api/get_liked_posts.ts";
+import * as $18 from "./routes/api/get_posts.ts";
+import * as $19 from "./routes/api/is_liked.ts";
+import * as $20 from "./routes/api/joke.ts";
+import * as $21 from "./routes/api/trpc/[path].ts";
 import * as $22 from "./routes/api/update_post.ts";
 import * as $23 from "./routes/auth.tsx";
 import * as $24 from "./routes/callback.tsx";
@@ -66,15 +66,15 @@ const manifest = {
     "./routes/api/delete_follow.ts": $10,
     "./routes/api/delete_like.ts": $11,
     "./routes/api/delete_post.ts": $12,
-    "./routes/api/get_comments.ts": $13,
-    "./routes/api/get_follow_info.ts": $14,
-    "./routes/api/get_follower_users.ts": $15,
-    "./routes/api/get_following_users.ts": $16,
-    "./routes/api/get_like_users.ts": $17,
-    "./routes/api/get_liked_posts.ts": $18,
-    "./routes/api/get_posts.ts": $19,
-    "./routes/api/is_liked.ts": $20,
-    "./routes/api/joke.ts": $21,
+    "./routes/api/get_follow_info.ts": $13,
+    "./routes/api/get_follower_users.ts": $14,
+    "./routes/api/get_following_users.ts": $15,
+    "./routes/api/get_like_users.ts": $16,
+    "./routes/api/get_liked_posts.ts": $17,
+    "./routes/api/get_posts.ts": $18,
+    "./routes/api/is_liked.ts": $19,
+    "./routes/api/joke.ts": $20,
+    "./routes/api/trpc/[path].ts": $21,
     "./routes/api/update_post.ts": $22,
     "./routes/auth.tsx": $23,
     "./routes/callback.tsx": $24,

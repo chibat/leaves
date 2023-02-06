@@ -1,11 +1,10 @@
-import { AppUser, Post } from "~/lib/db.ts";
+import { AppUser, Comment, Post } from "~/lib/db.ts";
 
 import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } from "~/routes/api/delete_post.ts";
 import type { RequestType as CreateRequest, ResponseType as CreateResponse } from "~/routes/api/create_comment.ts";
 import type { RequestType as DeleteCommentRequest, ResponseType as DeleteCommentResponse } from "~/routes/api/delete_comment.ts";
 import type { RequestType as LikeRequest, ResponseType as LikeResponse } from "~/routes/api/create_like.ts";
 import type { RequestType as CancelLikeRequest, ResponseType as CancelLikeResponse } from "~/routes/api/delete_like.ts";
-import type { RequestType as CommentsRequest, ResponseType as CommentsResponse } from "~/routes/api/get_comments.ts";
 import type { RequestType as IsLikedRequest } from "~/routes/api/is_liked.ts";
 
 import { request } from "~/lib/request.ts";
@@ -14,6 +13,7 @@ import * as hljs from "highlightjs";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { markedWithSanitaize } from "~/lib/utils.ts";
 import { useSignal } from "@preact/signals";
+import { trpc } from "~/trpc/client.ts";
 
 export default function PostView(props: { post: Post, user?: AppUser }) {
   const user = props.user;
@@ -24,7 +24,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   const [postSource, setPostSource] = useState<string>("");
   const [likes, setLikes] = useState<string>('0');
   const [liked, setLiked] = useState<boolean>();
-  const [comments, setComments] = useState<CommentsResponse>();
+  const [comments, setComments] = useState<Comment[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [commentLoading, setCommentLoading] = useState<boolean>(true);
   const [requesting, setRequesting] = useState<boolean>(false);
@@ -59,7 +59,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
 
   async function readComments() {
     setCommentLoading(true);
-    const results = await request<CommentsRequest, CommentsResponse>("get_comments", { postId: post.id });
+    const results = await trpc.getComments.query({ postId: post.id });
     setCommentLoading(false);
     setComments(results);
   }
