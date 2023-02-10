@@ -1,7 +1,6 @@
 import { AppUser, Comment, Post } from "~/lib/db.ts";
 
 import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } from "~/routes/api/delete_post.ts";
-import type { RequestType as CreateRequest, ResponseType as CreateResponse } from "~/routes/api/create_comment.ts";
 import type { RequestType as DeleteCommentRequest, ResponseType as DeleteCommentResponse } from "~/routes/api/delete_comment.ts";
 import type { RequestType as LikeRequest, ResponseType as LikeResponse } from "~/routes/api/create_like.ts";
 import type { RequestType as CancelLikeRequest, ResponseType as CancelLikeResponse } from "~/routes/api/delete_like.ts";
@@ -66,7 +65,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
 
   async function reply() {
     setLoading(true);
-    await request<CreateRequest, CreateResponse>("create_comment", { postId: post.id, source: commentSource });
+    await trpc.createComment.mutate({ postId: post.id, source: commentSource });
     await readComments();
     setCommentSource("");
     setLoading(false);
