@@ -1,8 +1,7 @@
-import { ResponsePost } from "~/lib/types.ts";
+import { z } from "zod";
 import {
   pool,
   Post,
-  selectFollowingUsersPostByLtId,
   selectFollowingUsersPosts,
   selectLikes,
   selectPostByLtId,
@@ -12,60 +11,55 @@ import {
   selectUserPostByLtId,
   selectUserPosts,
 } from "~/lib/db.ts";
-import { Handlers } from "$fresh/server.ts";
+import { publicProcedure } from "~/trpc/context.ts";
 import { getSession } from "~/lib/auth.ts";
 
-export type RequestType = {
-  postId?: number;
-  userId?: number;
-  followig?: boolean;
-  searchWord?: string;
-};
-
-export type ResponseType = Array<ResponsePost>;
-
-async function execute(
-  params: RequestType,
-  request: Request,
-): Promise<ResponseType> {
-  const session = await getSession(request);
+export const getPosts = publicProcedure.input(
+  z.object({
+    postId: z.number().optional(),
+    userId: z.number().optional(),
+    following: z.boolean().optional(),
+    searchWord: z.string().optional(),
+  }),
+).query(async ({ input, ctx }) => {
+  const session = await getSession(ctx.req);
 
   const { posts, likedPostIds } = await pool(async (client) => {
     let posts: Post[] = [];
-    if (params.userId) {
+    if (input.userId) {
       // specified user only
-      if (params.postId) {
+      if (input.postId) {
         posts = await selectUserPostByLtId(client, {
-          ltId: params.postId,
-          userId: params.userId,
+          ltId: input.postId,
+          userId: input.userId,
         });
       } else {
-        posts = await selectUserPosts(client, params.userId);
+        posts = await selectUserPosts(client, input.userId);
       }
-    } else if (params.followig && session) {
+    } else if (input.following && session) {
       // following user only
       const userId = session.user.id;
-      if (params.postId) {
-        posts = await selectFollowingUsersPostByLtId(client, {
-          ltId: params.postId,
+      if (input.postId) {
+        posts = await selectUserPostByLtId(client, {
+          ltId: input.postId,
           userId,
         });
       } else {
         posts = await selectFollowingUsersPosts(client, userId);
       }
-    } else if (params.searchWord) {
-      if (params.postId) {
+    } else if (input.searchWord) {
+      if (input.postId) {
         posts = await selectPostsBySearchWordAndLtId(client, {
-          searchWord: params.searchWord,
-          postId: params.postId,
+          searchWord: input.searchWord,
+          postId: input.postId,
         });
       } else {
-        posts = await selectPostsBySearchWord(client, params.searchWord);
+        posts = await selectPostsBySearchWord(client, input.searchWord);
       }
     } else {
       // all user
-      if (params.postId) {
-        posts = await selectPostByLtId(client, params.postId);
+      if (input.postId) {
+        posts = await selectPostByLtId(client, input.postId);
       } else {
         posts = await selectPosts(client);
       }
@@ -95,12 +89,4 @@ async function execute(
       liked: likedPostIds.includes(p.id),
     };
   });
-}
-
-export const handler: Handlers = {
-  async POST(request) {
-    const params: RequestType = await request.json();
-    const result: ResponseType = await execute(params, request);
-    return Response.json(result);
-  },
-};
+});

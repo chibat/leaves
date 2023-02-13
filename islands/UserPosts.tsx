@@ -6,12 +6,12 @@ import FollowerUsersModal from '~/components/FollowerUsersModal.tsx'
 import { ResponsePost } from "~/lib/types.ts";
 import { AppUser } from "~/lib/db.ts";
 
-import type { RequestType, ResponseType } from "~/routes/api/get_posts.ts";
 import type { RequestType as FollowInfoRequest, ResponseType as FollowInfoResponse } from "~/routes/api/get_follow_info.ts";
 import type { RequestType as FollowRequest, ResponseType as FollowResponse } from "~/routes/api/create_follow.ts";
 import type { RequestType as UnfollowRequest, ResponseType as UnfollowResponse } from "~/routes/api/delete_follow.ts";
 import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
+import { trpc } from "~/trpc/client.ts";
 
 export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUser }) {
 
@@ -39,7 +39,7 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
       if (!allLoaded.value && !loading.value && entries[0].intersectionRatio !== 0) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
-        request<RequestType, ResponseType>("get_posts", { postId, userId }).then(results => {
+        trpc.getPosts.query({ postId, userId }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }
