@@ -6,7 +6,6 @@ import FollowerUsersModal from '~/components/FollowerUsersModal.tsx'
 import { ResponsePost } from "~/lib/types.ts";
 import { AppUser } from "~/lib/db.ts";
 
-import type { RequestType as FollowInfoRequest, ResponseType as FollowInfoResponse } from "~/routes/api/get_follow_info.ts";
 import type { RequestType as FollowRequest, ResponseType as FollowResponse } from "~/routes/api/create_follow.ts";
 import type { RequestType as UnfollowRequest, ResponseType as UnfollowResponse } from "~/routes/api/delete_follow.ts";
 import { useEffect, useState } from "preact/hooks";
@@ -29,7 +28,7 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
   const [followerModal, setFollowerModal] = useState<boolean>(false);
 
   useEffect(() => {
-    request<FollowInfoRequest, FollowInfoResponse>("get_follow_info", { userId }).then(result => {
+    trpc.getFollowInfo.query({ userId }).then(result => {
       setFollowing(result.following);
       setFollowers(result.followers);
       setIsFollowing(result.isFollowing);
