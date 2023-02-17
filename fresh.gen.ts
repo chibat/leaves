@@ -15,29 +15,28 @@ import * as $8 from "./routes/api/delete_comment.ts";
 import * as $9 from "./routes/api/delete_follow.ts";
 import * as $10 from "./routes/api/delete_like.ts";
 import * as $11 from "./routes/api/delete_post.ts";
-import * as $12 from "./routes/api/get_follower_users.ts";
-import * as $13 from "./routes/api/get_following_users.ts";
-import * as $14 from "./routes/api/get_like_users.ts";
-import * as $15 from "./routes/api/get_liked_posts.ts";
-import * as $16 from "./routes/api/is_liked.ts";
-import * as $17 from "./routes/api/joke.ts";
-import * as $18 from "./routes/api/trpc/[path].ts";
-import * as $19 from "./routes/api/update_post.ts";
-import * as $20 from "./routes/auth.tsx";
-import * as $21 from "./routes/callback.tsx";
-import * as $22 from "./routes/debug_auth.tsx";
-import * as $23 from "./routes/directory/[userId].tsx";
-import * as $24 from "./routes/directory/index.tsx";
-import * as $25 from "./routes/following.tsx";
-import * as $26 from "./routes/index.tsx";
-import * as $27 from "./routes/likes.tsx";
-import * as $28 from "./routes/notification.tsx";
-import * as $29 from "./routes/posts/[postId]/edit.tsx";
-import * as $30 from "./routes/posts/[postId]/index.tsx";
-import * as $31 from "./routes/posts/new.tsx";
-import * as $32 from "./routes/search.tsx";
-import * as $33 from "./routes/signout.tsx";
-import * as $34 from "./routes/users/[userId].tsx";
+import * as $12 from "./routes/api/get_following_users.ts";
+import * as $13 from "./routes/api/get_like_users.ts";
+import * as $14 from "./routes/api/get_liked_posts.ts";
+import * as $15 from "./routes/api/is_liked.ts";
+import * as $16 from "./routes/api/joke.ts";
+import * as $17 from "./routes/api/trpc/[path].ts";
+import * as $18 from "./routes/api/update_post.ts";
+import * as $19 from "./routes/auth.tsx";
+import * as $20 from "./routes/callback.tsx";
+import * as $21 from "./routes/debug_auth.tsx";
+import * as $22 from "./routes/directory/[userId].tsx";
+import * as $23 from "./routes/directory/index.tsx";
+import * as $24 from "./routes/following.tsx";
+import * as $25 from "./routes/index.tsx";
+import * as $26 from "./routes/likes.tsx";
+import * as $27 from "./routes/notification.tsx";
+import * as $28 from "./routes/posts/[postId]/edit.tsx";
+import * as $29 from "./routes/posts/[postId]/index.tsx";
+import * as $30 from "./routes/posts/new.tsx";
+import * as $31 from "./routes/search.tsx";
+import * as $32 from "./routes/signout.tsx";
+import * as $33 from "./routes/users/[userId].tsx";
 import * as $$0 from "./islands/AllPosts.tsx";
 import * as $$1 from "./islands/FollowingPosts.tsx";
 import * as $$2 from "./islands/Header.tsx";
@@ -62,29 +61,28 @@ const manifest = {
     "./routes/api/delete_follow.ts": $9,
     "./routes/api/delete_like.ts": $10,
     "./routes/api/delete_post.ts": $11,
-    "./routes/api/get_follower_users.ts": $12,
-    "./routes/api/get_following_users.ts": $13,
-    "./routes/api/get_like_users.ts": $14,
-    "./routes/api/get_liked_posts.ts": $15,
-    "./routes/api/is_liked.ts": $16,
-    "./routes/api/joke.ts": $17,
-    "./routes/api/trpc/[path].ts": $18,
-    "./routes/api/update_post.ts": $19,
-    "./routes/auth.tsx": $20,
-    "./routes/callback.tsx": $21,
-    "./routes/debug_auth.tsx": $22,
-    "./routes/directory/[userId].tsx": $23,
-    "./routes/directory/index.tsx": $24,
-    "./routes/following.tsx": $25,
-    "./routes/index.tsx": $26,
-    "./routes/likes.tsx": $27,
-    "./routes/notification.tsx": $28,
-    "./routes/posts/[postId]/edit.tsx": $29,
-    "./routes/posts/[postId]/index.tsx": $30,
-    "./routes/posts/new.tsx": $31,
-    "./routes/search.tsx": $32,
-    "./routes/signout.tsx": $33,
-    "./routes/users/[userId].tsx": $34,
+    "./routes/api/get_following_users.ts": $12,
+    "./routes/api/get_like_users.ts": $13,
+    "./routes/api/get_liked_posts.ts": $14,
+    "./routes/api/is_liked.ts": $15,
+    "./routes/api/joke.ts": $16,
+    "./routes/api/trpc/[path].ts": $17,
+    "./routes/api/update_post.ts": $18,
+    "./routes/auth.tsx": $19,
+    "./routes/callback.tsx": $20,
+    "./routes/debug_auth.tsx": $21,
+    "./routes/directory/[userId].tsx": $22,
+    "./routes/directory/index.tsx": $23,
+    "./routes/following.tsx": $24,
+    "./routes/index.tsx": $25,
+    "./routes/likes.tsx": $26,
+    "./routes/notification.tsx": $27,
+    "./routes/posts/[postId]/edit.tsx": $28,
+    "./routes/posts/[postId]/index.tsx": $29,
+    "./routes/posts/new.tsx": $30,
+    "./routes/search.tsx": $31,
+    "./routes/signout.tsx": $32,
+    "./routes/users/[userId].tsx": $33,
   },
   islands: {
     "./islands/AllPosts.tsx": $$0,
