@@ -1,11 +1,11 @@
 import Users from '~/components/Users.tsx'
-import { request } from '~/lib/request.ts'
-import type { RequestType, ResponseType } from "~/routes/api/get_following_users.ts";
 import { useState, useEffect } from "preact/hooks";
+import { trpc } from "~/trpc/client.ts";
+import { User } from "~/trpc/procedures/getFollowerUsers.ts";
 
 export default function FollowingUsersModal(props: { userId: number, setModal: (modal: boolean) => void }) {
 
-  const [users, setUsers] = useState<ResponseType>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   function closeModal() {
@@ -14,7 +14,7 @@ export default function FollowingUsersModal(props: { userId: number, setModal: (
 
   useEffect(() => {
     setLoading(true);
-    request<RequestType, ResponseType>("get_following_users", { userId: props.userId }).then(results => {
+    trpc.getFollowerUsers.query({ userId: props.userId }).then(results => {
       setLoading(false);
       setUsers(results);
     });

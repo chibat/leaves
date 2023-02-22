@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { pool, selectFollowerUsers } from "~/lib/db.ts";
 import { defaultString } from "~/lib/utils.ts";
-
 import { publicProcedure } from "~/trpc/context.ts";
 
 export type User = { id: number; name: string; picture: string };
