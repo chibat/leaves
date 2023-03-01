@@ -1,12 +1,11 @@
 import { useEffect, useState } from "preact/hooks";
-import { request } from '~/lib/request.ts'
-
-import type { RequestType as LikeUsersRequest, ResponseType as LikeUsersResponse } from "~/routes/api/get_like_users.ts";
 import Users from "~/components/Users.tsx";
+import { User } from "~/trpc/procedures/getFollowingUsers.ts";
+import { trpc } from "~/trpc/client.ts";
 
 export function LikeUsersModal(props: { postId: number, setModal: (modal: boolean) => void }) {
 
-  const [users, setUsers] = useState<LikeUsersResponse>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   function closeModal() {
@@ -14,7 +13,7 @@ export function LikeUsersModal(props: { postId: number, setModal: (modal: boolea
   }
   useEffect(() => {
     setLoading(true);
-    request<LikeUsersRequest, LikeUsersResponse>("get_like_users", { postId: props.postId }).then(a => {
+    trpc.getLikeUsers.query({ postId: props.postId }).then(a => {
       setLoading(false);
       setUsers(a);
     });
