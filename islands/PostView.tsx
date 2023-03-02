@@ -4,7 +4,6 @@ import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } fro
 import type { RequestType as DeleteCommentRequest, ResponseType as DeleteCommentResponse } from "~/routes/api/delete_comment.ts";
 import type { RequestType as LikeRequest, ResponseType as LikeResponse } from "~/routes/api/create_like.ts";
 import type { RequestType as CancelLikeRequest, ResponseType as CancelLikeResponse } from "~/routes/api/delete_like.ts";
-import type { RequestType as IsLikedRequest } from "~/routes/api/is_liked.ts";
 
 import { request } from "~/lib/request.ts";
 import { useEffect, useState } from "preact/hooks";
@@ -94,7 +93,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
   useEffect(() => {
     setLikes(post.likes);
     (async () => {
-      const _liked = await request<IsLikedRequest, boolean>("is_liked", { postId: post.id });
+      const _liked = await trpc.isLiked.query({ postId: post.id });
       setLiked(_liked);
       await readComments();
     })();

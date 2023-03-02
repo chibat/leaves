@@ -7,6 +7,7 @@ import { getPosts } from "~/trpc/procedures/getPosts.ts";
 import { getFollowInfo } from "~/trpc/procedures/getFollowInfo.ts";
 import { getFollowerUsers } from "~/trpc/procedures/getFollowerUsers.ts";
 import { getLikeUsers } from "~/trpc/procedures/getLikeUsers.ts";
+import { isLiked } from "~/trpc/procedures/isLiked.ts";
 
 const posts = [{ name: "first post" }];
 
@@ -18,6 +19,7 @@ export const appRouter = router({
   getFollowInfo,
   getFollowerUsers,
   getLikeUsers,
+  isLiked,
   postGet: publicProcedure.query(() => posts),
   postCreate: publicProcedure.input(z.object({
     name: z.string(),
