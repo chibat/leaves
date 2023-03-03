@@ -2,10 +2,9 @@ import { useEffect } from "preact/hooks";
 import Posts from "~/components/Posts.tsx";
 import { ResponsePost } from "~/lib/types.ts";
 import { PAGE_ROWS } from "~/lib/constants.ts";
-import { request } from "~/lib/request.ts";
-import { RequestType, ResponseType } from "~/routes/api/get_liked_posts.ts";
 import { useSignal } from "@preact/signals";
 import { AppUser } from "~/lib/db.ts";
+import { trpc } from "~/trpc/client.ts";
 
 export default function LikePosts(props: { loginUser?: AppUser }) {
 
@@ -18,7 +17,7 @@ export default function LikePosts(props: { loginUser?: AppUser }) {
       if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
-        request<RequestType, ResponseType>("get_liked_posts", { postId, }).then(results => {
+        trpc.getLikedPosts.query({ postId }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }
