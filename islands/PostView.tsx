@@ -132,7 +132,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                 {new Date(post.updated_at).toLocaleString()}
               </div>
             </div>
-            <section class="card-body">
+            <article class="card-body">
               <span class="post" dangerouslySetInnerHTML={{ __html: postSource }}></span>
               <div class="d-flex justify-content-between">
                 <div>
@@ -166,7 +166,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
                   </div>
                 }
               </div>
-            </section>
+            </article>
             <div class="card-footer bg-transparent">
               {commentLoading &&
                 <div class="d-flex justify-content-center">
