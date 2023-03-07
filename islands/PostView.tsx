@@ -133,39 +133,41 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
               </div>
             </div>
             <article class="card-body">
-              <span class="post" dangerouslySetInnerHTML={{ __html: postSource }}></span>
-              <div class="d-flex justify-content-between">
-                <div>
-                  {requesting &&
-                    <div class="spinner-grow spinner-grow-sm ms-3" role="status">
-                      <span class="visually-hidden">Loading...</span>
+              <section>
+                <span class="post" dangerouslySetInnerHTML={{ __html: postSource }}></span>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    {requesting &&
+                      <div class="spinner-grow spinner-grow-sm ms-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    }
+                    {user && !requesting && liked &&
+                      <a href={void (0)} onClick={() => cancelLike(post.id)} class="ms-3" style={{ cursor: "pointer" }}>
+                        <img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img>
+                      </a>
+                    }
+                    {!requesting && !liked &&
+                      <a href={void (0)} onClick={() => like(post.id)} class="ms-3" style={{ cursor: "pointer" }}>
+                        <img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img>
+                      </a>
+                    }
+                    {Number(likes) > 0 &&
+                      <a href={void (0)} class="noDecoration ms-2" style={{ cursor: "pointer" }} onClick={() => setModal(true)}>
+                        {likes} Like{likes === "1" ? "" : "s"}
+                      </a>
+                    }
+                  </div>
+                  {user?.id === post.user_id &&
+                    <div>
+                      <a href={void (0)} class="me-2" style={{ cursor: "pointer" }} onClick={deletePost}>
+                        <img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img>
+                      </a>
+                      <a href={`/posts/${post.id}/edit`}><img src="/assets/img/pencil-fill.svg" alt="Edit" width="20" height="20"></img></a>
                     </div>
                   }
-                  {user && !requesting && liked &&
-                    <a href={void (0)} onClick={() => cancelLike(post.id)} class="ms-3" style={{ cursor: "pointer" }}>
-                      <img src="/assets/img/heart-fill.svg" alt="Edit" width="20" height="20"></img>
-                    </a>
-                  }
-                  {!requesting && !liked &&
-                    <a href={void (0)} onClick={() => like(post.id)} class="ms-3" style={{ cursor: "pointer" }}>
-                      <img src="/assets/img/heart.svg" alt="Edit" width="20" height="20"></img>
-                    </a>
-                  }
-                  {Number(likes) > 0 &&
-                    <a href={void (0)} class="noDecoration ms-2" style={{ cursor: "pointer" }} onClick={() => setModal(true)}>
-                      {likes} Like{likes === "1" ? "" : "s"}
-                    </a>
-                  }
                 </div>
-                {user?.id === post.user_id &&
-                  <div>
-                    <a href={void (0)} class="me-2" style={{ cursor: "pointer" }} onClick={deletePost}>
-                      <img src="/assets/img/trash-fill.svg" alt="Delete" width="20" height="20"></img>
-                    </a>
-                    <a href={`/posts/${post.id}/edit`}><img src="/assets/img/pencil-fill.svg" alt="Edit" width="20" height="20"></img></a>
-                  </div>
-                }
-              </div>
+              </section>
             </article>
             <div class="card-footer bg-transparent">
               {commentLoading &&
