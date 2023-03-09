@@ -19,7 +19,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
 
   const [flag, setFlag] = useState<boolean>(true);
   const [commentSource, setCommentSource] = useState<string>("");
-  const [postSource, setPostSource] = useState<string>(props.post.source);
+  const [postSource, setPostSource] = useState<string>("");
   const [likes, setLikes] = useState<string>('0');
   const [liked, setLiked] = useState<boolean>();
   const [comments, setComments] = useState<Comment[]>();
