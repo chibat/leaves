@@ -2,7 +2,6 @@ import { AppUser, Comment, Post } from "~/lib/db.ts";
 
 import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } from "~/routes/api/delete_post.ts";
 import type { RequestType as DeleteCommentRequest, ResponseType as DeleteCommentResponse } from "~/routes/api/delete_comment.ts";
-import type { RequestType as LikeRequest, ResponseType as LikeResponse } from "~/routes/api/create_like.ts";
 import type { RequestType as CancelLikeRequest, ResponseType as CancelLikeResponse } from "~/routes/api/delete_like.ts";
 
 import { request } from "~/lib/request.ts";
@@ -76,7 +75,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
       return;
     }
     setRequesting(true);
-    await request<LikeRequest, LikeResponse>("create_like", { postId });
+    await trpc.createLike.mutate({ postId });
     setLiked(true);
     setLikes("" + (Number(likes) + 1));
     setRequesting(false);

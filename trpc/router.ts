@@ -9,12 +9,14 @@ import { getFollowerUsers } from "~/trpc/procedures/getFollowerUsers.ts";
 import { getLikeUsers } from "~/trpc/procedures/getLikeUsers.ts";
 import { isLiked } from "~/trpc/procedures/isLiked.ts";
 import { getLikedPosts } from "~/trpc/procedures/getLikedPosts.ts";
+import { createLike } from "./procedures/createLike.ts";
 
 const posts = [{ name: "first post" }];
 
 export const appRouter = router({
   hello,
   createComment,
+  createLike,
   getComments,
   getPosts,
   getFollowInfo,

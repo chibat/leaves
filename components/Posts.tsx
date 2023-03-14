@@ -3,13 +3,13 @@ import { request } from '~/lib/request.ts'
 import { LikeUsersModal } from '~/components/LikeUsersModal.tsx'
 
 import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } from "~/routes/api/delete_post.ts";
-import type { RequestType as LikeRequest, ResponseType as LikeResponse } from "~/routes/api/create_like.ts";
 import type { RequestType as CancelLikeRequest, ResponseType as CancelLikeResponse } from "~/routes/api/delete_like.ts";
 import type { ResponsePost } from "~/lib/types.ts";
 import { useState, useEffect } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
 import { markedWithSanitaize } from "~/lib/utils.ts";
 import { Signal } from "@preact/signals-core";
+import { trpc } from "~/trpc/client.ts";
 
 type Props = {
   posts: Signal<ResponsePost[]>,
@@ -37,7 +37,7 @@ export default function Posts(props: Props) {
       location.href = "/auth";
       return;
     }
-    await request<LikeRequest, LikeResponse>("create_like", { postId: post.id });
+    await trpc.createLike.mutate({ postId: post.id });
     post.liked = true;
     post.likes = "" + (Number(post.likes) + 1);
     props.posts.value = [...props.posts.value];
