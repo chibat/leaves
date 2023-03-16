@@ -2,7 +2,6 @@ import { AppUser, Comment, Post } from "~/lib/db.ts";
 
 import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } from "~/routes/api/delete_post.ts";
 import type { RequestType as DeleteCommentRequest, ResponseType as DeleteCommentResponse } from "~/routes/api/delete_comment.ts";
-import type { RequestType as CancelLikeRequest, ResponseType as CancelLikeResponse } from "~/routes/api/delete_like.ts";
 
 import { request } from "~/lib/request.ts";
 import { useEffect, useState } from "preact/hooks";
@@ -83,7 +82,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
 
   async function cancelLike(postId: number) {
     setRequesting(true);
-    await request<CancelLikeRequest, CancelLikeResponse>("delete_like", { postId });
+    await trpc.cancelLike.mutate({ postId })
     setLiked(false);
     setLikes("" + (Number(likes) - 1));
     setRequesting(false);

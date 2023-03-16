@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { publicProcedure } from "~/trpc/context.ts";
-import { insertLike, pool } from "~/lib/db.ts";
+import { deleteLike, pool } from "~/lib/db.ts";
 import { getSession } from "~/lib/auth.ts";
+import { publicProcedure } from "~/trpc/context.ts";
 
-export const createLike = publicProcedure.input(
+export const cancelLike = publicProcedure.input(
   z.object({ postId: z.number() }),
 ).mutation(async ({ input, ctx }) => {
   const session = await getSession(ctx.req);
@@ -11,7 +11,7 @@ export const createLike = publicProcedure.input(
     return null; // TODO
   }
   await pool((client) =>
-    insertLike(client, {
+    deleteLike(client, {
       userId: session.user.id,
       postId: input.postId,
     })

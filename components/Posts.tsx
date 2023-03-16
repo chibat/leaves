@@ -3,7 +3,6 @@ import { request } from '~/lib/request.ts'
 import { LikeUsersModal } from '~/components/LikeUsersModal.tsx'
 
 import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } from "~/routes/api/delete_post.ts";
-import type { RequestType as CancelLikeRequest, ResponseType as CancelLikeResponse } from "~/routes/api/delete_like.ts";
 import type { ResponsePost } from "~/lib/types.ts";
 import { useState, useEffect } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
@@ -44,7 +43,7 @@ export default function Posts(props: Props) {
   }
 
   async function cancelLike(post: ResponsePost) {
-    await request<CancelLikeRequest, CancelLikeResponse>("delete_like", { postId: post.id });
+    await trpc.cancelLike.mutate({ postId: post.id })
     post.liked = false;
     post.likes = "" + (Number(post.likes) - 1);
     props.posts.value = [...props.posts.value];
