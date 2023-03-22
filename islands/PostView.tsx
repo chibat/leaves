@@ -1,7 +1,6 @@
 import { AppUser, Comment, Post } from "~/lib/db.ts";
 
 import type { RequestType as DeleteRequest, ResponseType as DeleteResponse } from "~/routes/api/delete_post.ts";
-import type { RequestType as DeleteCommentRequest, ResponseType as DeleteCommentResponse } from "~/routes/api/delete_comment.ts";
 
 import { request } from "~/lib/request.ts";
 import { useEffect, useState } from "preact/hooks";
@@ -48,7 +47,7 @@ export default function PostView(props: { post: Post, user?: AppUser }) {
 
   async function deleteComment(commentId: number) {
     if (confirm("Delete the comment?")) {
-      await request<DeleteCommentRequest, DeleteCommentResponse>("delete_comment", { commentId });
+      await trpc.deleteComment.mutate({ commentId });
       await readComments();
     }
   }
