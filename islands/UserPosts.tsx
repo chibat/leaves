@@ -6,7 +6,6 @@ import FollowerUsersModal from '~/components/FollowerUsersModal.tsx'
 import { ResponsePost } from "~/lib/types.ts";
 import { AppUser } from "~/lib/db.ts";
 
-import type { RequestType as FollowRequest, ResponseType as FollowResponse } from "~/routes/api/create_follow.ts";
 import type { RequestType as UnfollowRequest, ResponseType as UnfollowResponse } from "~/routes/api/delete_follow.ts";
 import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
@@ -62,7 +61,7 @@ export default function UserPosts(props: { pageUser: AppUser, loginUser?: AppUse
 
   async function follow() {
     setFollowLoading(true);
-    await request<FollowRequest, FollowResponse>("create_follow", { followingUserId: props.pageUser.id });
+    await trpc.createFollow.mutate({ followingUserId: props.pageUser.id });
     setFollowers((Number(followers) + 1).toString());
     setIsFollowing(!isFollowing);
     setFollowLoading(false);
