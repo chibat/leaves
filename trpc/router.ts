@@ -11,6 +11,7 @@ import { isLiked } from "~/trpc/procedures/isLiked.ts";
 import { getLikedPosts } from "~/trpc/procedures/getLikedPosts.ts";
 import { createLike } from "~/trpc/procedures/createLike.ts";
 import { createFollow } from "~/trpc/procedures/createFollow.ts";
+import { createPost } from "~/trpc/procedures/createPost.ts";
 import { cancelLike } from "~/trpc/procedures/cancelLike.ts";
 import { deleteComment } from "~/trpc/procedures/deleteComment.ts";
 import { deletePost } from "~/trpc/procedures/deletePost.ts";
@@ -23,6 +24,7 @@ export const appRouter = router({
   createComment,
   createFollow,
   createLike,
+  createPost,
   cancelLike,
   deleteComment,
   deletePost,
