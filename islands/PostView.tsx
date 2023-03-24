@@ -1,6 +1,5 @@
 import { AppUser, Comment, Post } from "~/lib/db.ts";
 
-import { request } from "~/lib/request.ts";
 import { useEffect, useState } from "preact/hooks";
 import * as hljs from "highlightjs";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";

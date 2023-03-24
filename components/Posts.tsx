@@ -1,5 +1,4 @@
 import * as hljs from "highlightjs";
-import { request } from "~/lib/request.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 
 import type { ResponsePost } from "~/lib/types.ts";
