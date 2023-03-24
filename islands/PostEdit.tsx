@@ -1,13 +1,11 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
-import { useState, useEffect } from "preact/hooks";
-import type { RequestType as UpdateRequest, ResponseType as UpdateResponse } from '~/routes/api/update_post.ts'
-import { request } from "~/lib/request.ts";
+import { useEffect, useState } from "preact/hooks";
 import { Post } from "~/lib/db.ts";
-import { markedWithSanitaize } from "../lib/utils.ts";
+import { markedWithSanitaize } from "~/lib/utils.ts";
+import { trpc } from "~/trpc/client.ts";
 
 export default function Edit(props: { post: Post }) {
-
   const postId = props.post.id;
 
   const [flag, setFlag] = useState<boolean>(true);
@@ -29,7 +27,7 @@ export default function Edit(props: { post: Post }) {
   async function save() {
     if (confirm("Save the post?")) {
       setLoading(true);
-      await request<UpdateRequest, UpdateResponse>("update_post", { postId: postId, source: text.value });
+      await trpc.updatePost.mutate({ postId: postId, source: text.value });
       setLoading(false);
       location.href = `/posts/${postId}?updated`;
     }
@@ -44,26 +42,60 @@ export default function Edit(props: { post: Post }) {
         <div class="card-body">
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class={flag ? "nav-link active" : "nav-link"} onClick={displayEdit}>Edit</a>
+              <a
+                class={flag ? "nav-link active" : "nav-link"}
+                onClick={displayEdit}
+              >
+                Edit
+              </a>
             </li>
             <li class="nav-item">
-              <a class={!flag ? "nav-link active" : "nav-link"} onClick={displayPreview}>Preview</a>
+              <a
+                class={!flag ? "nav-link active" : "nav-link"}
+                onClick={displayPreview}
+              >
+                Preview
+              </a>
             </li>
           </ul>
           {flag &&
-            <textarea class="form-control mt-3" style={{ height: "500px" }} maxLength={10000} value={text.value} autofocus
-              onChange={(e) => text.value = (e.target as any).value}>
-            </textarea>
-          }
+            (
+              <textarea
+                class="form-control mt-3"
+                style={{ height: "500px" }}
+                maxLength={10000}
+                value={text.value}
+                autofocus
+                onChange={(e) => text.value = (e.target as any).value}
+              >
+              </textarea>
+            )}
           {!flag &&
-            <span class="post" dangerouslySetInnerHTML={{ __html: markedWithSanitaize(text.value) }}></span>
-          }
+            (
+              <span
+                class="post"
+                dangerouslySetInnerHTML={{
+                  __html: markedWithSanitaize(text.value),
+                }}
+              >
+              </span>
+            )}
         </div>
         <div class="card-footer bg-transparent">
-          <button class="btn btn-primary" onClick={save} disabled={loading || text.value.length === 0}>
+          <button
+            class="btn btn-primary"
+            onClick={save}
+            disabled={loading || text.value.length === 0}
+          >
             {loading &&
-              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            }
+              (
+                <span
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                >
+                </span>
+              )}
             Save
           </button>
         </div>

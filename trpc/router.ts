@@ -16,6 +16,7 @@ import { cancelLike } from "~/trpc/procedures/cancelLike.ts";
 import { deleteComment } from "~/trpc/procedures/deleteComment.ts";
 import { deletePost } from "~/trpc/procedures/deletePost.ts";
 import { deleteFollow } from "~/trpc/procedures/deleteFollow.ts";
+import { updatePost } from "~/trpc/procedures/updatePost.ts";
 
 const posts = [{ name: "first post" }];
 
@@ -36,6 +37,7 @@ export const appRouter = router({
   getLikeUsers,
   isLiked,
   getLikedPosts,
+  updatePost,
   postGet: publicProcedure.query(() => posts),
   postCreate: publicProcedure.input(z.object({
     name: z.string(),
