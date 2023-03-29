@@ -13,6 +13,7 @@ import {
 } from "~/lib/db.ts";
 import { publicProcedure } from "~/trpc/context.ts";
 import { getSession } from "~/lib/auth.ts";
+import { render } from "~/lib/markdown.ts";
 
 export const getPosts = publicProcedure.input(
   z.object({
@@ -72,7 +73,12 @@ export const getPosts = publicProcedure.input(
       })
       : [];
 
-    return { posts, likedPostIds };
+    return {
+      posts: posts.map((post) => {
+        return { ...post, source: render(post.source) };
+      }),
+      likedPostIds,
+    };
   });
 
   return posts.map((p) => {

@@ -17,6 +17,7 @@ import { deleteComment } from "~/trpc/procedures/deleteComment.ts";
 import { deletePost } from "~/trpc/procedures/deletePost.ts";
 import { deleteFollow } from "~/trpc/procedures/deleteFollow.ts";
 import { updatePost } from "~/trpc/procedures/updatePost.ts";
+import { md2html } from "~/trpc/procedures/md2html.ts";
 
 const posts = [{ name: "first post" }];
 
@@ -38,6 +39,7 @@ export const appRouter = router({
   isLiked,
   getLikedPosts,
   updatePost,
+  md2html,
   postGet: publicProcedure.query(() => posts),
   postCreate: publicProcedure.input(z.object({
     name: z.string(),

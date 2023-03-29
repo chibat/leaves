@@ -1,13 +1,13 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect } from "preact/hooks";
-import { markedWithSanitaize } from "~/lib/utils.ts";
 import { trpc } from "~/trpc/client.ts";
 
 export default function Post() {
   const preview = useSignal(false);
   const loading = useSignal(false);
   const text = useSignal("");
+  const sanitizedHtml = useSignal("");
 
   useEffect(() => {
     (hljs as any).highlightAll();
@@ -41,7 +41,12 @@ export default function Post() {
               <a
                 class={preview.value ? "nav-link active" : "nav-link"}
                 style={{ cursor: "pointer" }}
-                onClick={() => preview.value = true}
+                onClick={async () => {
+                  sanitizedHtml.value = await trpc.md2html.query({
+                    source: text.value,
+                  });
+                  preview.value = true;
+                }}
               >
                 Preview
               </a>
@@ -65,7 +70,7 @@ export default function Post() {
               <span
                 class="post"
                 dangerouslySetInnerHTML={{
-                  __html: markedWithSanitaize(text.value),
+                  __html: sanitizedHtml.value,
                 }}
               >
               </span>

@@ -4,7 +4,6 @@ import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import type { ResponsePost } from "~/lib/types.ts";
 import { useEffect, useState } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
-import { markedWithSanitaize } from "~/lib/utils.ts";
 import { Signal } from "@preact/signals-core";
 import { trpc } from "~/trpc/client.ts";
 
@@ -81,7 +80,7 @@ export default function Posts(props: Props) {
             <span
               class="post"
               dangerouslySetInnerHTML={{
-                __html: markedWithSanitaize(post.source),
+                __html: post.source,
               }}
             >
             </span>

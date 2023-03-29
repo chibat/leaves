@@ -16,7 +16,8 @@
 
     "~/": "./",
     "highlightjs": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js",
-    "dompurify": "https://esm.sh/dompurify@2.4.1",
-    "marked": "https://esm.sh/marked@4.2.5"
+    "sanitize-html": "https://esm.sh/sanitize-html@2.8.1?target=esnext",
+    "marked": "https://esm.sh/marked@4.2.12",
+    "emoji": "https://deno.land/x/emoji@0.2.1/mod.ts"
   }
 }

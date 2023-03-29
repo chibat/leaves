@@ -3,7 +3,7 @@ import { AppUser, Comment, Post } from "~/lib/db.ts";
 import { useEffect, useState } from "preact/hooks";
 import * as hljs from "highlightjs";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
-import { markedWithSanitaize } from "~/lib/utils.ts";
+import { render } from "~/lib/markdown.ts";
 import { useSignal } from "@preact/signals";
 import { trpc } from "~/trpc/client.ts";
 
@@ -13,7 +13,8 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
 
   const [flag, setFlag] = useState<boolean>(true);
   const [commentSource, setCommentSource] = useState<string>("");
-  const [postSource, setPostSource] = useState<string>(props.post.source);
+  const sanitizedCommentHtml = useSignal("");
+  const postSource = render(props.post.source, {});
   const [likes, setLikes] = useState<string>("0");
   const [liked, setLiked] = useState<boolean>();
   const [comments, setComments] = useState<Comment[]>();
@@ -23,15 +24,14 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
   const [modal, setModal] = useState<boolean>(false);
   const message = useSignal("");
 
-  useEffect(() => {
-    setPostSource(markedWithSanitaize(post.source));
-  }, []);
-
   function displayEdit() {
     setFlag(true);
   }
 
-  function displayPreview() {
+  async function displayPreview() {
+    sanitizedCommentHtml.value = await trpc.md2html.query({
+      source: commentSource,
+    });
     setFlag(false);
   }
 
@@ -61,6 +61,8 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
     await trpc.createComment.mutate({ postId: post.id, source: commentSource });
     await readComments();
     setCommentSource("");
+    sanitizedCommentHtml.value = "";
+    displayEdit();
     setLoading(false);
   }
 
@@ -293,7 +295,7 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                         <span
                           class="post"
                           dangerouslySetInnerHTML={{
-                            __html: markedWithSanitaize(comment.source),
+                            __html: comment.source,
                           }}
                         >
                         </span>
@@ -342,7 +344,7 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                             <span
                               class="post"
                               dangerouslySetInnerHTML={{
-                                __html: markedWithSanitaize(commentSource),
+                                __html: sanitizedCommentHtml.value,
                               }}
                             >
                             </span>

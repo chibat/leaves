@@ -2,7 +2,6 @@ import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect, useState } from "preact/hooks";
 import { Post } from "~/lib/db.ts";
-import { markedWithSanitaize } from "~/lib/utils.ts";
 import { trpc } from "~/trpc/client.ts";
 
 export default function Edit(props: { post: Post }) {
@@ -10,13 +9,17 @@ export default function Edit(props: { post: Post }) {
 
   const [flag, setFlag] = useState<boolean>(true);
   const text = useSignal(props.post.source);
+  const sanitizedHtml = useSignal("");
   const [loading, setLoading] = useState<boolean>(false);
 
   function displayEdit() {
     setFlag(true);
   }
 
-  function displayPreview() {
+  async function displayPreview() {
+    sanitizedHtml.value = await trpc.md2html.query({
+      source: text.value,
+    });
     setFlag(false);
   }
 
@@ -75,7 +78,7 @@ export default function Edit(props: { post: Post }) {
               <span
                 class="post"
                 dangerouslySetInnerHTML={{
-                  __html: markedWithSanitaize(text.value),
+                  __html: sanitizedHtml.value,
                 }}
               >
               </span>
