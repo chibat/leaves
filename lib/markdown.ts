@@ -1,3 +1,4 @@
+// Original: https://github.com/denoland/deno-gfm/blob/6f4b8ae149b1f044037986929f096434b06bd726/mod.ts
 import { emojify } from "emoji";
 import * as Marked from "marked";
 //import { default as Prism } from "prismjs";
@@ -95,6 +96,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "details",
     "summary",
     "iframe",
+    "input",
   ]);
   if (opts.allowMath) {
     allowedTags = allowedTags.concat([
@@ -175,6 +177,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
       math: ["xmlns"], // Only enabled when math is enabled
       annotation: ["encoding"], // Only enabled when math is enabled
+      input: ["type", "checked", "disabled"],
     },
     allowedClasses: {
       div: ["highlight", "highlight-source-*", "notranslate"],
