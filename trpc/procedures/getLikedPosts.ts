@@ -7,6 +7,7 @@ import {
   selectLikes,
 } from "~/lib/db.ts";
 import { publicProcedure } from "~/trpc/context.ts";
+import { render } from "~/lib/markdown.ts";
 
 export const getLikedPosts = publicProcedure.input(
   z.object({
@@ -35,7 +36,12 @@ export const getLikedPosts = publicProcedure.input(
       postIds: posts.map((post) => post.id),
     });
 
-    return { posts, likedPostIds };
+    return {
+      posts: posts.map((post) => {
+        return { ...post, source: render(post.source) };
+      }),
+      likedPostIds,
+    };
   });
 
   return posts.map((p) => {

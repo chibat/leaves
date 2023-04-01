@@ -9,6 +9,7 @@ import { getFollowerUsers } from "~/trpc/procedures/getFollowerUsers.ts";
 import { getLikeUsers } from "~/trpc/procedures/getLikeUsers.ts";
 import { isLiked } from "~/trpc/procedures/isLiked.ts";
 import { getLikedPosts } from "~/trpc/procedures/getLikedPosts.ts";
+import { getSession } from "~/trpc/procedures/getSession.ts";
 import { createLike } from "~/trpc/procedures/createLike.ts";
 import { createFollow } from "~/trpc/procedures/createFollow.ts";
 import { createPost } from "~/trpc/procedures/createPost.ts";
@@ -36,6 +37,7 @@ export const appRouter = router({
   getFollowInfo,
   getFollowerUsers,
   getLikeUsers,
+  getSession,
   isLiked,
   getLikedPosts,
   updatePost,

@@ -14,10 +14,11 @@
     "@trpc/client": "https://esm.sh/v89/@trpc/client@10.9.0?deps=@trpc/server@10.9.0",
     "zod": "https://deno.land/x/zod@v3.20.2/mod.ts",
 
-    "~/": "./",
     "highlightjs": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js",
     "sanitize-html": "https://esm.sh/sanitize-html@2.8.1?target=esnext",
     "marked": "https://esm.sh/marked@4.2.12",
-    "emoji": "https://deno.land/x/emoji@0.2.1/mod.ts"
+    "emoji": "https://deno.land/x/emoji@0.2.1/mod.ts",
+    "mousetrap": "https://esm.sh/v113/mousetrap@1.6.5",
+    "~/": "./"
   }
 }
