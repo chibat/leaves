@@ -6,6 +6,7 @@ import { useEffect, useState } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
 import { Signal } from "@preact/signals-core";
 import { trpc } from "~/trpc/client.ts";
+import { registerJumpElements } from "~/shortcut.ts";
 
 type Props = {
   posts: Signal<ResponsePost[]>;
@@ -15,6 +16,10 @@ type Props = {
 export default function Posts(props: Props) {
   const [modal, setModal] = useState<boolean>(false);
   const [selectedPostId, setSelectedPostId] = useState<number>();
+
+  useEffect(() => {
+    registerJumpElements(document.getElementsByClassName("card"));
+  }, []);
 
   useEffect(() => {
     (hljs as any).highlightAll();
@@ -181,3 +186,4 @@ export default function Posts(props: Props) {
     </>
   );
 }
+
