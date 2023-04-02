@@ -174,7 +174,8 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       h4: ["id"],
       h5: ["id"],
       h6: ["id"],
-      iframe: ["src", "width", "height"], // Only used when iframe tags are allowed in the first place.
+      //<iframe src="https://ogp.deno.dev/?size=large&url=https://github.com" height="500" style="width: 500px; max-width: 100%;"></iframe>
+      iframe: ["src", "width", "height", "style"], // Only used when iframe tags are allowed in the first place.
       math: ["xmlns"], // Only enabled when math is enabled
       annotation: ["encoding"], // Only enabled when math is enabled
       input: ["type", "checked", "disabled"],
