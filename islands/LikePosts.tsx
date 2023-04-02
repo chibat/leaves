@@ -18,12 +18,16 @@ export default function LikePosts(props: { loginUser?: AppUser }) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
         loading.value = true;
         trpc.getLikedPosts.query({ postId }).then(results => {
+          if (!results) {
+            return;
+          }
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }
           if (results.length < PAGE_ROWS) {
             allLoaded.value = true;
           }
+        }).finally(() => {
           loading.value = false;
         });
       }
