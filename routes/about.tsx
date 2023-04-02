@@ -33,11 +33,7 @@ export default function Page(props: PageProps<PageType>) {
         <h1>About</h1>
         <ul>
           <li>本サイトは、<a href="https://chibat.github.io/" target="_blank" class="doc">@chibat</a> によるポートフォリオです。</li>
-          <li>Markdown で投稿できる SNS のようなものを作成してみました。
-            <ul>
-              <li>iframe での埋め込みコードは、YouTube と <a href="https://ogp.deno.dev/" target="blank">Open Graph Preview</a> のみサポートしています。</li>
-            </ul>
-          </li>
+          <li>Markdown で投稿できる SNS のようなものを作成してみました。 </li>
           <li>Production Runtime（次の無料枠を利用しています）
             <ul>
               <li><a href="https://deno.com/deploy" target="_blank">Deno Deploy</a>(TypeScript at the Edge)</li>
@@ -54,6 +50,19 @@ export default function Page(props: PageProps<PageType>) {
           <li><a href="https://github.com/chibat/md-sns7" target="_blank" class="doc">ソースコード</a></li>
           <li><a href="https://zenn.dev/chiba/articles/md-sns-deno-fresh" target="_blank">Zenn 記事</a></li>
         </ul>
+        <h2>Keyboard Shortcut</h2>
+        <table>
+          <tr><td>Search</td><td style={{ textAlign: "right" }}>/</td></tr>
+          <tr><td>New Post</td><td style={{ textAlign: "right" }}>n</td></tr>
+          <tr><td>Scroll to top</td><td style={{ textAlign: "right" }}>.</td></tr>
+          <tr><td>Next Post</td><td style={{ textAlign: "right" }}>j</td></tr>
+          <tr><td>Previous Post</td><td style={{ textAlign: "right" }}>k</td></tr>
+          <tr><td>Home</td><td style={{ textAlign: "right" }}>gh</td></tr>
+          <tr><td>Notification</td><td style={{ textAlign: "right" }}>gn</td></tr>
+          <tr><td>Liked</td><td style={{ textAlign: "right" }}>gl</td></tr>
+          <tr><td>Following</td><td style={{ textAlign: "right" }}>gf</td></tr>
+          <tr><td>Profile</td><td style={{ textAlign: "right" }}>gp</td></tr>
+        </table>
       </main>
     </>
   );
