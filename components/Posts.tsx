@@ -16,6 +16,7 @@ type Props = {
 export default function Posts(props: Props) {
   const [modal, setModal] = useState<boolean>(false);
   const [selectedPostId, setSelectedPostId] = useState<number>();
+  const [now] = useState<Date>(new Date());
 
   useEffect(() => {
     registerJumpElements(document.getElementsByClassName("card"));
@@ -77,7 +78,7 @@ export default function Posts(props: Props) {
             </div>
             <div>
               <a href={`/posts/${post.id}`} class="ms-2 noDecoration">
-                {new Date(post.updated_at).toLocaleString()}
+                {formatDate(now, post.updated_at)}
               </a>
             </div>
           </div>
@@ -187,3 +188,14 @@ export default function Posts(props: Props) {
   );
 }
 
+function formatDate(now: Date, date: string) {
+  const d = new Date(date);
+  if (
+    now.getFullYear() === d.getFullYear() && now.getMonth() === d.getMonth() &&
+    now.getDate() === d.getDate()
+  ) {
+    return d.toLocaleTimeString();
+  } else {
+    return d.toLocaleDateString();
+  }
+}
