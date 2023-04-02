@@ -20,6 +20,29 @@ CREATE TABLE post (
 CREATE INDEX post_user_id ON post(user_id);
 CREATE INDEX post_source_index ON post USING pgroonga (source);
 
+CREATE TABLE revision (
+ id SERIAL PRIMARY KEY,
+ post_id INTEGER,
+ source TEXT,
+ updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+ created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX revision_post_id ON revision(post_id);
+
+CREATE OR REPLACE FUNCTION insert_revision() RETURNS TRIGGER AS $insert_revision$
+    BEGIN
+        IF (TG_OP = 'DELETE' OR TG_OP = 'UPDATE') THEN
+            INSERT INTO revision(post_id, source, created_at) SELECT OLD.id, OLD.source, OLD.created_at;
+            RETURN OLD;
+        END IF;
+        RETURN NULL;
+    END;
+$insert_revision$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_revision_trigger
+AFTER UPDATE OR DELETE ON post
+FOR EACH ROW EXECUTE PROCEDURE insert_revision();
+
 CREATE TABLE app_session (
  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
  user_id INTEGER NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,

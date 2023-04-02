@@ -8,7 +8,7 @@ export const isLiked = publicProcedure.input(
 ).query(async ({ input, ctx }) => {
   const session = await getSession(ctx.req);
   if (!session) {
-    return Response.json(null, { status: 401 });
+    return null;
   }
   const results = await pool((client) =>
     selectLikes(client, {

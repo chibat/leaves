@@ -4,9 +4,6 @@ import * as db from "~/lib/db.ts";
 
 import { getSession } from "~/lib/auth.ts";
 
-export type RequestType = { postId: number };
-export type ResponseType = { postId: number };
-
 export const deletePost = publicProcedure.input(
   z.object({ postId: z.number() }),
 ).mutation(async ({ input, ctx }) => {

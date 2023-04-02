@@ -89,8 +89,10 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
   useEffect(() => {
     setLikes(post.likes);
     (async () => {
-      const _liked = await trpc.isLiked.query({ postId: post.id });
-      setLiked(_liked);
+      const maybeliked = await trpc.isLiked.query({ postId: post.id });
+      if (maybeliked) {
+        setLiked(maybeliked);
+      }
       await readComments();
     })();
     const searchParams = new URLSearchParams(location.search);

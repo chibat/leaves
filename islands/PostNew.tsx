@@ -17,7 +17,7 @@ export default function Post() {
     loading.value = true;
     const result = await trpc.createPost.mutate({ source: text.value });
     loading.value = false;
-    if (result.postId) {
+    if (result?.postId) {
       location.href = `/posts/${result.postId}?posted`;
       return;
     }
