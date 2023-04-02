@@ -18,14 +18,14 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
   return (
     <>
       <Head>
-        <title>md-sns - SNS with Markdown</title>
-        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
-        <meta property="og:title" content="md-sns"></meta>
-        <meta property="og:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
+        <title>Leaves - SNS with Markdown</title>
+        <meta property="og:url" content="https://leaves.deno.dev/"></meta>
+        <meta property="og:title" content="Leaves"></meta>
+        <meta property="og:image" content="https://leaves.deno.dev/assets/img/icon-192x192.png" />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:creator" content="@tomofummy" />
-        <meta name="twitter:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
+        <meta name="twitter:image" content="https://leaves.deno.dev/assets/img/icon-192x192.png" />
       </Head>
       <Header user={props.data.user} authUrl={props.data.authUrl} />
       <main class="container">

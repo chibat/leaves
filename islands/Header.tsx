@@ -19,9 +19,9 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
               src="/assets/img/icon-192x192.png"
               width="39"
               class="me-2"
-              alt="md-sns"
+              alt="Leaves"
             />
-            <a class="fs-4 me-3 noDecoration" href="/">md-sns</a>
+            <a class="fs-4 me-3 noDecoration" href="/">Leaves</a>
             <a class="me-3 noDecoration" href="/">All</a>
             {props.user &&
               <a class="me-3 noDecoration" href="/following">Following</a>}

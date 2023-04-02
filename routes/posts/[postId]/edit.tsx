@@ -39,7 +39,7 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>Edit - md-sns</title>
+        <title>Edit - Leaves</title>
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
       <main class="container">

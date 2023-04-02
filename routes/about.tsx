@@ -19,14 +19,14 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>About - md-sns</title>
-        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
-        <meta property="og:title" content="md-sns"></meta>
-        <meta property="og:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
+        <title>About - Leaves</title>
+        <meta property="og:url" content="https://leaves.deno.dev/"></meta>
+        <meta property="og:title" content="Leaves"></meta>
+        <meta property="og:image" content="https://leaves.deno.dev/assets/img/icon-192x192.png" />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:creator" content="@tomofummy" />
-        <meta name="twitter:image" content="https://md-sns.deno.dev/assets/img/icon-192x192.png" />
+        <meta name="twitter:image" content="https://leaves.deno.dev/assets/img/icon-192x192.png" />
       </Head>
       <Header user={props.data.user} />
       <main class="container">
@@ -43,11 +43,11 @@ export default function Page(props: PageProps<PageType>) {
           </li>
           <li>利用モジュール
             <ul>
-              <li><a href="https://github.com/chibat/md-sns7/blob/main/import_map.json" target="_blank">import_map.json を参照</a></li>
+              <li><a href="https://github.com/chibat/leaves/blob/main/import_map.json" target="_blank">import_map.json を参照</a></li>
               <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></li>
             </ul>
           </li>
-          <li><a href="https://github.com/chibat/md-sns7" target="_blank" class="doc">ソースコード</a></li>
+          <li><a href="https://github.com/chibat/leaves" target="_blank" class="doc">ソースコード</a></li>
           <li><a href="https://zenn.dev/chiba/articles/md-sns-deno-fresh" target="_blank">Zenn 記事</a></li>
         </ul>
         <h2>Keyboard Shortcut</h2>

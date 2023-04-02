@@ -27,7 +27,7 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>Likes - md-sns</title>
+        <title>Likes - Leaves</title>
       </Head>
       <Header user={props.data.loginUser} />
       <main class="container">

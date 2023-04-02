@@ -22,23 +22,23 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>Search:{searchParams} - md-sns</title>
-        <meta property="og:title" content={`Search:${searchParams} - md-sns`}>
+        <title>Search:{searchParams} - Leaves</title>
+        <meta property="og:title" content={`Search:${searchParams} - Leaves`}>
         </meta>
         <meta
           property="og:description"
-          content={`Search:${searchParams} - md-sns`}
+          content={`Search:${searchParams} - Leaves`}
         >
         </meta>
         <meta
           property="og:image"
-          content="https://md-sns.deno.dev/assets/img/icon-192x192.png"
+          content="https://leaves.deno.dev/assets/img/icon-192x192.png"
         />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta
           name="twitter:image"
-          content="https://md-sns.deno.dev/assets/img/icon-192x192.png"
+          content="https://leaves.deno.dev/assets/img/icon-192x192.png"
         />
       </Head>
       <Header user={props.data.loginUser} />

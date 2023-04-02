@@ -39,7 +39,7 @@ export default function Edit(props: { post: Post }) {
   return (
     <>
       <head>
-        <title>Edit - md-sns</title>
+        <title>Edit - Leaves</title>
       </head>
       <div class="card mb-3">
         <div class="card-body">

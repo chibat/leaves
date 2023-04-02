@@ -29,9 +29,9 @@ export default function Page(props: PageProps<PageType>) {
   return (
     <>
       <Head>
-        <title>{props.data.pageUser.name} - md-sns</title>
-        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
-        <meta property="og:title" content={`${props.data.pageUser.name} - md-sns`}></meta>
+        <title>{props.data.pageUser.name} - Leaves</title>
+        <meta property="og:url" content="https://leaves.deno.dev/"></meta>
+        <meta property="og:title" content={`${props.data.pageUser.name} - Leaves`}></meta>
         <meta property="og:description" content={props.data.pageUser.name}></meta>
         <meta property="og:image" content={props.data.pageUser.picture} />
         <meta name="twitter:card" content="summary"></meta>

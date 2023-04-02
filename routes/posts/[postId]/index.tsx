@@ -32,12 +32,12 @@ export default function Page(
 ) {
   const user = props.data.user;
   const post = props.data.post;
-  const title = getTitle(post.source) + " | md-sns";
+  const title = getTitle(post.source) + " | Leaves";
   return (
     <>
       <Head>
         <title>{title}</title>
-        <meta property="og:url" content="https://md-sns.deno.dev/"></meta>
+        <meta property="og:url" content="https://leaves.deno.dev/"></meta>
         <meta property="og:title" content={title}></meta>
         <meta property="og:description" content={post.source?.substring(0, 1000)?.replaceAll("\n", " ")}></meta>
         <meta property="og:image" content={post.picture} />

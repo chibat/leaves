@@ -6,7 +6,7 @@ export default function NotFoundPage({ url }: UnknownPageProps) {
   return (
     <>
       <Head>
-        <title>Not Found - md-sns</title>
+        <title>Not Found - Leaves</title>
       </Head>
       <Header />
       <main class="container">
