@@ -61,141 +61,152 @@ export default function Posts(props: Props) {
 
   return (
     <>
-      {posts && posts.map((post) => (
-        <div class="card mb-3" key={post.id}>
-          <div class="card-header bg-transparent d-flex justify-content-between">
-            <div>
-              <img
-                src={post.picture}
-                alt="mdo"
-                width="32"
-                height="32"
-                class="rounded-circle"
-              />
-              <a href={`/users/${post.user_id}`} class="ms-2 noDecoration">
-                {post.name}
-              </a>
-            </div>
-            <div>
-              <a href={`/posts/${post.id}`} class="ms-2 noDecoration">
-                {formatDate(now, post.updated_at)}
-              </a>
-            </div>
-          </div>
-          <div class="card-body">
-            <span
-              class="post"
-              dangerouslySetInnerHTML={{
-                __html: post.source,
-              }}
-            >
-            </span>
-            <div class="d-flex justify-content-between">
+      {posts && posts.map((post) => {
+        return {
+          ...post,
+          createdDate: new Date(post.created_at),
+          updatedDate: new Date(post.updated_at),
+        };
+      })
+        .map((post) => (
+          <div class="card mb-3" key={post.id}>
+            <div class="card-header bg-transparent d-flex justify-content-between">
+              <div>
+                <img
+                  src={post.picture}
+                  alt="mdo"
+                  width="32"
+                  height="32"
+                  class="rounded-circle"
+                />
+                <a href={`/users/${post.user_id}`} class="ms-2 noDecoration">
+                  {post.name}
+                </a>
+              </div>
               <div>
                 <a
-                  class="btn btn-outline-secondary btn-sm"
-                  href={user ? `/posts/${post.id}` : "/auth"}
+                  href={`/posts/${post.id}`}
+                  class="ms-2 noDecoration"
+                  title={`Created at: ${post.createdDate.toLocaleString()} , Updated at: ${post.updatedDate.toLocaleString()}`}
                 >
-                  Comment
+                  {formatDate(now, post.updatedDate)}
                 </a>
-                {Number(post.comments) > 0 &&
-                  (
-                    <a class="ms-2 noDecoration" href={`/posts/${post.id}`}>
-                      {post.comments} Comment{post.comments === "1" ? "" : "s"}
-                    </a>
-                  )}
-                {user && post.liked &&
-                  (
-                    <a
-                      href={void (0)}
-                      onClick={() => cancelLike(post)}
-                      class="ms-3"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img
-                        src="/assets/img/heart-fill.svg"
-                        alt="Edit"
-                        width="20"
-                        height="20"
+              </div>
+            </div>
+            <div class="card-body">
+              <span
+                class="post"
+                dangerouslySetInnerHTML={{
+                  __html: post.source,
+                }}
+              >
+              </span>
+              <div class="d-flex justify-content-between">
+                <div>
+                  <a
+                    class="btn btn-outline-secondary btn-sm"
+                    href={user ? `/posts/${post.id}` : "/auth"}
+                  >
+                    Comment
+                  </a>
+                  {Number(post.comments) > 0 &&
+                    (
+                      <a class="ms-2 noDecoration" href={`/posts/${post.id}`}>
+                        {post.comments}{" "}
+                        Comment{post.comments === "1" ? "" : "s"}
+                      </a>
+                    )}
+                  {user && post.liked &&
+                    (
+                      <a
+                        href={void (0)}
+                        onClick={() => cancelLike(post)}
+                        class="ms-3"
+                        style={{ cursor: "pointer" }}
                       >
-                      </img>
-                    </a>
-                  )}
-                {!post.liked &&
-                  (
-                    <a
-                      href={void (0)}
-                      onClick={() => like(post)}
-                      class="ms-3"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img
-                        src="/assets/img/heart.svg"
-                        alt="Edit"
-                        width="20"
-                        height="20"
+                        <img
+                          src="/assets/img/heart-fill.svg"
+                          alt="Edit"
+                          width="20"
+                          height="20"
+                        >
+                        </img>
+                      </a>
+                    )}
+                  {!post.liked &&
+                    (
+                      <a
+                        href={void (0)}
+                        onClick={() => like(post)}
+                        class="ms-3"
+                        style={{ cursor: "pointer" }}
                       >
-                      </img>
-                    </a>
-                  )}
-                {Number(post.likes) > 0 &&
+                        <img
+                          src="/assets/img/heart.svg"
+                          alt="Edit"
+                          width="20"
+                          height="20"
+                        >
+                        </img>
+                      </a>
+                    )}
+                  {Number(post.likes) > 0 &&
+                    (
+                      <a
+                        href={void (0)}
+                        class="noDecoration ms-2"
+                        onClick={() => openModal(post.id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {post.likes} Like{post.likes === "1" ? "" : "s"}
+                      </a>
+                    )}
+                </div>
+                {user && user.id === post.user_id &&
                   (
-                    <a
-                      href={void (0)}
-                      class="noDecoration ms-2"
-                      onClick={() => openModal(post.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {post.likes} Like{post.likes === "1" ? "" : "s"}
-                    </a>
+                    <div>
+                      <a
+                        href={void (0)}
+                        class="me-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => deletePost(post.id)}
+                      >
+                        <img
+                          src="/assets/img/trash-fill.svg"
+                          alt="Delete"
+                          width="20"
+                          height="20"
+                        >
+                        </img>
+                      </a>
+                      <a href={`/posts/${post.id}/edit`}>
+                        <img
+                          src="/assets/img/pencil-fill.svg"
+                          alt="Edit"
+                          width="20"
+                          height="20"
+                        >
+                        </img>
+                      </a>
+                    </div>
                   )}
               </div>
-              {user && user.id === post.user_id &&
-                (
-                  <div>
-                    <a
-                      href={void (0)}
-                      class="me-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => deletePost(post.id)}
-                    >
-                      <img
-                        src="/assets/img/trash-fill.svg"
-                        alt="Delete"
-                        width="20"
-                        height="20"
-                      >
-                      </img>
-                    </a>
-                    <a href={`/posts/${post.id}/edit`}>
-                      <img
-                        src="/assets/img/pencil-fill.svg"
-                        alt="Edit"
-                        width="20"
-                        height="20"
-                      >
-                      </img>
-                    </a>
-                  </div>
-                )}
             </div>
           </div>
-        </div>
-      ))}
+        ))}
       {modal && selectedPostId &&
         <LikeUsersModal postId={selectedPostId} setModal={setModal} />}
     </>
   );
 }
 
-function formatDate(now: Date, date: string) {
-  const d = new Date(date);
+function formatDate(now: Date, date: Date) {
   if (
-    now.getFullYear() === d.getFullYear() && now.getMonth() === d.getMonth() &&
-    now.getDate() === d.getDate()
+    now.getFullYear() === date.getFullYear() && now.getMonth() === date.getMonth() &&
+    now.getDate() === date.getDate()
   ) {
-    return d.toLocaleTimeString();
+    return date.toLocaleTimeString();
   } else {
-    return d.toLocaleDateString();
+    return date.toLocaleDateString();
   }
 }

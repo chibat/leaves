@@ -109,6 +109,9 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
     (hljs as any).highlightAll();
   });
 
+  const createdAt = new Date(post.created_at).toLocaleString();
+  const updatedAt = new Date(post.updated_at).toLocaleString();
+
   return (
     <div>
       {post &&
@@ -147,8 +150,8 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                     {post.name}
                   </a>
                 </div>
-                <div>
-                  {new Date(post.updated_at).toLocaleString()}
+                <div title={`Created at: ${createdAt} , Updated at: ${updatedAt}`}>
+                  {updatedAt}
                 </div>
               </div>
               <article class="card-body">
