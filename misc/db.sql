@@ -14,11 +14,13 @@ CREATE TABLE post (
  id SERIAL PRIMARY KEY,
  user_id INTEGER REFERENCES app_user(id) ON DELETE CASCADE,
  source TEXT,
+ draft BOOLEAN DEFAULT false,
  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX post_user_id ON post(user_id);
 CREATE INDEX post_source_index ON post USING pgroonga (source);
+ALTER TABLE post ADD column draft BOOLEAN DEFAULT false;
 
 CREATE TABLE revision (
  id SERIAL PRIMARY KEY,
