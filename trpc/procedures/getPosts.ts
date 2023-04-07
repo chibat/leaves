@@ -4,12 +4,9 @@ import {
   Post,
   selectFollowingUsersPosts,
   selectLikes,
-  selectPostByLtId,
   selectPosts,
   selectPostsBySearchWord,
-  selectPostsBySearchWordAndLtId,
-  selectUserPostByLtId,
-  selectUserPosts,
+  selectUserPost,
 } from "~/lib/db.ts";
 import { publicProcedure } from "~/trpc/context.ts";
 import { getSession } from "~/lib/auth.ts";
@@ -29,41 +26,25 @@ export const getPosts = publicProcedure.input(
     let posts: Post[] = [];
     if (input.userId) {
       // specified user only
-      if (input.postId) {
-        posts = await selectUserPostByLtId(client, {
-          ltId: input.postId,
-          userId: input.userId,
-        });
-      } else {
-        posts = await selectUserPosts(client, input.userId);
-      }
+      posts = await selectUserPost(client, {
+        userId: input.userId,
+        ltId: input.postId,
+      });
     } else if (input.following && session) {
       // following user only
       const userId = session.user.id;
-      if (input.postId) {
-        posts = await selectUserPostByLtId(client, {
-          ltId: input.postId,
-          userId,
-        });
-      } else {
-        posts = await selectFollowingUsersPosts(client, userId);
-      }
+      posts = await selectFollowingUsersPosts(client, {
+        userId,
+        ltId: input.postId,
+      });
     } else if (input.searchWord) {
-      if (input.postId) {
-        posts = await selectPostsBySearchWordAndLtId(client, {
-          searchWord: input.searchWord,
-          postId: input.postId,
-        });
-      } else {
-        posts = await selectPostsBySearchWord(client, input.searchWord);
-      }
+      posts = await selectPostsBySearchWord(client, {
+        searchWord: input.searchWord,
+        postId: input.postId,
+      });
     } else {
       // all user
-      if (input.postId) {
-        posts = await selectPostByLtId(client, input.postId);
-      } else {
-        posts = await selectPosts(client);
-      }
+      posts = await selectPosts(client, input.postId);
     }
 
     const likedPostIds = session

@@ -1,11 +1,6 @@
 import { z } from "zod";
 import { getSession } from "~/lib/auth.ts";
-import {
-  pool,
-  selectLikedPosts,
-  selectLikedPostsByLtId,
-  selectLikes,
-} from "~/lib/db.ts";
+import { pool, selectLikedPosts, selectLikes } from "~/lib/db.ts";
 import { publicProcedure } from "~/trpc/context.ts";
 import { render } from "~/lib/markdown.ts";
 
@@ -21,15 +16,10 @@ export const getLikedPosts = publicProcedure.input(
   const user = session.user;
 
   const { posts, likedPostIds } = await pool(async (client) => {
-    let posts;
-    if (input.postId) {
-      posts = await selectLikedPostsByLtId(client, {
-        userId: user.id,
-        ltId: input.postId,
-      });
-    } else {
-      posts = await selectLikedPosts(client, user.id);
-    }
+    const posts = await selectLikedPosts(client, {
+      userId: user.id,
+      ltId: input.postId,
+    });
 
     const likedPostIds = await selectLikes(client, {
       userId: user.id,

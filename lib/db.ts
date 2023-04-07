@@ -2,6 +2,7 @@ import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
 import { PAGE_ROWS } from "~/lib/constants.ts";
 import { SessionType } from "~/lib/auth.ts";
 import * as uuid from "std/uuid/mod.ts";
+import { QueryBuilder } from "~/lib/query_builder.ts";
 
 export type Client = PoolClient | Transaction;
 
@@ -208,13 +209,6 @@ export async function selectPost(
   return result.rowCount ? result.rows[0] : null;
 }
 
-export async function selectPosts(client: Client): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(
-    `${SELECT_POST} ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
-  );
-  return result.rows;
-}
-
 export async function selectPostIds(
   client: Client,
   userId: number,
@@ -225,146 +219,99 @@ export async function selectPostIds(
   return result.rows.map((row) => row.id);
 }
 
-export async function selectPostByLtId(
+export async function selectPosts(
   client: Client,
-  ltId: number,
+  ltId?: number,
 ): Promise<Array<Post>> {
+  const builder = new QueryBuilder().append(SELECT_POST);
+  if (ltId) {
+    builder.append`WHERE p.id < ${ltId}`;
+  }
+  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
   const result = await client.queryObject<Post>(
-    `
-      ${SELECT_POST}
-      WHERE p.id < $1
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
-    [ltId],
+    builder.query,
+    builder.args,
   );
   return result.rows;
 }
 
-export async function selectUserPosts(
+export async function selectUserPost(
   client: Client,
-  userId: number,
+  params: { userId: number; ltId?: number },
 ): Promise<Array<Post>> {
+  const builder = new QueryBuilder()
+    .append(SELECT_POST)
+    .append`WHERE p.user_id = ${params.userId}`;
+  if (params.ltId) {
+    builder.append`AND p.id < ${params.ltId}`;
+  }
+  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
   const result = await client.queryObject<Post>(
-    `
-      ${SELECT_POST}
-      WHERE p.user_id = $1
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
-    [userId],
-  );
-  return result.rows;
-}
-
-export async function selectUserPostByLtId(
-  client: Client,
-  params: { ltId: number; userId: number },
-): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(
-    `
-      ${SELECT_POST}
-      WHERE p.user_id = $1
-      AND p.id < $2
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `,
-    [params.userId, params.ltId],
+    builder.query,
+    builder.args,
   );
   return result.rows;
 }
 
 export async function selectFollowingUsersPosts(
   client: Client,
-  userId: number,
+  params: { userId: number; ltId?: number },
 ): Promise<Array<Post>> {
+  const builder = new QueryBuilder()
+    .append(SELECT_POST)
+    .append`WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${params.userId})`;
+  if (params.ltId) {
+    builder.append`AND p.id < ${params.ltId}`;
+  }
+  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
   const result = await client.queryObject<Post>(
-    `
-      ${SELECT_POST}
-      WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = $1)
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
-    [userId],
-  );
-  return result.rows;
-}
-
-export async function selectFollowingUsersPostByLtId(
-  client: Client,
-  params: { ltId: number; userId: number },
-): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(
-    `
-      ${SELECT_POST}
-      WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = $1)
-      AND p.id < $2
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `,
-    [params.userId, params.ltId],
+    builder.query,
+    builder.args,
   );
   return result.rows;
 }
 
 export async function selectLikedPosts(
   client: Client,
-  userId: number,
+  params: { userId: number; ltId?: number },
 ): Promise<Array<Post>> {
-  const result = await client.queryObject<Post>(
-    `
-      ${SELECT_POST}
-      WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = $1 ORDER BY post_id DESC)
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
-    [userId],
+  const builder = new QueryBuilder()
+    .append(SELECT_POST)
+    .append`WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = ${params.userId}`;
+  if (params.ltId) {
+    builder.append`AND post_id < ${params.ltId} `;
+  }
+  builder.append(
+    `ORDER BY post_id DESC) ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
   );
-  return result.rows;
-}
-
-export async function selectLikedPostsByLtId(
-  client: Client,
-  params: { ltId: number; userId: number },
-): Promise<Array<Post>> {
   const result = await client.queryObject<Post>(
-    `
-      ${SELECT_POST}
-      WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = $1 AND post_id < $2 ORDER BY post_id DESC)
-      ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `,
-    [params.userId, params.ltId],
+    builder.query,
+    builder.args,
   );
   return result.rows;
 }
 
 export async function selectPostsBySearchWord(
   client: Client,
-  searchWord: string,
-): Promise<Array<Post>> {
-  if (searchWord.trim().length === 0) {
-    return [];
-  }
-  const result = await client.queryObject<Post>(
-    `
-    ${SELECT_POST}
-    WHERE source &@~ $1
-    ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `,
-    [searchWord.trim()],
-  );
-  return result.rows;
-}
-
-export async function selectPostsBySearchWordAndLtId(
-  client: Client,
   params: {
     searchWord: string;
-    postId: number;
+    postId?: number;
   },
 ): Promise<Array<Post>> {
   const searchWord = params.searchWord.trim();
   if (searchWord.trim().length === 0) {
     return [];
   }
+  const builder = new QueryBuilder()
+    .append(SELECT_POST)
+    .append`WHERE source &@~ ${searchWord.trim()}`;
+  if (params.postId) {
+    builder.append`AND p.id < ${params.postId}`;
+  }
+  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
   const result = await client.queryObject<Post>(
-    `
-    ${SELECT_POST}
-    WHERE source &@~ $1
-    AND p.id < $2
-    ORDER BY p.id DESC LIMIT ${PAGE_ROWS}
-    `,
-    [searchWord.trim(), params.postId],
+    builder.query,
+    builder.args,
   );
   return result.rows;
 }
