@@ -149,10 +149,10 @@ export async function selectUser(
 export async function selectUsers(
   client: Client,
 ): Promise<number[]> {
-  const result = await client.queryObject<AppUser>`
-      SELECT id FROM app_user order by id
+  const result = await client.queryObject<Post>`
+  SELECT DISTINCT user_id FROM post ORDER BY user_id
     `;
-  return result.rows.map((row) => row.id);
+  return result.rows.map((row) => row.user_id);
 }
 
 export async function insertPost(
