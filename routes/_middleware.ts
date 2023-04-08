@@ -25,17 +25,17 @@ export async function handler(
     }`;
 
     return new Response(
-      `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${
+      `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${
         users.map((user) =>
-          `<sitemap><loc>${baseUrl}/users/${user.user_id}</loc><lastmod>${
+          `<url><loc>${baseUrl}/users/${user.user_id}</loc><lastmod>${
             new Date(user.updated_at).toISOString()
-          }</lastmod></sitemap>`
+          }</lastmod></url>`
         ).join() + posts.map((post) =>
-          `<sitemap><loc>${baseUrl}/posts/${post.id}</loc><lastmod>${
+          `<url><loc>${baseUrl}/posts/${post.id}</loc><lastmod>${
             new Date(post.updated_at).toISOString()
-          }</lastmod></sitemap>`
+          }</lastmod></url>`
         )
-      }</sitemapindex>`,
+      }</urlset>`,
       {
         headers: { "content-type": 'application/xml; charset="UTF-8"' },
       },
