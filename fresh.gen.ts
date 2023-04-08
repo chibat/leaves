@@ -13,18 +13,16 @@ import * as $6 from "./routes/api/trpc/[path].ts";
 import * as $7 from "./routes/auth.tsx";
 import * as $8 from "./routes/callback.tsx";
 import * as $9 from "./routes/debug_auth.tsx";
-import * as $10 from "./routes/directory/[userId].tsx";
-import * as $11 from "./routes/directory/index.tsx";
-import * as $12 from "./routes/following.tsx";
-import * as $13 from "./routes/index.tsx";
-import * as $14 from "./routes/likes.tsx";
-import * as $15 from "./routes/notification.tsx";
-import * as $16 from "./routes/posts/[postId]/edit.tsx";
-import * as $17 from "./routes/posts/[postId]/index.tsx";
-import * as $18 from "./routes/posts/new.tsx";
-import * as $19 from "./routes/search.tsx";
-import * as $20 from "./routes/signout.tsx";
-import * as $21 from "./routes/users/[userId].tsx";
+import * as $10 from "./routes/following.tsx";
+import * as $11 from "./routes/index.tsx";
+import * as $12 from "./routes/likes.tsx";
+import * as $13 from "./routes/notification.tsx";
+import * as $14 from "./routes/posts/[postId]/edit.tsx";
+import * as $15 from "./routes/posts/[postId]/index.tsx";
+import * as $16 from "./routes/posts/new.tsx";
+import * as $17 from "./routes/search.tsx";
+import * as $18 from "./routes/signout.tsx";
+import * as $19 from "./routes/users/[userId].tsx";
 import * as $$0 from "./islands/AllPosts.tsx";
 import * as $$1 from "./islands/FollowingPosts.tsx";
 import * as $$2 from "./islands/Header.tsx";
@@ -47,18 +45,16 @@ const manifest = {
     "./routes/auth.tsx": $7,
     "./routes/callback.tsx": $8,
     "./routes/debug_auth.tsx": $9,
-    "./routes/directory/[userId].tsx": $10,
-    "./routes/directory/index.tsx": $11,
-    "./routes/following.tsx": $12,
-    "./routes/index.tsx": $13,
-    "./routes/likes.tsx": $14,
-    "./routes/notification.tsx": $15,
-    "./routes/posts/[postId]/edit.tsx": $16,
-    "./routes/posts/[postId]/index.tsx": $17,
-    "./routes/posts/new.tsx": $18,
-    "./routes/search.tsx": $19,
-    "./routes/signout.tsx": $20,
-    "./routes/users/[userId].tsx": $21,
+    "./routes/following.tsx": $10,
+    "./routes/index.tsx": $11,
+    "./routes/likes.tsx": $12,
+    "./routes/notification.tsx": $13,
+    "./routes/posts/[postId]/edit.tsx": $14,
+    "./routes/posts/[postId]/index.tsx": $15,
+    "./routes/posts/new.tsx": $16,
+    "./routes/search.tsx": $17,
+    "./routes/signout.tsx": $18,
+    "./routes/users/[userId].tsx": $19,
   },
   islands: {
     "./islands/AllPosts.tsx": $$0,

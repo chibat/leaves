@@ -47,9 +47,6 @@ export default function App({ Component }: AppProps) {
           <li class="nav-item">
             <a href="/about" class="nav-link px-2 text-muted">About</a>
           </li>
-          <li class="nav-item">
-            <a href="/directory" class="nav-link px-2 text-muted">Directory</a>
-          </li>
         </ul>
       </footer>
       <script

@@ -148,11 +148,11 @@ export async function selectUser(
 
 export async function selectUsers(
   client: Client,
-): Promise<number[]> {
+): Promise<Post[]> {
   const result = await client.queryObject<Post>`
-  SELECT DISTINCT user_id FROM post ORDER BY user_id
+  SELECT user_id, max(updated_at) as updated_at FROM post GROUP BY user_id ORDER BY user_id
     `;
-  return result.rows.map((row) => row.user_id);
+  return result.rows;
 }
 
 export async function insertPost(
@@ -211,12 +211,11 @@ export async function selectPost(
 
 export async function selectPostIds(
   client: Client,
-  userId: number,
-): Promise<Array<number>> {
+): Promise<Array<Post>> {
   const result = await client.queryObject<
     Post
-  >`SELECT id FROM post WHERE user_id = ${userId} ORDER BY id DESC LIMIT 1000`;
-  return result.rows.map((row) => row.id);
+  >`SELECT id,updated_at FROM post ORDER BY id DESC LIMIT 1000`;
+  return result.rows;
 }
 
 export async function selectPosts(
