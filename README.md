@@ -1,3 +1,4 @@
+![logo](static/assets/img/icon-192x192.png)
 # Leaves
 
 [![Made with Fresh](https://fresh.deno.dev/fresh-badge.svg)](https://fresh.deno.dev)
