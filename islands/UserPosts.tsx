@@ -41,6 +41,7 @@ export default function UserPosts(
           : posts.value[posts.value.length - 1].id;
         loading.value = true;
         trpc.getPosts.query({ postId, userId }).then((results) => {
+          console.log("###", results);
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }

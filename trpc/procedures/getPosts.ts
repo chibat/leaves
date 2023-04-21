@@ -28,6 +28,7 @@ export const getPosts = publicProcedure.input(
       // specified user only
       posts = await selectUserPost(client, {
         userId: input.userId,
+        self: input.userId === session?.user.id,
         ltId: input.postId,
       });
     } else if (input.following && session) {
@@ -41,6 +42,7 @@ export const getPosts = publicProcedure.input(
       posts = await selectPostsBySearchWord(client, {
         searchWord: input.searchWord,
         postId: input.postId,
+        loginUserId: session?.user.id,
       });
     } else {
       // all user
@@ -74,6 +76,7 @@ export const getPosts = publicProcedure.input(
       picture: p.picture,
       likes: p.likes,
       liked: likedPostIds.includes(p.id),
+      draft: p.draft,
     };
   });
 });

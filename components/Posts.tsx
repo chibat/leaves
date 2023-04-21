@@ -94,6 +94,12 @@ export default function Posts(props: Props) {
               </div>
             </div>
             <div class="card-body">
+              {post.draft &&
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                  <span class="badge bg-danger" style={{ marginRight: "5px" }}>DRAFT</span>
+                  <div>This post is visible only to you.</div>
+                </div>
+              }
               <span
                 class="post"
                 dangerouslySetInnerHTML={{
