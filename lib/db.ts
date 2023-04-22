@@ -26,6 +26,7 @@ export type Post = {
   picture?: string; // app_user
   comments?: string; // comment
   likes: string; // likes
+  draft: boolean;
 };
 
 export type Comment = {
@@ -157,11 +158,12 @@ export async function selectUsers(
 
 export async function insertPost(
   client: Client,
-  params: { userId: number; source: string },
+  params: { userId: number; source: string; draft: boolean },
 ): Promise<number> {
+  console.log("#### debug02", params.draft);
   const result = await client.queryObject<{ id: number }>`
-      INSERT INTO post (user_id, source)
-      VALUES (${params.userId}, ${params.source})
+      INSERT INTO post (user_id, source, draft)
+      VALUES (${params.userId}, ${params.source}, ${params.draft})
       RETURNING id
     `;
   return result.rows[0].id;
@@ -169,10 +171,11 @@ export async function insertPost(
 
 export async function updatePost(
   client: Client,
-  params: { postId: number; userId: number; source: string },
+  params: { postId: number; userId: number; source: string; draft: boolean },
 ) {
   await client.queryObject`
-      UPDATE post SET source= ${params.source}, updated_at=CURRENT_TIMESTAMP
+      UPDATE post
+      SET source= ${params.source}, draft= ${params.draft}, updated_at=CURRENT_TIMESTAMP
       WHERE id = ${params.postId} and user_id = ${params.userId}
       RETURNING id
     `;
@@ -214,7 +217,7 @@ export async function selectPostIds(
 ): Promise<Array<Post>> {
   const result = await client.queryObject<
     Post
-  >`SELECT id,updated_at FROM post ORDER BY id DESC LIMIT 1000`;
+  >`SELECT id,updated_at FROM post WHERE draft = false ORDER BY id DESC LIMIT 1000`;
   return result.rows;
 }
 
@@ -222,9 +225,11 @@ export async function selectPosts(
   client: Client,
   ltId?: number,
 ): Promise<Array<Post>> {
-  const builder = new QueryBuilder().append(SELECT_POST);
+  const builder = new QueryBuilder().append(SELECT_POST).append(
+    "WHERE p.draft = false",
+  );
   if (ltId) {
-    builder.append`WHERE p.id < ${ltId}`;
+    builder.append`AND p.id < ${ltId}`;
   }
   builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
   const result = await client.queryObject<Post>(
@@ -236,11 +241,14 @@ export async function selectPosts(
 
 export async function selectUserPost(
   client: Client,
-  params: { userId: number; ltId?: number },
+  params: { userId: number; self: boolean; ltId?: number },
 ): Promise<Array<Post>> {
   const builder = new QueryBuilder()
     .append(SELECT_POST)
     .append`WHERE p.user_id = ${params.userId}`;
+  if (!params.self) {
+    builder.append`AND p.draft = false`;
+  }
   if (params.ltId) {
     builder.append`AND p.id < ${params.ltId}`;
   }
@@ -258,7 +266,7 @@ export async function selectFollowingUsersPosts(
 ): Promise<Array<Post>> {
   const builder = new QueryBuilder()
     .append(SELECT_POST)
-    .append`WHERE p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${params.userId})`;
+    .append`WHERE p.draft = false AND  p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${params.userId})`;
   if (params.ltId) {
     builder.append`AND p.id < ${params.ltId}`;
   }
@@ -276,7 +284,7 @@ export async function selectLikedPosts(
 ): Promise<Array<Post>> {
   const builder = new QueryBuilder()
     .append(SELECT_POST)
-    .append`WHERE p.id IN (SELECT post_id FROM likes WHERE user_id = ${params.userId}`;
+    .append`WHERE p.draft = false AND p.id IN (SELECT post_id FROM likes WHERE user_id = ${params.userId}`;
   if (params.ltId) {
     builder.append`AND post_id < ${params.ltId} `;
   }
@@ -295,6 +303,7 @@ export async function selectPostsBySearchWord(
   params: {
     searchWord: string;
     postId?: number;
+    loginUserId?: number;
   },
 ): Promise<Array<Post>> {
   const searchWord = params.searchWord.trim();
@@ -303,7 +312,11 @@ export async function selectPostsBySearchWord(
   }
   const builder = new QueryBuilder()
     .append(SELECT_POST)
-    .append`WHERE source &@~ ${searchWord.trim()}`;
+    .append`WHERE p.source &@~ ${searchWord.trim()} AND (p.draft = false`;
+  if (params.loginUserId) {
+    builder.append`OR p.user_id = ${params.loginUserId}`;
+  }
+  builder.append(")");
   if (params.postId) {
     builder.append`AND p.id < ${params.postId}`;
   }

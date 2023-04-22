@@ -8,12 +8,12 @@ import * as $1 from "./routes/_500.tsx";
 import * as $2 from "./routes/_app.tsx";
 import * as $3 from "./routes/_middleware.ts";
 import * as $4 from "./routes/about.tsx";
-import * as $5 from "./routes/api/joke.ts";
-import * as $6 from "./routes/api/trpc/[path].ts";
-import * as $7 from "./routes/auth.tsx";
-import * as $8 from "./routes/callback.tsx";
-import * as $9 from "./routes/debug_auth.tsx";
-import * as $10 from "./routes/following.tsx";
+import * as $5 from "./routes/api/trpc/[path].ts";
+import * as $6 from "./routes/auth.tsx";
+import * as $7 from "./routes/callback.tsx";
+import * as $8 from "./routes/debug_auth.tsx";
+import * as $9 from "./routes/following.tsx";
+import * as $10 from "./routes/help.tsx";
 import * as $11 from "./routes/index.tsx";
 import * as $12 from "./routes/likes.tsx";
 import * as $13 from "./routes/notification.tsx";
@@ -40,12 +40,12 @@ const manifest = {
     "./routes/_app.tsx": $2,
     "./routes/_middleware.ts": $3,
     "./routes/about.tsx": $4,
-    "./routes/api/joke.ts": $5,
-    "./routes/api/trpc/[path].ts": $6,
-    "./routes/auth.tsx": $7,
-    "./routes/callback.tsx": $8,
-    "./routes/debug_auth.tsx": $9,
-    "./routes/following.tsx": $10,
+    "./routes/api/trpc/[path].ts": $5,
+    "./routes/auth.tsx": $6,
+    "./routes/callback.tsx": $7,
+    "./routes/debug_auth.tsx": $8,
+    "./routes/following.tsx": $9,
+    "./routes/help.tsx": $10,
     "./routes/index.tsx": $11,
     "./routes/likes.tsx": $12,
     "./routes/notification.tsx": $13,

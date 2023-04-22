@@ -6,6 +6,7 @@ import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/lib/markdown.ts";
 import { useSignal } from "@preact/signals";
 import { trpc } from "~/trpc/client.ts";
+import Mousetrap from "mousetrap";
 
 export default function PostView(props: { post: Post; user?: AppUser }) {
   const user = props.user;
@@ -103,6 +104,11 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
       message.value = "Updated.";
       history.replaceState(null, "", location.pathname);
     }
+    Mousetrap.bind("e", () => {
+      if (user?.id === post.user_id) {
+        location.href = `/posts/${post.id}/edit`;
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -150,11 +156,28 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                     {post.name}
                   </a>
                 </div>
-                <div title={`Created at: ${createdAt} , Updated at: ${updatedAt}`}>
+                <div
+                  title={`Created at: ${createdAt} , Updated at: ${updatedAt}`}
+                >
                   {updatedAt}
                 </div>
               </div>
               <article class="card-body">
+                {post.draft &&
+                  (
+                    <div
+                      class="alert alert-danger d-flex align-items-center"
+                      role="alert"
+                    >
+                      <span
+                        class="badge bg-danger"
+                        style={{ marginRight: "5px" }}
+                      >
+                        DRAFT
+                      </span>
+                      <div>This post is visible only to you.</div>
+                    </div>
+                  )}
                 <section>
                   <span
                     class="post"

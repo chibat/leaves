@@ -9,6 +9,7 @@ export default function Edit(props: { post: Post }) {
 
   const [flag, setFlag] = useState<boolean>(true);
   const text = useSignal(props.post.source);
+  const draft = useSignal(props.post.draft);
   const sanitizedHtml = useSignal("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -30,7 +31,11 @@ export default function Edit(props: { post: Post }) {
   async function save() {
     if (confirm("Save the post?")) {
       setLoading(true);
-      await trpc.updatePost.mutate({ postId: postId, source: text.value });
+      await trpc.updatePost.mutate({
+        postId: postId,
+        source: text.value,
+        draft: draft.value,
+      });
       setLoading(false);
       location.href = `/posts/${postId}?updated`;
     }
@@ -84,7 +89,24 @@ export default function Edit(props: { post: Post }) {
               </span>
             )}
         </div>
-        <div class="card-footer bg-transparent">
+        <div class="card-footer text-end bg-transparent">
+          <input
+            class="form-check-input align-middle"
+            style={{ marginRight: "5px", marginTop: "0px" }}
+            type="checkbox"
+            checked={draft.value}
+            id="flexCheckDefault"
+            onChange={(e) => {
+              draft.value = !draft.value;
+            }}
+          />
+          <label
+            class="form-check-label"
+            for="flexCheckDefault"
+            style={{ marginRight: "10px" }}
+          >
+            Draft
+          </label>
           <button
             class="btn btn-primary"
             onClick={save}

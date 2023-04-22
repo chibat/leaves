@@ -13,7 +13,6 @@ type PageType = {
 
 export const handler: Handlers<PageType> = {
   async GET(req, ctx) {
-
     const session = await getSession(req);
     if (!session) {
       return new Response("", {
@@ -27,6 +26,12 @@ export const handler: Handlers<PageType> = {
     const post = await pool((client) => selectPost(client, postId));
     if (!post) {
       return ctx.renderNotFound();
+    }
+    if (session.user.id !== post.user_id) {
+      return new Response("", {
+        status: 307,
+        headers: { Location: "/" },
+      });
     }
 
     const res = await ctx.render({ user: session?.user, authUrl, post });

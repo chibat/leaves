@@ -6,6 +6,7 @@ import { trpc } from "~/trpc/client.ts";
 export default function Post() {
   const preview = useSignal(false);
   const loading = useSignal(false);
+  const draft = useSignal(false);
   const text = useSignal("");
   const sanitizedHtml = useSignal("");
 
@@ -15,7 +16,10 @@ export default function Post() {
 
   async function post() {
     loading.value = true;
-    const result = await trpc.createPost.mutate({ source: text.value });
+    const result = await trpc.createPost.mutate({
+      source: text.value,
+      draft: draft.value,
+    });
     loading.value = false;
     if (result?.postId) {
       location.href = `/posts/${result.postId}?posted`;
@@ -77,6 +81,17 @@ export default function Post() {
             )}
         </div>
         <div class="card-footer text-end bg-transparent">
+          <input
+            class="form-check-input align-middle"
+            style={{ marginRight: "5px", marginTop: "0px" }}
+            type="checkbox"
+            checked={draft.value}
+            id="flexCheckDefault"
+            onChange={e => {
+              draft.value = !draft.value;
+            }}
+          />
+          <label class="form-check-label" for="flexCheckDefault" style={{ marginRight: '10px' }}>Draft</label>
           <button
             class="btn btn-primary"
             onClick={post}
