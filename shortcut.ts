@@ -11,6 +11,9 @@ export function shortcut() {
   Mousetrap.bind(".", () => {
     window.scroll({ top: 0, behavior: "smooth" });
   });
+  Mousetrap.bind("g a", () => {
+    location.href = "/about";
+  });
   Mousetrap.bind("g h", () => {
     location.href = "/";
   });

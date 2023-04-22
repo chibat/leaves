@@ -14,7 +14,6 @@ export const handler: Handlers<PageType> = {
   },
 };
 
-
 export default function Page(props: PageProps<PageType>) {
   return (
     <>
@@ -22,46 +21,139 @@ export default function Page(props: PageProps<PageType>) {
         <title>About - Leaves</title>
         <meta property="og:url" content="https://leaves.deno.dev/"></meta>
         <meta property="og:title" content="Leaves"></meta>
-        <meta property="og:image" content="https://leaves.deno.dev/assets/img/icon-192x192.png" />
+        <meta
+          property="og:image"
+          content="https://leaves.deno.dev/assets/img/icon-192x192.png"
+        />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:creator" content="@tomofummy" />
-        <meta name="twitter:image" content="https://leaves.deno.dev/assets/img/icon-192x192.png" />
+        <meta
+          name="twitter:image"
+          content="https://leaves.deno.dev/assets/img/icon-192x192.png"
+        />
       </Head>
       <Header user={props.data.user} />
       <main class="container">
         <h1>About</h1>
         <ul>
-          <li>本サイトは、<a href="https://chibat.github.io/" target="_blank" class="doc">@chibat</a> によるポートフォリオです。</li>
-          <li>Markdown で投稿できる SNS のようなものを作成してみました。 </li>
-          <li>Production Runtime（次の無料枠を利用しています）
+          <li>
+            本サイトは、<a
+              href="https://chibat.github.io/"
+              target="_blank"
+              class="doc"
+            >
+              @chibat
+            </a>{" "}
+            によるポートフォリオです。
+          </li>
+          <li>Markdown で投稿できる SNS のようなものを作成してみました。</li>
+          <li>
+            Production Runtime（次の無料枠を利用しています）
             <ul>
-              <li><a href="https://deno.com/deploy" target="_blank">Deno Deploy</a>(TypeScript at the Edge)</li>
-              <li><a href="https://supabase.com/" target="_blank">Supabase</a>(Postgres database)</li>
+              <li>
+                <a href="https://deno.com/deploy" target="_blank">
+                  Deno Deploy
+                </a>(TypeScript at the Edge)
+              </li>
+              <li>
+                <a href="https://supabase.com/" target="_blank">
+                  Supabase
+                </a>(Postgres database)
+              </li>
               <li>Google OAuth</li>
             </ul>
           </li>
-          <li>利用モジュール
+          <li>
+            利用モジュール
             <ul>
-              <li><a href="https://github.com/chibat/leaves/blob/main/import_map.json" target="_blank">import_map.json を参照</a></li>
-              <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></li>
+              <li>
+                <a
+                  href="https://github.com/chibat/leaves/blob/main/import_map.json"
+                  target="_blank"
+                >
+                  import_map.json を参照
+                </a>
+              </li>
+              <li>
+                <a href="https://getbootstrap.com/" target="_blank">
+                  Bootstrap
+                </a>
+              </li>
             </ul>
           </li>
-          <li><a href="https://github.com/chibat/leaves" target="_blank" class="doc">ソースコード</a></li>
-          <li><a href="https://zenn.dev/chiba/articles/md-sns-deno-fresh" target="_blank">Zenn 記事</a></li>
+          <li>
+            <a
+              href="https://github.com/chibat/leaves"
+              target="_blank"
+              class="doc"
+            >
+              ソースコード
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://zenn.dev/chiba/articles/md-sns-deno-fresh"
+              target="_blank"
+            >
+              Zenn 記事
+            </a>
+          </li>
         </ul>
         <h2>Keyboard Shortcut</h2>
         <table>
-          <tr><td>Search</td><td style={{ textAlign: "right" }}>/</td></tr>
-          <tr><td>New Post</td><td style={{ textAlign: "right" }}>n</td></tr>
-          <tr><td>Scroll to top</td><td style={{ textAlign: "right" }}>.</td></tr>
-          <tr><td>Next Post</td><td style={{ textAlign: "right" }}>j</td></tr>
-          <tr><td>Previous Post</td><td style={{ textAlign: "right" }}>k</td></tr>
-          <tr><td>Home</td><td style={{ textAlign: "right" }}>gh</td></tr>
-          <tr><td>Notification</td><td style={{ textAlign: "right" }}>gn</td></tr>
-          <tr><td>Liked</td><td style={{ textAlign: "right" }}>gl</td></tr>
-          <tr><td>Following</td><td style={{ textAlign: "right" }}>gf</td></tr>
-          <tr><td>Profile</td><td style={{ textAlign: "right" }}>gp</td></tr>
+          <tr>
+            <td>Search</td>
+            <td style={{ textAlign: "right" }}>/</td>
+          </tr>
+          <tr>
+            <td>New Post</td>
+            <td style={{ textAlign: "right" }}>n</td>
+          </tr>
+          <tr>
+            <td>Scroll to top</td>
+            <td style={{ textAlign: "right" }}>.</td>
+          </tr>
+          <tr>
+            <td>Next Post</td>
+            <td style={{ textAlign: "right" }}>j</td>
+          </tr>
+          <tr>
+            <td>Previous Post</td>
+            <td style={{ textAlign: "right" }}>k</td>
+          </tr>
+          <tr>
+            <td>Open Post</td>
+            <td style={{ textAlign: "right" }}>o</td>
+          </tr>
+          <tr>
+            <td>Edit Post</td>
+            <td style={{ textAlign: "right" }}>e</td>
+          </tr>
+          <tr>
+            <td>About</td>
+            <td style={{ textAlign: "right" }}>ga</td>
+          </tr>
+          <tr>
+            <td>Home</td>
+            <td style={{ textAlign: "right" }}>gh</td>
+          </tr>
+          <tr>
+            <td>Notification</td>
+            <td style={{ textAlign: "right" }}>gn</td>
+          </tr>
+          <tr>
+            <td>Liked</td>
+            <td style={{ textAlign: "right" }}>gl</td>
+          </tr>
+          <tr>
+            <td>Following</td>
+            <td style={{ textAlign: "right" }}>gf</td>
+          </tr>
+          <tr>
+            <td>Profile</td>
+            <td style={{ textAlign: "right" }}>gp</td>
+          </tr>
         </table>
       </main>
     </>
