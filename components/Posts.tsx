@@ -6,7 +6,8 @@ import { useEffect, useState } from "preact/hooks";
 import { AppUser } from "~/lib/db.ts";
 import { Signal } from "@preact/signals-core";
 import { trpc } from "~/trpc/client.ts";
-import { registerJumpElements } from "~/shortcut.ts";
+import Mousetrap from "mousetrap";
+import { useSignal } from "@preact/signals";
 
 type Props = {
   posts: Signal<ResponsePost[]>;
@@ -14,12 +15,24 @@ type Props = {
 };
 
 export default function Posts(props: Props) {
+  const user = props.user;
+  const posts = props.posts.value;
+
   const [modal, setModal] = useState<boolean>(false);
   const [selectedPostId, setSelectedPostId] = useState<number>();
+  const selectedIndex = useSignal<number>(0);
   const [now] = useState<Date>(new Date());
 
   useEffect(() => {
-    registerJumpElements(document.getElementsByClassName("card"));
+    registerJumpElements(document.getElementsByClassName("postCard"));
+    Mousetrap.bind("o", () => {
+      location.href = `/posts/${props.posts.value[selectedIndex.value].id}`;
+    });
+    Mousetrap.bind("e", () => {
+      location.href = `/posts/${
+        props.posts.value[selectedIndex.value].id
+      }/edit`;
+    });
   }, []);
 
   useEffect(() => {
@@ -56,8 +69,41 @@ export default function Posts(props: Props) {
     setModal(true);
   }
 
-  const user = props.user;
-  const posts = props.posts.value;
+  function registerJumpElements(elements: HTMLCollectionOf<Element>) {
+    const KEYCODE_J = "j";
+    const KEYCODE_K = "k";
+
+    let currentIndex = -1;
+
+    const scollElement = (event: KeyboardEvent) => {
+      if (event.key == ".") {
+        currentIndex = -1;
+      } else if (event.key != KEYCODE_J && event.key != KEYCODE_K) {
+        return;
+      }
+      // 次の位置を計算
+      let nextIndex = currentIndex + ((event.key == KEYCODE_J) ? 1 : -1);
+
+      if (nextIndex < 0) {
+        nextIndex = 0;
+      } else if (nextIndex >= elements.length) {
+        nextIndex = elements.length - 1;
+      }
+
+      // 要素が表示されるようにスクロール
+      elements[nextIndex].scrollIntoView();
+      currentIndex = nextIndex;
+      selectedIndex.value = currentIndex;
+    };
+
+    if (document.addEventListener) {
+      document.addEventListener(
+        "keydown",
+        scollElement,
+        false,
+      );
+    }
+  }
 
   return (
     <>
@@ -69,7 +115,7 @@ export default function Posts(props: Props) {
         };
       })
         .map((post) => (
-          <div class="card mb-3" key={post.id}>
+          <div class="card mb-3 postCard" key={post.id}>
             <div class="card-header bg-transparent d-flex justify-content-between">
               <div>
                 <img
@@ -95,11 +141,20 @@ export default function Posts(props: Props) {
             </div>
             <div class="card-body">
               {post.draft &&
-                <div class="alert alert-danger d-flex align-items-center" role="alert">
-                  <span class="badge bg-danger" style={{ marginRight: "5px" }}>DRAFT</span>
-                  <div>This post is visible only to you.</div>
-                </div>
-              }
+                (
+                  <div
+                    class="alert alert-danger d-flex align-items-center"
+                    role="alert"
+                  >
+                    <span
+                      class="badge bg-danger"
+                      style={{ marginRight: "5px" }}
+                    >
+                      DRAFT
+                    </span>
+                    <div>This post is visible only to you.</div>
+                  </div>
+                )}
               <span
                 class="post"
                 dangerouslySetInnerHTML={{
@@ -208,7 +263,8 @@ export default function Posts(props: Props) {
 
 function formatDate(now: Date, date: Date) {
   if (
-    now.getFullYear() === date.getFullYear() && now.getMonth() === date.getMonth() &&
+    now.getFullYear() === date.getFullYear() &&
+    now.getMonth() === date.getMonth() &&
     now.getDate() === date.getDate()
   ) {
     return date.toLocaleTimeString();
