@@ -31,7 +31,11 @@ export default function Edit(props: { post: Post }) {
   async function save() {
     if (confirm("Save the post?")) {
       setLoading(true);
-      await trpc.updatePost.mutate({ postId: postId, source: text.value, draft: draft.value });
+      await trpc.updatePost.mutate({
+        postId: postId,
+        source: text.value,
+        draft: draft.value,
+      });
       setLoading(false);
       location.href = `/posts/${postId}?updated`;
     }
@@ -92,11 +96,17 @@ export default function Edit(props: { post: Post }) {
             type="checkbox"
             checked={draft.value}
             id="flexCheckDefault"
-            onChange={e => {
+            onChange={(e) => {
               draft.value = !draft.value;
             }}
           />
-          <label class="form-check-label" for="flexCheckDefault" style={{ marginRight: '10px' }}>Draft</label>
+          <label
+            class="form-check-label"
+            for="flexCheckDefault"
+            style={{ marginRight: "10px" }}
+          >
+            Draft
+          </label>
           <button
             class="btn btn-primary"
             onClick={save}
