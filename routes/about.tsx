@@ -99,62 +99,10 @@ export default function Page(props: PageProps<PageType>) {
               Zenn 記事
             </a>
           </li>
+          <li>
+            <a href="/help">Help</a>
+          </li>
         </ul>
-        <h2>Keyboard Shortcut</h2>
-        <table>
-          <tr>
-            <td>Search</td>
-            <td style={{ textAlign: "right" }}>/</td>
-          </tr>
-          <tr>
-            <td>New Post</td>
-            <td style={{ textAlign: "right" }}>n</td>
-          </tr>
-          <tr>
-            <td>Scroll to top</td>
-            <td style={{ textAlign: "right" }}>.</td>
-          </tr>
-          <tr>
-            <td>Next Post</td>
-            <td style={{ textAlign: "right" }}>j</td>
-          </tr>
-          <tr>
-            <td>Previous Post</td>
-            <td style={{ textAlign: "right" }}>k</td>
-          </tr>
-          <tr>
-            <td>Open Post</td>
-            <td style={{ textAlign: "right" }}>o</td>
-          </tr>
-          <tr>
-            <td>Edit Post</td>
-            <td style={{ textAlign: "right" }}>e</td>
-          </tr>
-          <tr>
-            <td>About</td>
-            <td style={{ textAlign: "right" }}>ga</td>
-          </tr>
-          <tr>
-            <td>Home</td>
-            <td style={{ textAlign: "right" }}>gh</td>
-          </tr>
-          <tr>
-            <td>Notification</td>
-            <td style={{ textAlign: "right" }}>gn</td>
-          </tr>
-          <tr>
-            <td>Liked</td>
-            <td style={{ textAlign: "right" }}>gl</td>
-          </tr>
-          <tr>
-            <td>Following</td>
-            <td style={{ textAlign: "right" }}>gf</td>
-          </tr>
-          <tr>
-            <td>Profile</td>
-            <td style={{ textAlign: "right" }}>gp</td>
-          </tr>
-        </table>
       </main>
     </>
   );

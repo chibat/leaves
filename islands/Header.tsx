@@ -132,6 +132,19 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                         </a>
                       </li>
                       <li>
+                        <a class="dropdown-item" href="/help">
+                          <img
+                            src="/assets/img/heart-fill.svg"
+                            alt="Edit"
+                            width="16"
+                            height="16"
+                            class="me-2"
+                          >
+                          </img>
+                          Help
+                        </a>
+                      </li>
+                      <li>
                         <hr class="dropdown-divider" />
                       </li>
                       <li>

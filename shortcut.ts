@@ -8,6 +8,9 @@ export function shortcut() {
   Mousetrap.bind("n", () => {
     location.href = "/posts/new";
   });
+  Mousetrap.bind("?", () => {
+    location.href = "/help";
+  });
   Mousetrap.bind(".", () => {
     window.scroll({ top: 0, behavior: "smooth" });
   });
