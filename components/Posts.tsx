@@ -29,9 +29,10 @@ export default function Posts(props: Props) {
       location.href = `/posts/${props.posts.value[selectedIndex.value].id}`;
     });
     Mousetrap.bind("e", () => {
-      location.href = `/posts/${
-        props.posts.value[selectedIndex.value].id
-      }/edit`;
+      const post = props.posts.value[selectedIndex.value];
+      if (user?.id === post.user_id) {
+        location.href = `/posts/${post.id}/edit`;
+      }
     });
   }, []);
 

@@ -105,7 +105,9 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
       history.replaceState(null, "", location.pathname);
     }
     Mousetrap.bind("e", () => {
-      location.href = `/posts/${post.id}/edit`;
+      if (user?.id === post.user_id) {
+        location.href = `/posts/${post.id}/edit`;
+      }
     });
   }, []);
 
