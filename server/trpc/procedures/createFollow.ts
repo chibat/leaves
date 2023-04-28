@@ -1,17 +1,17 @@
 import { z } from "zod";
-import * as db from "~/lib/db.ts";
-import { getSession } from "~/lib/auth.ts";
-import { publicProcedure } from "~/trpc/context.ts";
+import { publicProcedure } from "~/server/trpc/context.ts";
+import { insertFollow, pool } from "~/server/db.ts";
+import { getSession } from "~/server/auth.ts";
 
-export const deleteFollow = publicProcedure.input(
+export const createFollow = publicProcedure.input(
   z.object({ followingUserId: z.number() }),
 ).mutation(async ({ input, ctx }) => {
   const session = await getSession(ctx.req);
   if (!session) {
-    return null; // TODO
+    return null;
   }
-  await db.pool((client) =>
-    db.deleteFollow(client, {
+  await pool((client) =>
+    insertFollow(client, {
       userId: session.user.id,
       followingUserId: input.followingUserId,
     })

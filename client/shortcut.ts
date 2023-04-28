@@ -1,4 +1,4 @@
-import { trpc } from "~/trpc/client.ts";
+import { trpc } from "./trpc.ts";
 import Mousetrap from "mousetrap";
 
 export function shortcut() {

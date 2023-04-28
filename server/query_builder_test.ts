@@ -1,5 +1,5 @@
 import { assertEquals } from "std/testing/asserts.ts";
-import { QueryBuilder } from "~/lib/query_builder.ts";
+import { QueryBuilder } from "./query_builder.ts";
 
 const LIMIT = 10;
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { pool, selectComments } from "~/lib/db.ts";
-import { publicProcedure } from "~/trpc/context.ts";
-import { render } from "~/lib/markdown.ts";
+import { pool, selectComments } from "~/server/db.ts";
+import { publicProcedure } from "~/server/trpc/context.ts";
+import { render } from "~/server/markdown.ts";
 
 export const getComments = publicProcedure.input(
   z.object({ postId: z.number() }),

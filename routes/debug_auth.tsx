@@ -1,5 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import { createSession } from "~/lib/auth.ts";
+import { createSession } from "~/server/auth.ts";
 
 const debug = Deno.env.get("HOSTNAME")?.startsWith("codespaces-");
 

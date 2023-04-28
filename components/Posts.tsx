@@ -1,11 +1,11 @@
 import * as hljs from "highlightjs";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 
-import type { ResponsePost } from "~/lib/types.ts";
+import type { ResponsePost } from "~/common/types.ts";
 import { useEffect, useState } from "preact/hooks";
-import { AppUser } from "~/lib/db.ts";
+import { AppUser } from "~/server/db.ts";
 import { Signal } from "@preact/signals-core";
-import { trpc } from "~/trpc/client.ts";
+import { trpc } from "~/client/trpc.ts";
 import Mousetrap from "mousetrap";
 import { useSignal } from "@preact/signals";
 

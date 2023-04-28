@@ -1,7 +1,7 @@
 import { Handlers } from "$fresh/server.ts";
 import { deleteCookie } from "std/http/cookie.ts";
-import { getSession } from "~/lib/auth.ts";
-import { deleteSession, pool } from "~/lib/db.ts";
+import { getSession } from "~/server/auth.ts";
+import { deleteSession, pool } from "~/server/db.ts";
 
 export const handler: Handlers = {
   async GET(request) {

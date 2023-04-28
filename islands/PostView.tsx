@@ -1,12 +1,11 @@
-import { AppUser, Comment, Post } from "~/lib/db.ts";
-
 import { useEffect, useState } from "preact/hooks";
-import * as hljs from "highlightjs";
-import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
-import { render } from "~/lib/markdown.ts";
 import { useSignal } from "@preact/signals";
-import { trpc } from "~/trpc/client.ts";
+import * as hljs from "highlightjs";
 import Mousetrap from "mousetrap";
+import { AppUser, Comment, Post } from "~/server/db.ts";
+import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
+import { render } from "~/server/markdown.ts";
+import { trpc } from "~/client/trpc.ts";
 
 export default function PostView(props: { post: Post; user?: AppUser }) {
   const user = props.user;

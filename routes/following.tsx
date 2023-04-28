@@ -1,9 +1,9 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import FollowingPosts from "~/islands/FollowingPosts.tsx";
-import { AppUser } from "~/lib/db.ts";
+import { AppUser } from "~/server/db.ts";
 import Header from "~/islands/Header.tsx";
-import { getSession } from "~/lib/auth.ts";
+import { getSession } from "~/server/auth.ts";
 
 type PageType = {
   loginUser?: AppUser,

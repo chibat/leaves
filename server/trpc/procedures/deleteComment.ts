@@ -1,7 +1,7 @@
 import { z } from "zod";
-import * as db from "~/lib/db.ts";
-import { getSession } from "~/lib/auth.ts";
-import { publicProcedure } from "~/trpc/context.ts";
+import * as db from "~/server/db.ts";
+import { getSession } from "~/server/auth.ts";
+import { publicProcedure } from "~/server/trpc/context.ts";
 
 export const deleteComment = publicProcedure.input(
   z.object({ commentId: z.number() }),

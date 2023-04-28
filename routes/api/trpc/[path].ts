@@ -1,6 +1,6 @@
 import { HandlerContext } from "$fresh/server.ts";
-import { appRouter } from "~/trpc/router.ts";
-import { createContext } from "~/trpc/context.ts";
+import { appRouter } from "~/server/trpc/router.ts";
+import { createContext } from "~/server/trpc/context.ts";
 
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 

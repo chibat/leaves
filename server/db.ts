@@ -1,8 +1,8 @@
 import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
-import { PAGE_ROWS } from "~/lib/constants.ts";
-import { SessionType } from "~/lib/auth.ts";
+import { PAGE_ROWS } from "~/common/constants.ts";
+import { SessionType } from "~/server/auth.ts";
 import * as uuid from "std/uuid/mod.ts";
-import { QueryBuilder } from "~/lib/query_builder.ts";
+import { QueryBuilder } from "./query_builder.ts";
 
 export type Client = PoolClient | Transaction;
 

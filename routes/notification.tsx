@@ -1,7 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
-import { getSession } from "~/lib/auth.ts";
-import { AppNotification, AppUser, selectNotificationsWithUpdate, transaction } from "~/lib/db.ts";
+import { getSession } from "~/server/auth.ts";
+import { AppNotification, AppUser, selectNotificationsWithUpdate, transaction } from "~/server/db.ts";
 import Header from "~/islands/Header.tsx";
 
 type PageType = {

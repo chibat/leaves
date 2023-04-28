@@ -1,7 +1,7 @@
 import { Handlers } from "$fresh/server.ts";
-import { clientId, clientSecret } from "~/lib/env.ts";
-import { createSession, getCallbackUrl } from "~/lib/auth.ts";
-import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "../lib/db.ts";
+import { clientId, clientSecret } from "~/server/env.ts";
+import { createSession, getCallbackUrl } from "~/server/auth.ts";
+import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "~/server/db.ts";
 
 export type Token = { access_token: string; refresh_token: string };
 
