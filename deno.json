@@ -1,8 +1,8 @@
 {
   "tasks": {
-    "win": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$LOCALAPPDATA/Temp --allow-run=$(where deno),$LOCALAPPDATA/Cache/esbuild/bin/esbuild-windows-64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts",
-    "arm": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,/tmp --allow-run=$(which deno),$HOME/.cache/esbuild/bin/esbuild-linux-arm64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts",
-    "linux": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,/tmp,$HOME/.cache/esbuild/bin --allow-run=$(which deno),$HOME/.cache/esbuild/bin/esbuild-linux-64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts"
+    "win": "deno run --unstable --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$LOCALAPPDATA/Temp --allow-run=$(where deno),$LOCALAPPDATA/Cache/esbuild/bin/esbuild-windows-64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts",
+    "arm": "deno run --unstable --watch=static/,routes/ --allow-env --allow-read --allow-write=.,/tmp --allow-run=$(which deno),$HOME/.cache/esbuild/bin/esbuild-linux-arm64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts",
+    "linux": "deno run --unstable --watch=static/,routes/ --allow-env --allow-read --allow-write=.,/tmp,$HOME/.cache/esbuild/bin --allow-run=$(which deno),$HOME/.cache/esbuild/bin/esbuild-linux-64@0.14.51 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts"
   },
   "importMap": "./import_map.json",
   "compilerOptions": {

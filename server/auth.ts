@@ -1,6 +1,7 @@
 import { getCookies, setCookie } from "std/http/cookie.ts";
-import { AppUser, insertSession, pool, selectSession } from "~/server/db.ts";
+import { AppUser, pool, selectSession } from "~/server/db.ts";
 import { clientId } from "~/server/env.ts";
+import * as kv from "~/server/kv.ts";
 
 export type SessionType = { id: string; user: AppUser };
 
@@ -20,7 +21,7 @@ export async function getSession(
 }
 
 export async function createSession(response: Response, userId: number) {
-  const sessionId = await pool((client) => insertSession(client, userId));
+  const sessionId = await kv.createSession(userId);
   setCookie(response.headers, {
     name: "session",
     value: sessionId,

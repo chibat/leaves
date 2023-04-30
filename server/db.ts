@@ -1,6 +1,6 @@
 import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
-import { SessionType } from "~/server/auth.ts";
+import { getSession } from "~/server/kv.ts";
 import * as uuid from "std/uuid/mod.ts";
 import { QueryBuilder } from "./query_builder.ts";
 
@@ -589,52 +589,12 @@ export async function selectSession(
   if (!uuid.validate(sessionId)) {
     return undefined;
   }
+  const session = await getSession(sessionId);
+  if (!session) {
+    return undefined;
+  }
   const result = await client.queryObject<AppUser>`
-  SELECT * FROM app_user u WHERE EXISTS (SELECT 1 FROM app_session WHERE user_id = u.id AND id = ${sessionId})
+  SELECT * FROM app_user u WHERE id = ${session.userId}
 `;
   return result.rowCount ? result.rows[0] : undefined;
-}
-
-export async function insertSession(
-  client: Client,
-  userId: number,
-): Promise<string> {
-  const result = await client.queryObject<{ id: string }>`
-      INSERT INTO app_session (user_id)
-      VALUES (${userId})
-      RETURNING id
-    `;
-  const sessionId = result.rows[0].id;
-  await deleteExpiredSession(client, userId);
-  return sessionId;
-}
-
-export async function deleteSession(
-  client: Client,
-  session: SessionType,
-): Promise<void> {
-  await client.queryObject<void>`
-  DELETE FROM app_session WHERE id = ${session.id}
-`;
-  await deleteExpiredSession(client, session.user.id);
-}
-
-/**
- * 作成後、1ヶ月経過しているセッションを削除する
- * TODO セッション取得時に updated_at を更新するか？
- *
- * @param client
- * @param userId
- */
-export async function deleteExpiredSession(
-  client: Client,
-  userId: number,
-): Promise<void> {
-  try {
-    await client.queryObject<void>`
-  DELETE FROM app_session WHERE user_id = ${userId} AND updated_at < NOW() - CAST('1 months' AS INTERVAL)
-`;
-  } catch (ignore) {
-    console.error(ignore);
-  }
 }
