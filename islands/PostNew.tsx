@@ -1,7 +1,7 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect } from "preact/hooks";
-import { trpc } from "~/trpc/client.ts";
+import { trpc } from "~/client/trpc.ts";
 
 export default function Post() {
   const preview = useSignal(false);

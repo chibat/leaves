@@ -1,7 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import Users from "~/components/Users.tsx";
-import { User } from "~/trpc/procedures/getFollowingUsers.ts";
-import { trpc } from "~/trpc/client.ts";
+import { User } from "~/server/trpc/procedures/getFollowingUsers.ts";
+import { trpc } from "~/client/trpc.ts";
 
 export function LikeUsersModal(props: { postId: number, setModal: (modal: boolean) => void }) {
 

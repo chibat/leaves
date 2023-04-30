@@ -1,5 +1,5 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { pool, selectPostIds, selectUsers } from "~/lib/db.ts";
+import { pool, selectPostIds, selectUsers } from "~/server/db.ts";
 
 export async function handler(
   _req: Request,

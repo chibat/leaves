@@ -1,8 +1,8 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import Header from "~/islands/Header.tsx";
-import { getAuthUrl, getSession } from "~/lib/auth.ts";
-import { AppUser } from "~/lib/db.ts";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { AppUser } from "~/server/db.ts";
 import PostNew from "~/islands/PostNew.tsx";
 
 export const handler: Handlers<{ authUrl?: string, user?: AppUser }> = {

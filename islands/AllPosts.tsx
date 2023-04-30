@@ -1,11 +1,11 @@
 import { useEffect } from "preact/hooks";
 import Posts from "~/components/Posts.tsx";
 
-import type { ResponsePost } from "~/lib/types.ts";
-import { PAGE_ROWS } from "~/lib/constants.ts";
+import type { ResponsePost } from "~/common/types.ts";
+import { PAGE_ROWS } from "~/common/constants.ts";
 import { useSignal } from "@preact/signals";
-import { AppUser } from "~/lib/db.ts";
-import { trpc } from "~/trpc/client.ts";
+import { AppUser } from "~/server/db.ts";
+import { trpc } from "~/client/trpc.ts";
 
 export default function AllPosts(props: { loginUser?: AppUser }) {
 

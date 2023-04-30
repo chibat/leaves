@@ -7,10 +7,10 @@ import {
   selectPosts,
   selectPostsBySearchWord,
   selectUserPost,
-} from "~/lib/db.ts";
-import { publicProcedure } from "~/trpc/context.ts";
-import { getSession } from "~/lib/auth.ts";
-import { render } from "~/lib/markdown.ts";
+} from "~/server/db.ts";
+import { publicProcedure } from "~/server/trpc/context.ts";
+import { getSession } from "~/server/auth.ts";
+import { render } from "~/server/markdown.ts";
 
 export const getPosts = publicProcedure.input(
   z.object({

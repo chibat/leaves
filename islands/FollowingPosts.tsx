@@ -1,10 +1,10 @@
 import { useEffect, useState } from "preact/hooks";
-import { ResponsePost } from "~/lib/types.ts";
-import { PAGE_ROWS } from "~/lib/constants.ts";
+import { ResponsePost } from "~/common/types.ts";
+import { PAGE_ROWS } from "~/common/constants.ts";
 import Posts from "~/components/Posts.tsx";
 import { useSignal } from "@preact/signals";
-import { AppUser } from "~/lib/db.ts";
-import { trpc } from "~/trpc/client.ts";
+import { AppUser } from "~/server/db.ts";
+import { trpc } from "~/client/trpc.ts";
 
 export default function FollowingPosts(props: { loginUser?: AppUser }) {
 

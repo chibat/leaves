@@ -1,8 +1,8 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect, useState } from "preact/hooks";
-import { Post } from "~/lib/db.ts";
-import { trpc } from "~/trpc/client.ts";
+import { Post } from "~/server/db.ts";
+import { trpc } from "~/client/trpc.ts";
 
 export default function Edit(props: { post: Post }) {
   const postId = props.post.id;

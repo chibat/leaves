@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { insertComment, pool } from "~/lib/db.ts";
-import { getSession } from "~/lib/auth.ts";
-import { publicProcedure } from "~/trpc/context.ts";
+import { insertComment, pool } from "~/server/db.ts";
+import { getSession } from "~/server/auth.ts";
+import { publicProcedure } from "~/server/trpc/context.ts";
 
 export type RequestType = { postId: number; source: string };
 

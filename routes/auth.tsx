@@ -1,5 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import { getAuthUrl, getSession } from "~/lib/auth.ts";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
 
 export const handler: Handlers = {
   async GET(request) {

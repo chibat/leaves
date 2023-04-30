@@ -1,8 +1,8 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { AppUser, pool, Post, selectPost } from "~/lib/db.ts";
+import { AppUser, pool, Post, selectPost } from "~/server/db.ts";
 import Header from "~/islands/Header.tsx";
-import { getAuthUrl, getSession } from "~/lib/auth.ts";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
 import PostEdit from "~/islands/PostEdit.tsx";
 
 type PageType = {

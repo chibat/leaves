@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { publicProcedure } from "~/trpc/context.ts";
-import { insertLike, pool } from "~/lib/db.ts";
-import { getSession } from "~/lib/auth.ts";
+import { publicProcedure } from "~/server/trpc/context.ts";
+import { insertLike, pool } from "~/server/db.ts";
+import { getSession } from "~/server/auth.ts";
 
 export const createLike = publicProcedure.input(
   z.object({ postId: z.number() }),

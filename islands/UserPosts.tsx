@@ -1,13 +1,13 @@
 import Posts from "~/components/Posts.tsx";
-import { PAGE_ROWS } from "~/lib/constants.ts";
+import { PAGE_ROWS } from "~/common/constants.ts";
 import FollowingUsersModal from "~/components/FollowingUsersModal.tsx";
 import FollowerUsersModal from "~/components/FollowerUsersModal.tsx";
-import { ResponsePost } from "~/lib/types.ts";
-import { AppUser } from "~/lib/db.ts";
+import { ResponsePost } from "~/common/types.ts";
+import { AppUser } from "~/server/db.ts";
 
 import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
-import { trpc } from "~/trpc/client.ts";
+import { trpc } from "~/client/trpc.ts";
 
 export default function UserPosts(
   props: { pageUser: AppUser; loginUser?: AppUser },

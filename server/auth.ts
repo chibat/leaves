@@ -1,6 +1,6 @@
 import { getCookies, setCookie } from "std/http/cookie.ts";
-import { AppUser, insertSession, pool, selectSession } from "~/lib/db.ts";
-import { clientId } from "~/lib/env.ts";
+import { AppUser, insertSession, pool, selectSession } from "~/server/db.ts";
+import { clientId } from "~/server/env.ts";
 
 export type SessionType = { id: string; user: AppUser };
 

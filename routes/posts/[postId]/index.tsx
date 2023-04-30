@@ -1,10 +1,10 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import Header from "~/islands/Header.tsx";
-import { getAuthUrl, getSession } from "~/lib/auth.ts";
-import { AppUser, pool, Post, selectPost } from "~/lib/db.ts";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { AppUser, pool, Post, selectPost } from "~/server/db.ts";
 import PostView from "~/islands/PostView.tsx";
-import { getTitle } from "~/lib/getTitle.ts";
+import { getTitle } from "~/server/getTitle.ts";
 
 type PageType = {
   authUrl?: string;

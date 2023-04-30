@@ -1,6 +1,6 @@
-import { AppUser } from "~/lib/db.ts";
 import { useEffect } from "preact/hooks";
-import { shortcut } from "~/shortcut.ts";
+import { AppUser } from "~/server/db.ts";
+import { shortcut } from "~/client/shortcut.ts";
 
 export default function Header(props: { user?: AppUser; authUrl?: string }) {
   useEffect(() => {

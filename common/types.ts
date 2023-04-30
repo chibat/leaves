@@ -1,3 +1,3 @@
-import { Post } from "~/lib/db.ts";
+import { Post } from "~/server/db.ts";
 
 export type ResponsePost = Post & { liked: boolean };

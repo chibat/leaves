@@ -3,9 +3,9 @@ import {
   pool,
   selectCountFollower,
   selectCountFollowing,
-} from "~/lib/db.ts";
-import { getSession } from "~/lib/auth.ts";
-import { publicProcedure } from "~/trpc/context.ts";
+} from "~/server/db.ts";
+import { getSession } from "~/server/auth.ts";
+import { publicProcedure } from "~/server/trpc/context.ts";
 import { z } from "zod";
 
 export const getFollowInfo = publicProcedure.input(

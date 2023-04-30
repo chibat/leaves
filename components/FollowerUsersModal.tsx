@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "preact/hooks";
 import Users from '~/components/Users.tsx'
-import { trpc } from "~/trpc/client.ts";
-import { User } from "~/trpc/procedures/getFollowerUsers.ts";
+import { trpc } from "~/client/trpc.ts";
+import { User } from "~/server/trpc/procedures/getFollowerUsers.ts";
 
 export default function FollowerUsersModal(props: { userId: number, setModal: (modal: boolean) => void }) {
 
