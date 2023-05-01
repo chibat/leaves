@@ -9,15 +9,17 @@ import { trpc } from "~/client/trpc.ts";
 export default function SearchedPosts(props: { searchWord: string, loginUser?: AppUser }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
-  const loading = useSignal<boolean>(false);
+  const requesting = useSignal<boolean>(false);
+  const spinning = useSignal<boolean>(true);
   const allLoaded = useSignal(false);
   const notFound = useSignal(false);
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
-      if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
+      if (!requesting.value && entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
-        loading.value = true;
+        requesting.value = true;
+        spinning.value = true;
         trpc.getPosts.query({ postId, searchWord: props.searchWord }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
@@ -25,7 +27,8 @@ export default function SearchedPosts(props: { searchWord: string, loginUser?: A
           if (results.length < PAGE_ROWS) {
             allLoaded.value = true;
           }
-          loading.value = false;
+          requesting.value = false;
+          spinning.value = false;
           if (!postId && results.length === 0) {
             notFound.value = true;
           }
@@ -49,7 +52,7 @@ export default function SearchedPosts(props: { searchWord: string, loginUser?: A
       <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />
-      {loading.value &&
+      {spinning.value &&
         <div class="d-flex justify-content-center">
           <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
