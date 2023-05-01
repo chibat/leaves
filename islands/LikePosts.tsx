@@ -9,14 +9,16 @@ import { trpc } from "~/client/trpc.ts";
 export default function LikePosts(props: { loginUser?: AppUser }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
-  const loading = useSignal<boolean>(false);
+  const spinning = useSignal<boolean>(true);
+  const requesting = useSignal<boolean>(false);
   const allLoaded = useSignal(false);
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
-      if (entries[0].intersectionRatio !== 0 && !allLoaded.value) {
+      if (!requesting.value && entries[0].intersectionRatio !== 0 && !allLoaded.value) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
-        loading.value = true;
+        requesting.value = true;
+        spinning.value = true;
         trpc.getLikedPosts.query({ postId }).then(results => {
           if (!results) {
             return;
@@ -28,7 +30,8 @@ export default function LikePosts(props: { loginUser?: AppUser }) {
             allLoaded.value = true;
           }
         }).finally(() => {
-          loading.value = false;
+          requesting.value = false;
+          spinning.value = false;
         });
       }
     });
@@ -49,7 +52,7 @@ export default function LikePosts(props: { loginUser?: AppUser }) {
       <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />
-      {loading.value &&
+      {spinning.value &&
         <div class="d-flex justify-content-center">
           <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
