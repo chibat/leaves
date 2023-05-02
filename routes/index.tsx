@@ -32,7 +32,7 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
         <div class="card mb-3">
           <div class="card-body">
             {props.data.user?.picture &&
-              <img src={props.data.user.picture} alt="mdo" width="32" height="32" class="rounded-circle me-2" />
+              <img src={props.data.user.picture} alt="mdo" width="32" height="32" referrerpolicy="no-referrer" class="rounded-circle me-2" />
             }
             <a href="/posts/new">
               <input class="form-control" type="text" placeholder="Post" aria-label="Post" readOnly style={{ cursor: "pointer", width: "90%", display: "inline" }} ></input>

@@ -94,6 +94,7 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                         width="32"
                         height="32"
                         class="rounded-circle"
+                        referrerpolicy="no-referrer"
                       />
                     </a>
                     <ul

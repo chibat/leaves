@@ -147,6 +147,7 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                     width="32"
                     height="32"
                     class="rounded-circle"
+                    referrerpolicy="no-referrer"
                   />
                   <a
                     href={`/users/${post.user_id}`}
@@ -291,6 +292,7 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                             width="32"
                             height="32"
                             class="rounded-circle"
+                            referrerpolicy="no-referrer"
                           />
                           <a
                             href={`/users/${comment.user_id}`}

@@ -125,6 +125,7 @@ export default function Posts(props: Props) {
                   width="32"
                   height="32"
                   class="rounded-circle"
+                  referrerpolicy="no-referrer"
                 />
                 <a href={`/users/${post.user_id}`} class="ms-2 noDecoration">
                   {post.name}
