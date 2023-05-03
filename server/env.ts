@@ -1,12 +1,11 @@
-const maybeClientId = Deno.env.get("LEAVES_AUTH_CLIENT_ID");
-if (!maybeClientId) {
-  Deno.exit(1);
+export function get(name: string) {
+  const value = Deno.env.get(name);
+  if (!value) {
+    console.error("Cannot get the environment variable: " + name);
+    Deno.exit(1);
+  }
+  return value;
 }
 
-const maybeClientSecret = Deno.env.get("LEAVES_AUTH_CLIENT_SECRET");
-if (!maybeClientSecret) {
-  Deno.exit(2);
-}
-
-export const clientId = maybeClientId;
-export const clientSecret = maybeClientSecret;
+export const clientId = get("LEAVES_AUTH_CLIENT_ID");
+export const clientSecret = get("LEAVES_AUTH_CLIENT_SECRET");

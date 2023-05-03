@@ -22,7 +22,7 @@ export default function UserPosts(
   const [followLoading, setFollowLoading] = useState<boolean>(false);
   const [following, setFollowing] = useState<string>("");
   const [followers, setFollowers] = useState<string>("");
-  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [isFollowing, setIsFollowing] = useState<boolean>();
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
 
@@ -96,7 +96,7 @@ export default function UserPosts(
       {(loginUser && props.pageUser.id !== loginUser.id) &&
         (
           <>
-            {!isFollowing &&
+            {isFollowing === false &&
               (
                 <button
                   class="btn btn-secondary me-2 mb-2"
@@ -116,7 +116,7 @@ export default function UserPosts(
                   Follow
                 </button>
               )}
-            {isFollowing &&
+            {isFollowing === true &&
               (
                 <>
                   Following
