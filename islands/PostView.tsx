@@ -7,7 +7,7 @@ import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
 
-export default function PostView(props: { post: Post; user?: AppUser }) {
+export default function PostView(props: { post: Post; postTitle: string; user?: AppUser }) {
   const user = props.user;
   const post = props.post;
 
@@ -116,6 +116,13 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
 
   const createdAt = new Date(post.created_at).toLocaleString();
   const updatedAt = new Date(post.updated_at).toLocaleString();
+
+  function tweet() {
+    const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(props.postTitle + "\n" + location.href);
+    console.log(url);
+    window.open(url);
+    // location.href = url;
+  }
 
   return (
     <div>
@@ -241,34 +248,36 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                           </a>
                         )}
                     </div>
-                    {user?.id === post.user_id &&
-                      (
-                        <div>
-                          <a
-                            href={void (0)}
-                            class="me-2"
-                            style={{ cursor: "pointer" }}
-                            onClick={deletePost}
-                          >
-                            <img
-                              src="/assets/img/trash-fill.svg"
-                              alt="Delete"
-                              width="20"
-                              height="20"
+                    <div>
+                      {user?.id === post.user_id &&
+                        (
+                          <>
+                            <a
+                              href={void (0)}
+                              class="me-2"
+                              style={{ cursor: "pointer" }}
+                              onClick={deletePost}
                             >
-                            </img>
-                          </a>
-                          <a href={`/posts/${post.id}/edit`}>
-                            <img
-                              src="/assets/img/pencil-fill.svg"
-                              alt="Edit"
-                              width="20"
-                              height="20"
-                            >
-                            </img>
-                          </a>
-                        </div>
-                      )}
+                              <img
+                                src="/assets/img/trash-fill.svg"
+                                alt="Delete"
+                                width="20"
+                                height="20"
+                              >
+                              </img>
+                            </a>
+                            <a class="me-2" href={`/posts/${post.id}/edit`}>
+                              <img
+                                src="/assets/img/pencil-fill.svg"
+                                alt="Edit"
+                                width="20"
+                                height="20"
+                              >
+                              </img>
+                            </a></>
+                        )}
+                      <img src="/assets/img/twitter.svg" width={20} onClick={tweet} style={{ cursor: "pointer" }} />
+                    </div>
                   </div>
                 </section>
               </article>
