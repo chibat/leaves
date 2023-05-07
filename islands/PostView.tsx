@@ -193,6 +193,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                   </span>
                   <div class="d-flex justify-content-between">
                     <div>
+                      <img src="/assets/img/twitter.svg" title="Tweet" alt="Tweet" width={20} onClick={tweet} style={{ cursor: "pointer" }} />
                       {requesting &&
                         (
                           <div
@@ -212,7 +213,8 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                           >
                             <img
                               src="/assets/img/heart-fill.svg"
-                              alt="Edit"
+                              title="Unlike"
+                              alt="Unlike"
                               width="20"
                               height="20"
                             >
@@ -229,7 +231,8 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                           >
                             <img
                               src="/assets/img/heart.svg"
-                              alt="Edit"
+                              title="Like"
+                              alt="Like"
                               width="20"
                               height="20"
                             >
@@ -276,7 +279,6 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                               </img>
                             </a></>
                         )}
-                      <img src="/assets/img/twitter.svg" width={20} onClick={tweet} style={{ cursor: "pointer" }} />
                     </div>
                   </div>
                 </section>
