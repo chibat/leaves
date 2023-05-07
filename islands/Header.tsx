@@ -167,6 +167,9 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                   </div>
                 </>
               )}
+            {!props.user &&
+              <a class="noDecoration" href={props.authUrl}>Sign in</a>
+            }
           </div>
         </div>
       </header>
