@@ -170,17 +170,6 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
           </div>
         </div>
       </header>
-      {!props.user && props.authUrl &&
-        (
-          <div style={{ textAlign: "center" }}>
-            <a href={props.authUrl}>
-              <input
-                type="image"
-                src="/btn_google_signin_dark_pressed_web.png"
-              />
-            </a>
-          </div>
-        )}
     </>
   );
 }
