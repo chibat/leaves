@@ -1,4 +1,4 @@
-const kv = await Deno.openKv();
+const kv = await Deno.openKv("session");
 
 type SessionKey = ["session", /* sessionId */ string?];
 
