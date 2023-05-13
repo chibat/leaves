@@ -29,10 +29,30 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
       </Head>
       <Header user={props.data.user} authUrl={props.data.authUrl} />
       <main class="container">
+        {!props.data.user && props.data.authUrl &&
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="px-4 py-5 my-5 text-center">
+                <img class="d-block mx-auto mb-4" src="/assets/img/icon-192x192.png" alt="Leaves" width="100px" />
+                <h1 class="display-5 fw-bold text-body-emphasis">Leaves</h1>
+                <div class="col-lg-6 mx-auto">
+                  <p class="lead mb-4">This website is a SNS that allows you to post in Markdown.<br />Sign in with your Google account and use it.</p>
+                  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <div style={{ textAlign: "center" }}>
+                      <a href={props.data.authUrl}>
+                        <input type="image" src="/btn_google_signin_dark_pressed_web.png" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
         <div class="card mb-3">
           <div class="card-body">
             {props.data.user?.picture &&
-              <img src={props.data.user.picture} alt="mdo" width="32" height="32" class="rounded-circle me-2" />
+              <img src={props.data.user.picture} alt="mdo" width="32" height="32" referrerpolicy="no-referrer" class="rounded-circle me-2" />
             }
             <a href="/posts/new">
               <input class="form-control" type="text" placeholder="Post" aria-label="Post" readOnly style={{ cursor: "pointer", width: "90%", display: "inline" }} ></input>

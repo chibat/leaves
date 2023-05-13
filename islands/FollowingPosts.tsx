@@ -10,13 +10,15 @@ export default function FollowingPosts(props: { loginUser?: AppUser }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const allLoaded = useSignal(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const requesting = useSignal<boolean>(false);
+  const spinning = useSignal<boolean>(true);
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
-      if (!allLoaded.value && !loading && entries[0].intersectionRatio !== 0) {
+      if (!allLoaded.value && !requesting.value && entries[0].intersectionRatio !== 0) {
         const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
-        setLoading(true);
+        requesting.value = true;
+        spinning.value = true;
         trpc.getPosts.query({ postId, following: true }).then(results => {
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
@@ -24,7 +26,8 @@ export default function FollowingPosts(props: { loginUser?: AppUser }) {
           if (results.length < PAGE_ROWS) {
             allLoaded.value = true;
           }
-          setLoading(false);
+          requesting.value = false;
+          spinning.value = false;
         });
       }
     });
@@ -45,7 +48,7 @@ export default function FollowingPosts(props: { loginUser?: AppUser }) {
       <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />
-      {loading &&
+      {spinning.value &&
         <div class="d-flex justify-content-center">
           <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>

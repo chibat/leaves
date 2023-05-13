@@ -94,6 +94,7 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                         width="32"
                         height="32"
                         class="rounded-circle"
+                        referrerpolicy="no-referrer"
                       />
                     </a>
                     <ul
@@ -166,20 +167,12 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                   </div>
                 </>
               )}
+            {!props.user &&
+              <a class="noDecoration" href={props.authUrl}>Sign in</a>
+            }
           </div>
         </div>
       </header>
-      {!props.user && props.authUrl &&
-        (
-          <div style={{ textAlign: "center" }}>
-            <a href={props.authUrl}>
-              <input
-                type="image"
-                src="/btn_google_signin_dark_pressed_web.png"
-              />
-            </a>
-          </div>
-        )}
     </>
   );
 }

@@ -17,11 +17,12 @@ export default function UserPosts(
   const allLoaded = useSignal(false);
 
   const posts = useSignal<Array<ResponsePost>>([]);
-  const loading = useSignal<boolean>(false);
+  const requesting = useSignal<boolean>(false);
+  const spinning = useSignal<boolean>(true);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
   const [following, setFollowing] = useState<string>("");
   const [followers, setFollowers] = useState<string>("");
-  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [isFollowing, setIsFollowing] = useState<boolean>();
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
 
@@ -34,12 +35,13 @@ export default function UserPosts(
 
     const io = new IntersectionObserver((entries) => {
       if (
-        !allLoaded.value && !loading.value && entries[0].intersectionRatio !== 0
+        !allLoaded.value && !requesting.value && entries[0].intersectionRatio !== 0
       ) {
         const postId = posts.value.length === 0
           ? undefined
           : posts.value[posts.value.length - 1].id;
-        loading.value = true;
+        requesting.value = true;
+        spinning.value = true;
         trpc.getPosts.query({ postId, userId }).then((results) => {
           console.log("###", results);
           if (results.length > 0) {
@@ -48,7 +50,8 @@ export default function UserPosts(
           if (results.length < PAGE_ROWS) {
             allLoaded.value = true;
           }
-          loading.value = false;
+          requesting.value = false;
+          spinning.value = false;
         });
       }
     });
@@ -90,83 +93,78 @@ export default function UserPosts(
 
   return (
     <div>
-      {!loading.value &&
+      {(loginUser && props.pageUser.id !== loginUser.id) &&
         (
           <>
-            {(loginUser && props.pageUser.id !== loginUser.id) &&
+            {isFollowing === false &&
+              (
+                <button
+                  class="btn btn-secondary me-2 mb-2"
+                  onClick={follow}
+                  style={{ width: "150px" }}
+                  disabled={followLoading}
+                >
+                  {followLoading &&
+                    (
+                      <div
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    )}
+                  Follow
+                </button>
+              )}
+            {isFollowing === true &&
               (
                 <>
-                  {!isFollowing &&
-                    (
-                      <button
-                        class="btn btn-secondary me-2 mb-2"
-                        onClick={follow}
-                        style={{ width: "150px" }}
-                        disabled={followLoading}
-                      >
-                        {followLoading &&
-                          (
-                            <div
-                              class="spinner-border spinner-border-sm me-2"
-                              role="status"
-                            >
-                              <span class="visually-hidden">Loading...</span>
-                            </div>
-                          )}
-                        Follow
-                      </button>
-                    )}
-                  {isFollowing &&
-                    (
-                      <>
-                        Following
-                        <button
-                          class="btn btn-danger ms-2 me-2 mb-2"
-                          onClick={unfollow}
-                          style={{ width: "150px" }}
-                          disabled={followLoading}
+                  Following
+                  <button
+                    class="btn btn-danger ms-2 me-2 mb-2"
+                    onClick={unfollow}
+                    style={{ width: "150px" }}
+                    disabled={followLoading}
+                  >
+                    {followLoading &&
+                      (
+                        <div
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
                         >
-                          {followLoading &&
-                            (
-                              <div
-                                class="spinner-border spinner-border-sm me-2"
-                                role="status"
-                              >
-                                <span class="visually-hidden">Loading...</span>
-                              </div>
-                            )}
-                          Unfollow
-                        </button>
-                      </>
-                    )}
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      )}
+                    Unfollow
+                  </button>
                 </>
               )}
-            <div class="mb-3">
-              {following &&
-                (following === "0" ? <span class="me-3">0 Following</span> : (
-                  <a
-                    class="noDecoration me-3"
-                    onClick={displayFollowingUsers}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {following} Following
-                  </a>
-                ))}
-              {followers &&
-                (followers === "0" ? <span class="me-3">0 Followers</span> : (
-                  <a
-                    class="noDecoration me-3"
-                    onClick={displayFollowerUsers}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {followers} Follower{followers === "1" ? "" : "s"}
-                  </a>
-                ))}
-              {(loginUser && props.pageUser.id === loginUser.id) &&
-                <a class="noDecoration" href="/likes">Likes</a>}
-            </div>
           </>
         )}
+      <div class="mb-3">
+        {following &&
+          (following === "0" ? <span class="me-3">0 Following</span> : (
+            <a
+              class="noDecoration me-3"
+              onClick={displayFollowingUsers}
+              style={{ cursor: "pointer" }}
+            >
+              {following} Following
+            </a>
+          ))}
+        {followers &&
+          (followers === "0" ? <span class="me-3">0 Followers</span> : (
+            <a
+              class="noDecoration me-3"
+              onClick={displayFollowerUsers}
+              style={{ cursor: "pointer" }}
+            >
+              {followers} Follower{followers === "1" ? "" : "s"}
+            </a>
+          ))}
+        {(loginUser && props.pageUser.id === loginUser.id) &&
+          <a class="noDecoration" href="/likes">Likes</a>}
+      </div>
       {followingModal &&
         <FollowingUsersModal userId={userId} setModal={setFollowingModal} />}
       {followerModal &&
@@ -174,7 +172,7 @@ export default function UserPosts(
       <Posts posts={posts} user={loginUser} />
       <br />
       <br />
-      {loading.value &&
+      {spinning.value &&
         (
           <div class="d-flex justify-content-center">
             <div class="spinner-border" role="status">

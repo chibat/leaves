@@ -47,7 +47,7 @@ export default function Page(
       </Head>
       <Header user={user} authUrl={props.data.authUrl} />
       <main class="container">
-        <PostView post={props.data.post} user={user} />
+        <PostView post={props.data.post} postTitle={title} user={user} />
       </main>
     </>
   );

@@ -7,7 +7,7 @@ import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
 
-export default function PostView(props: { post: Post; user?: AppUser }) {
+export default function PostView(props: { post: Post; postTitle: string; user?: AppUser }) {
   const user = props.user;
   const post = props.post;
 
@@ -117,6 +117,13 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
   const createdAt = new Date(post.created_at).toLocaleString();
   const updatedAt = new Date(post.updated_at).toLocaleString();
 
+  function tweet() {
+    const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(props.postTitle + "\n" + location.href);
+    console.log(url);
+    window.open(url);
+    // location.href = url;
+  }
+
   return (
     <div>
       {post &&
@@ -147,6 +154,7 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                     width="32"
                     height="32"
                     class="rounded-circle"
+                    referrerpolicy="no-referrer"
                   />
                   <a
                     href={`/users/${post.user_id}`}
@@ -185,6 +193,7 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                   </span>
                   <div class="d-flex justify-content-between">
                     <div>
+                      <img src="/assets/img/twitter.svg" title="Tweet" alt="Tweet" width={20} onClick={tweet} style={{ cursor: "pointer" }} />
                       {requesting &&
                         (
                           <div
@@ -204,7 +213,8 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                           >
                             <img
                               src="/assets/img/heart-fill.svg"
-                              alt="Edit"
+                              title="Unlike"
+                              alt="Unlike"
                               width="20"
                               height="20"
                             >
@@ -221,7 +231,8 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                           >
                             <img
                               src="/assets/img/heart.svg"
-                              alt="Edit"
+                              title="Like"
+                              alt="Like"
                               width="20"
                               height="20"
                             >
@@ -240,34 +251,35 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                           </a>
                         )}
                     </div>
-                    {user?.id === post.user_id &&
-                      (
-                        <div>
-                          <a
-                            href={void (0)}
-                            class="me-2"
-                            style={{ cursor: "pointer" }}
-                            onClick={deletePost}
-                          >
-                            <img
-                              src="/assets/img/trash-fill.svg"
-                              alt="Delete"
-                              width="20"
-                              height="20"
+                    <div>
+                      {user?.id === post.user_id &&
+                        (
+                          <>
+                            <a
+                              href={void (0)}
+                              class="me-2"
+                              style={{ cursor: "pointer" }}
+                              onClick={deletePost}
                             >
-                            </img>
-                          </a>
-                          <a href={`/posts/${post.id}/edit`}>
-                            <img
-                              src="/assets/img/pencil-fill.svg"
-                              alt="Edit"
-                              width="20"
-                              height="20"
-                            >
-                            </img>
-                          </a>
-                        </div>
-                      )}
+                              <img
+                                src="/assets/img/trash-fill.svg"
+                                alt="Delete"
+                                width="20"
+                                height="20"
+                              >
+                              </img>
+                            </a>
+                            <a class="me-2" href={`/posts/${post.id}/edit`}>
+                              <img
+                                src="/assets/img/pencil-fill.svg"
+                                alt="Edit"
+                                width="20"
+                                height="20"
+                              >
+                              </img>
+                            </a></>
+                        )}
+                    </div>
                   </div>
                 </section>
               </article>
@@ -291,6 +303,7 @@ export default function PostView(props: { post: Post; user?: AppUser }) {
                             width="32"
                             height="32"
                             class="rounded-circle"
+                            referrerpolicy="no-referrer"
                           />
                           <a
                             href={`/users/${comment.user_id}`}

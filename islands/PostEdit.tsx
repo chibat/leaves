@@ -29,16 +29,14 @@ export default function Edit(props: { post: Post }) {
   });
 
   async function save() {
-    if (confirm("Save the post?")) {
-      setLoading(true);
-      await trpc.updatePost.mutate({
-        postId: postId,
-        source: text.value,
-        draft: draft.value,
-      });
-      setLoading(false);
-      location.href = `/posts/${postId}?updated`;
-    }
+    setLoading(true);
+    await trpc.updatePost.mutate({
+      postId: postId,
+      source: text.value,
+      draft: draft.value,
+    });
+    setLoading(false);
+    location.href = `/posts/${postId}?updated`;
   }
 
   return (
