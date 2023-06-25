@@ -43,7 +43,7 @@ export default function Posts(props: Props) {
   async function deletePost(postId: number) {
     if (confirm("Delete the post?")) {
       await trpc.deletePost.mutate({ postId });
-      location.href = "/";
+      location.reload();
     }
   }
 
