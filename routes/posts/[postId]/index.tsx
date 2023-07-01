@@ -21,6 +21,12 @@ export const handler: Handlers<PageType> = {
     }
 
     const session = await getSession(req);
+    if (post.draft && post.user_id !== session?.user.id) {
+      return new Response("", {
+        status: 307,
+        headers: { Location: "/" },
+      });
+    }
     const authUrl = session ? undefined : getAuthUrl(req.url);
     const res = await ctx.render({ user: session?.user, authUrl, post });
     return res;
