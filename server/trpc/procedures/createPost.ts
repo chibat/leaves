@@ -11,7 +11,6 @@ export const createPost = publicProcedure.input(
     return null;
   }
   const userId = session.user.id;
-  console.log("### debug", input.draft);
   const postId = await pool((client) =>
     insertPost(client, {
       userId,

@@ -160,7 +160,6 @@ export async function insertPost(
   client: Client,
   params: { userId: number; source: string; draft: boolean },
 ): Promise<number> {
-  console.log("#### debug02", params.draft);
   const result = await client.queryObject<{ id: number }>`
       INSERT INTO post (user_id, source, draft)
       VALUES (${params.userId}, ${params.source}, ${params.draft})

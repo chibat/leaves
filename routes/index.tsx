@@ -18,7 +18,7 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
   return (
     <>
       <Head>
-        <title>Leaves - SNS with Markdown</title>
+        <title>Leaves - Microblog with Markdown</title>
         <meta property="og:url" content="https://leaves.deno.dev/"></meta>
         <meta property="og:title" content="Leaves"></meta>
         <meta property="og:image" content="https://leaves.deno.dev/assets/img/icon-192x192.png" />
@@ -36,7 +36,7 @@ export default function Home(props: PageProps<{ authUrl?: string, user?: AppUser
                 <img class="d-block mx-auto mb-4" src="/assets/img/icon-192x192.png" alt="Leaves" width="100px" />
                 <h1 class="display-5 fw-bold text-body-emphasis">Leaves</h1>
                 <div class="col-lg-6 mx-auto">
-                  <p class="lead mb-4">This website is a SNS that allows you to post in Markdown.<br />Sign in with your Google account and use it.</p>
+                  <p class="lead mb-4">This website is a Microblog that allows you to post in <b>Markdown</b>.<br />Sign in with your Google account and use it.</p>
                   <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                     <div style={{ textAlign: "center" }}>
                       <a href={props.data.authUrl}>

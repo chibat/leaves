@@ -47,7 +47,8 @@ export default function Page(props: PageProps<PageType>) {
             </a>{" "}
             によるポートフォリオです。
           </li>
-          <li>Markdown で投稿できる SNS のようなものを作成してみました。</li>
+          <li>Markdown で投稿できるマイクロブログです。</li>
+          <li>Google アカウントでログインできます。</li>
           <li>
             Production Runtime（次の無料枠を利用しています）
             <ul>
