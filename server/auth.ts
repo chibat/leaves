@@ -1,4 +1,4 @@
-import { getCookies, setCookie } from "std/http/cookie.ts";
+import { getCookies, setCookie } from "$std/http/cookie.ts";
 import { AppUser, insertSession, pool, selectSession } from "~/server/db.ts";
 import { clientId } from "~/server/env.ts";
 
