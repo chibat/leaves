@@ -1,0 +1,14 @@
+{
+  "name": "Leaves",
+  "short_name": "Leaves",
+  "theme_color": "#1fbc92",
+  "background_color": "#999999",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [{
+    "src": "/assets/img/icon-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
+}

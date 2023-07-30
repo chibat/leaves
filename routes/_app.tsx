@@ -18,6 +18,7 @@ export default function App({ Component }: AppProps) {
           href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/tomorrow-night.min.css"
         />
         <link rel="stylesheet" href="/app.css" />
+        <link rel="manifest" href="/manifest.json" />
         {
           /* <script async src="https://www.googletagmanager.com/gtag/js?id=G-SZVLRW13Y8"></script>
         <script>
@@ -55,6 +56,9 @@ export default function App({ Component }: AppProps) {
         crossOrigin="anonymous"
       >
       </script>
+        <script>
+
+  </script>
     </>
   );
 }
