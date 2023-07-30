@@ -7,6 +7,7 @@ export default function App({ Component }: AppProps) {
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#1fbc92" />
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -19,6 +20,7 @@ export default function App({ Component }: AppProps) {
         />
         <link rel="stylesheet" href="/app.css" />
         <link rel="manifest" href="/manifest.json" />
+        <script async src="/register_sw.js" />
         {
           /* <script async src="https://www.googletagmanager.com/gtag/js?id=G-SZVLRW13Y8"></script>
         <script>
@@ -56,9 +58,6 @@ export default function App({ Component }: AppProps) {
         crossOrigin="anonymous"
       >
       </script>
-        <script>
-
-  </script>
     </>
   );
 }
