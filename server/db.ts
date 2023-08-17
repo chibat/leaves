@@ -50,20 +50,25 @@ export type AppNotification = {
   name?: string; // app_user
 };
 
-const connectionPool = new Pool(
-  {
-    tls: {
-      enforce: false,
-      caCertificates: [
-        `-----BEGIN CERTIFICATE-----\n${
-          Deno.env.get("MDSNS_DATABASE_CA_CERTIFICATE")
-        }\n-----END CERTIFICATE-----`,
-      ],
+let connectionPool: Pool;
+
+export function initPool() {
+  // build 時に処理が動かないように初期化を遅延させる
+  connectionPool = new Pool(
+    {
+      tls: {
+        enforce: false,
+        caCertificates: [
+          `-----BEGIN CERTIFICATE-----\n${
+            Deno.env.get("MDSNS_DATABASE_CA_CERTIFICATE")
+          }\n-----END CERTIFICATE-----`,
+        ],
+      },
     },
-  },
-  5,
-  true,
-);
+    5,
+    true,
+  );
+}
 
 export async function pool<T>(
   handler: (client: PoolClient) => Promise<T>,

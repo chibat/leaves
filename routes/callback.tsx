@@ -1,5 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import { clientId, clientSecret } from "~/server/env.ts";
+import { env } from "~/server/env.ts";
 import { createSession, getCallbackUrl } from "~/server/auth.ts";
 import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "~/server/db.ts";
 
@@ -29,8 +29,8 @@ export const handler: Handlers = {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams([
-            ["client_id", clientId],
-            ["client_secret", clientSecret],
+            ["client_id", env.clientId],
+            ["client_secret", env.clientSecret],
             ["redirect_uri", redirectUri],
             ["grant_type", "authorization_code"],
             ["code", code],
