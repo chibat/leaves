@@ -1,40 +1,28 @@
-import { Handlers, PageProps } from "$fresh/server.ts";
+import { defineRoute } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
 import { getSession } from "~/server/auth.ts";
-import { AppNotification, AppUser, selectNotificationsWithUpdate, transaction } from "~/server/db.ts";
+import { selectNotificationsWithUpdate, transaction } from "~/server/db.ts";
 import Header from "~/islands/Header.tsx";
 
-type PageType = {
-  loginUser?: AppUser,
-  notifications: AppNotification[],
-}
-
-export const handler: Handlers<PageType> = {
-  async GET(req, ctx) {
-    const session = await getSession(req);
-    if (!session) {
-      return new Response("", {
-        status: 307,
-        headers: { Location: "/" },
-      });
-    }
-    const notifications = await transaction(client => selectNotificationsWithUpdate(client, session.user.id));
-    session.user.notification = false;
-    const res = await ctx.render({ loginUser: session.user, notifications });
-    return res;
-  },
-};
-
-export default function Page(props: PageProps<PageType>) {
+export default defineRoute(async (req, _ctx) => {
+  const session = await getSession(req);
+  if (!session) {
+    return new Response("", {
+      status: 307,
+      headers: { Location: "/" },
+    });
+  }
+  const notifications = await transaction(client => selectNotificationsWithUpdate(client, session.user.id));
+  session.user.notification = false;
   return (
     <>
       <Head>
         <title>Notification - Leaves</title>
       </Head>
-      <Header user={props.data.loginUser} />
+      <Header user={session.user} />
       <main class="container">
         <h1>Notification</h1>
-        {props.data.notifications.map(notification =>
+        {notifications.map(notification =>
           <div class="mb-1" key={notification.id}>
             <span class="me-3">{new Date(notification.created_at).toLocaleString()}</span>
             {notification.type === "follow" && <a href={`/users/${notification.action_user_id}`}><b>{notification.name}</b> followed you.</a>
@@ -50,4 +38,4 @@ export default function Page(props: PageProps<PageType>) {
       </main>
     </>
   );
-}
+});

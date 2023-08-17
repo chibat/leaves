@@ -1,20 +1,11 @@
 import { Head } from "$fresh/runtime.ts";
-import { Handlers, PageProps } from "$fresh/server.ts";
+import { defineRoute } from "$fresh/server.ts";
 import Header from "~/islands/Header.tsx";
-import { AppUser } from "~/server/db.ts";
-import { getSession } from "~/server/auth.ts";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
 
-type PageType = { user?: AppUser };
-
-export const handler: Handlers<PageType> = {
-  async GET(req, ctx) {
-    const session = await getSession(req);
-    const res = await ctx.render({ user: session?.user });
-    return res;
-  },
-};
-
-export default function Page(props: PageProps<PageType>) {
+export default defineRoute(async (req, _ctx) => {
+  const session = await getSession(req);
+  const authUrl = session ? undefined : getAuthUrl(req.url);
   return (
     <>
       <Head>
@@ -33,7 +24,7 @@ export default function Page(props: PageProps<PageType>) {
           content="https://leaves.deno.dev/assets/img/icon-192x192.png"
         />
       </Head>
-      <Header user={props.data.user} />
+      <Header user={session?.user} authUrl={authUrl} />
       <main class="container">
         <h1>About</h1>
         <ul>
@@ -107,4 +98,4 @@ export default function Page(props: PageProps<PageType>) {
       </main>
     </>
   );
-}
+});
