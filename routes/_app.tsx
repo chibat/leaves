@@ -6,6 +6,7 @@ export default function App({ Component }: AppProps) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#1fbc92" />
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -17,6 +18,8 @@ export default function App({ Component }: AppProps) {
           href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/tomorrow-night.min.css"
         />
         <link rel="stylesheet" href="/app.css" />
+        <link rel="manifest" href="/manifest.json" />
+        <script async src="/register_sw.js" />
         {
           /* <script async src="https://www.googletagmanager.com/gtag/js?id=G-SZVLRW13Y8"></script>
         <script>
