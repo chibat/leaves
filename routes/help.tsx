@@ -26,7 +26,17 @@ export default defineRoute(async (req, _ctx) => {
       </Head>
       <Header user={session?.user} authUrl={authUrl} />
       <main class="container">
-        <h1>Help</h1>
+        <h1>
+          <img
+            src="/assets/img/question-circle-fill.svg"
+            alt="Edit"
+            width="32"
+            height="32"
+            class="me-2"
+          >
+          </img>
+          Help
+        </h1>
         <h2>Keyboard Shortcut</h2>
         <div class="post">
           <table>
