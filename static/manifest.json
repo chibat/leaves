@@ -3,7 +3,7 @@
   "short_name": "Leaves",
   "theme_color": "#1fbc92",
   "background_color": "#999999",
-  "display": "standalone",
+  "display": "minimal-ui",
   "scope": "/",
   "start_url": "/",
   "icons": [
