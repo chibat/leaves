@@ -1,4 +1,8 @@
-const kv = await Deno.openKv();
+let kv: Deno.Kv;
+
+export async function initKv() {
+  kv = await Deno.openKv();
+}
 
 type SessionKey = ["session", /* sessionId */ string?];
 

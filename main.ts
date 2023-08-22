@@ -9,6 +9,7 @@ import { start } from "$fresh/server.ts";
 import manifest from "~/fresh.gen.ts";
 import { initPool } from "~/server/db.ts";
 import { env } from "~/server/env.ts";
+import { initKv } from "~/server/kv.ts";
 
 // const render: RenderFunction = (ctx, render) => {
 //   ctx.lang = "ja";
@@ -17,4 +18,5 @@ import { env } from "~/server/env.ts";
 
 env.init();
 initPool();
+initKv();
 await start(manifest);
