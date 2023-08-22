@@ -18,6 +18,7 @@ import { deletePost } from "./procedures/deletePost.ts";
 import { deleteFollow } from "./procedures/deleteFollow.ts";
 import { updatePost } from "./procedures/updatePost.ts";
 import { md2html } from "./procedures/md2html.ts";
+import { getFollowingUsers } from "~/server/trpc/procedures/getFollowingUsers.ts";
 
 const posts = [{ name: "first post" }];
 
@@ -34,6 +35,7 @@ export const appRouter = router({
   getPosts,
   getFollowInfo,
   getFollowerUsers,
+  getFollowingUsers,
   getLikeUsers,
   getSession,
   isLiked,

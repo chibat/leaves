@@ -1,7 +1,7 @@
 import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
 import { getSession } from "~/server/kv.ts";
-import * as uuid from "std/uuid/mod.ts";
+import * as uuid from "$std/uuid/mod.ts";
 import { QueryBuilder } from "./query_builder.ts";
 
 export type Client = PoolClient | Transaction;
@@ -50,20 +50,25 @@ export type AppNotification = {
   name?: string; // app_user
 };
 
-const connectionPool = new Pool(
-  {
-    tls: {
-      enforce: false,
-      caCertificates: [
-        `-----BEGIN CERTIFICATE-----\n${
-          Deno.env.get("MDSNS_DATABASE_CA_CERTIFICATE")
-        }\n-----END CERTIFICATE-----`,
-      ],
+let connectionPool: Pool;
+
+export function initPool() {
+  // build 時に処理が動かないように初期化を遅延させる
+  connectionPool = new Pool(
+    {
+      tls: {
+        enforce: false,
+        caCertificates: [
+          `-----BEGIN CERTIFICATE-----\n${
+            Deno.env.get("MDSNS_DATABASE_CA_CERTIFICATE")
+          }\n-----END CERTIFICATE-----`,
+        ],
+      },
     },
-  },
-  5,
-  true,
-);
+    5,
+    true,
+  );
+}
 
 export async function pool<T>(
   handler: (client: PoolClient) => Promise<T>,
@@ -160,7 +165,6 @@ export async function insertPost(
   client: Client,
   params: { userId: number; source: string; draft: boolean },
 ): Promise<number> {
-  console.log("#### debug02", params.draft);
   const result = await client.queryObject<{ id: number }>`
       INSERT INTO post (user_id, source, draft)
       VALUES (${params.userId}, ${params.source}, ${params.draft})

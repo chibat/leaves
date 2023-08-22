@@ -1,5 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import { deleteCookie } from "std/http/cookie.ts";
+import { deleteCookie } from "$std/http/cookie.ts";
 import { getSession } from "~/server/auth.ts";
 import { deleteSession } from "~/server/kv.ts";
 

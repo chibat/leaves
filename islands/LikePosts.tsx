@@ -48,7 +48,16 @@ export default function LikePosts(props: { loginUser?: AppUser }) {
 
   return (
     <div>
-      <h1>Likes</h1>
+      <h1>
+        <img
+          src="/assets/img/heart-fill.svg"
+          alt="Edit"
+          width="32"
+          height="32"
+          class="me-2"
+        >
+        </img>Likes
+      </h1>
       <Posts posts={posts} user={props.loginUser} />
       <br />
       <br />

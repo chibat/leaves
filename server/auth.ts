@@ -1,7 +1,7 @@
-import { getCookies, setCookie } from "std/http/cookie.ts";
-import { AppUser, pool, selectSession } from "~/server/db.ts";
-import { clientId } from "~/server/env.ts";
+import { getCookies, setCookie } from "$std/http/cookie.ts";
 import * as kv from "~/server/kv.ts";
+import { AppUser, pool, selectSession } from "~/server/db.ts";
+import { env } from "~/server/env.ts";
 
 export type SessionType = { id: string; user: AppUser };
 
@@ -40,12 +40,12 @@ export function getCallbackUrl(requestUrl: string) {
 
 export function getAuthUrl(requestUrl: string): string {
   const redirectUri = getCallbackUrl(requestUrl);
-  if (!clientId) {
+  if (!env.clientId) {
     throw new Error("clientId is undefined");
   }
   return "https://accounts.google.com/o/oauth2/auth?" +
     new URLSearchParams([
-      ["client_id", clientId],
+      ["client_id", env.clientId],
       ["redirect_uri", redirectUri],
       ["scope", "https://www.googleapis.com/auth/userinfo.profile"],
       ["access_type", "offline"],

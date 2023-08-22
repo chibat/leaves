@@ -14,7 +14,7 @@ export default function FollowingUsersModal(props: { userId: number, setModal: (
 
   useEffect(() => {
     setLoading(true);
-    trpc.getFollowerUsers.query({ userId: props.userId }).then(results => {
+    trpc.getFollowingUsers.query({ userId: props.userId }).then(results => {
       setLoading(false);
       setUsers(results);
     });

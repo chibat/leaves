@@ -5,12 +5,16 @@
 /// <reference lib="deno.ns" />
 /// <reference lib="deno.unstable" />
 
-import { RenderFunction, start } from "$fresh/server.ts";
+import { start } from "$fresh/server.ts";
 import manifest from "~/fresh.gen.ts";
+import { initPool } from "~/server/db.ts";
+import { env } from "~/server/env.ts";
 
-const render: RenderFunction = (ctx, render) => {
-  ctx.lang = "ja";
-  render();
-};
+// const render: RenderFunction = (ctx, render) => {
+//   ctx.lang = "ja";
+//   render();
+// };
 
-await start(manifest, { render });
+env.init();
+initPool();
+await start(manifest);

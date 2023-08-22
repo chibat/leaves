@@ -8,28 +8,35 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
   }, []);
 
   return (
-    <>
-      <header class="py-3 mb-3 border-bottom bg-white">
-        <div
-          class="container-fluid d-grid gap-3 align-items-center"
-          style={{ gridTemplateColumns: "1fr 2fr" }}
-        >
-          <div>
-            <img
-              src="/assets/img/icon-192x192.png"
-              width="39"
-              class="me-2"
-              alt="Leaves"
-            />
-            <a class="fs-4 me-3 noDecoration" href="/">Leaves</a>
-            <a class="me-3 noDecoration" href="/">All</a>
+    <nav class="navbar navbar-expand-lg mb-3" style={{ backgroundColor: "#ffffff", borderBottomStyle: "solid", borderBottomWidth: "0.5px", borderBottomColor: "var(--bs-border-color-translucent)" }}>
+      <div class="container-fluid">
+        <img
+          src="/assets/img/icon-192x192.png"
+          width="39"
+          class="me-2"
+          alt="Leaves"
+        />
+        <a class="navbar-brand" href="/">Leaves</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link noDecoration" href="/">Home</a>
+            </li>
             {props.user &&
-              <a class="me-3 noDecoration" href="/following">Following</a>}
-            <a class="me-3 noDecoration" href="/about">About</a>
-          </div>
-          <div class="d-flex align-items-center ms-auto">
-            <a class="noDecoration" href="/search" title="Search">
-              <span class="me-3">
+              <li class="nav-item">
+                <a class="nav-link noDecoration" href="/following">Following</a>
+              </li>
+            }
+            <li>
+              <a class="nav-link noDecoration" href="/about">About</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="noDecoration nav-link" href="/search" title="Search">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -40,10 +47,10 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                 >
                   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                 </svg>
-              </span>
-            </a>
-            <a class="noDecoration" href="/posts/new" title="New Post">
-              <span class="me-3">
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="noDecoration nav-link" href="/posts/new" title="New Post">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -54,53 +61,42 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                 >
                   <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
                 </svg>
-              </span>
-            </a>
+              </a>
+            </li>
             {props.user &&
               (
                 <>
-                  <a href="/notification" title="Notification">
-                    {!props.user.notification &&
-                      (
-                        <img
-                          alt="bell"
-                          src="/assets/img/bell.png"
-                          width="20px"
-                          class="me-3"
-                        />
-                      )}
-                    {props.user.notification &&
-                      (
-                        <img
-                          alt="bell"
-                          src="/assets/img/bell2.png"
-                          width="20px"
-                          class="me-3"
-                        />
-                      )}
-                  </a>
-                  <div class="flex-shrink-0 dropdown">
-                    <a
-                      href={void (0)}
-                      class="d-block link-dark text-decoration-none dropdown-toggle"
-                      id="dropdownUser2"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      style={{ cursor: "pointer" }}
-                    >
+                  <li class="nav-item">
+                    <a class="nav-link" href="/notification" title="Notification">
+                      {!props.user.notification &&
+                        (
+                          <img
+                            alt="bell"
+                            src="/assets/img/bell.png"
+                            width="20px"
+                            class="me-3" />
+                        )}
+                      {props.user.notification &&
+                        (
+                          <img
+                            alt="bell"
+                            src="/assets/img/bell2.png"
+                            width="20px"
+                            class="me-3" />
+                        )}
+                    </a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <img
                         src={props.user.picture}
                         alt="mdo"
                         width="32"
                         height="32"
                         class="rounded-circle"
-                        referrerpolicy="no-referrer"
-                      />
+                        referrerpolicy="no-referrer" />
                     </a>
-                    <ul
-                      class="dropdown-menu text-small shadow"
-                      aria-labelledby="dropdownUser2"
-                    >
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                       <li>
                         <a
                           class="dropdown-item"
@@ -135,7 +131,7 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                       <li>
                         <a class="dropdown-item" href="/help">
                           <img
-                            src="/assets/img/heart-fill.svg"
+                            src="/assets/img/question-circle-fill.svg"
                             alt="Edit"
                             width="16"
                             height="16"
@@ -164,15 +160,17 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                         </a>
                       </li>
                     </ul>
-                  </div>
+                  </li>
                 </>
               )}
             {!props.user &&
-              <a class="noDecoration" href={props.authUrl}>Sign in</a>
+              <li class="nav-item">
+                <a class="nav-link noDecoration" href={props.authUrl}>Sign in</a>
+              </li>
             }
-          </div>
+          </ul>
         </div>
-      </header>
-    </>
+      </div>
+    </nav>
   );
 }
