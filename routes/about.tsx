@@ -60,12 +60,7 @@ export default defineRoute(async (req, _ctx) => {
             利用モジュール
             <ul>
               <li>
-                <a
-                  href="https://github.com/chibat/leaves/blob/main/import_map.json"
-                  target="_blank"
-                >
-                  import_map.json を参照
-                </a>
+                deno.json imports を参照
               </li>
               <li>
                 <a href="https://getbootstrap.com/" target="_blank">
