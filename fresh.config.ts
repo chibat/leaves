@@ -4,5 +4,7 @@ import { env } from "~/server/env.ts";
 
 export default defineConfig({});
 
-env.init();
-initPool();
+if (Deno.args.at(0) !== "build") {
+  env.init();
+  initPool();
+}
