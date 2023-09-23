@@ -103,6 +103,10 @@ export default defineRoute(async (req, _ctx) => {
                 <td>Profile</td>
                 <td>gp</td>
               </tr>
+              <tr>
+                <td>Send/Save Post</td>
+                <td>CTRL+Enter</td>
+              </tr>
             </tbody>
           </table>
         </div>
