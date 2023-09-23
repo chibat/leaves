@@ -1,5 +1,6 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
+import { createRef } from "preact";
 import Mousetrap from "mousetrap";
 import { useEffect } from "preact/hooks";
 import { trpc } from "~/client/trpc.ts";
@@ -10,16 +11,17 @@ export default function Post() {
   const draft = useSignal(false);
   const text = useSignal("");
   const sanitizedHtml = useSignal("");
+  const textarea = createRef();
 
   useEffect(() => {
     (hljs as any).highlightAll();
   });
   useEffect(() => {
     if (!preview.value) {
-      Mousetrap(document.querySelector("textarea") as Element).bind(
+      Mousetrap(textarea.current).bind(
         "mod+enter",
         () => {
-          text.value = (document.getElementById("textarea") as HTMLTextAreaElement).value
+          text.value = textarea.current.value;
           post();
         },
       );
@@ -71,7 +73,7 @@ export default function Post() {
           {!preview.value &&
             (
               <textarea
-                id="textarea"
+                ref={textarea}
                 class="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}

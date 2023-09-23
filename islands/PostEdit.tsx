@@ -4,6 +4,7 @@ import { useEffect, useState } from "preact/hooks";
 import { Post } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
 import Mousetrap from "mousetrap";
+import { createRef } from "preact";
 
 export default function Edit(props: { post: Post }) {
   const postId = props.post.id;
@@ -13,6 +14,7 @@ export default function Edit(props: { post: Post }) {
   const draft = useSignal(props.post.draft);
   const sanitizedHtml = useSignal("");
   const [loading, setLoading] = useState<boolean>(false);
+  const textarea = createRef();
 
   function displayEdit() {
     preview.value = false;
@@ -31,10 +33,10 @@ export default function Edit(props: { post: Post }) {
 
   useEffect(() => {
     if (!preview.value) {
-      Mousetrap(document.querySelector("textarea") as Element).bind(
+      Mousetrap(textarea.current).bind(
         "mod+enter",
         () => {
-          text.value = (document.getElementById("textarea") as HTMLTextAreaElement).value
+          text.value = textarea.current.value;
           save();
         },
       );
@@ -80,7 +82,7 @@ export default function Edit(props: { post: Post }) {
           {!preview.value &&
             (
               <textarea
-                id="textarea"
+                ref={textarea}
                 class="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}
