@@ -1,5 +1,6 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
+import Mousetrap from "mousetrap";
 import { useEffect } from "preact/hooks";
 import { trpc } from "~/client/trpc.ts";
 
@@ -13,6 +14,17 @@ export default function Post() {
   useEffect(() => {
     (hljs as any).highlightAll();
   });
+  useEffect(() => {
+    if (!preview.value) {
+      Mousetrap(document.querySelector("textarea") as Element).bind(
+        "mod+enter",
+        () => {
+          text.value = (document.getElementById("textarea") as HTMLTextAreaElement).value
+          post();
+        },
+      );
+    }
+  }, [preview.value]);
 
   async function post() {
     loading.value = true;
@@ -59,6 +71,7 @@ export default function Post() {
           {!preview.value &&
             (
               <textarea
+                id="textarea"
                 class="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}
@@ -87,11 +100,17 @@ export default function Post() {
             type="checkbox"
             checked={draft.value}
             id="flexCheckDefault"
-            onChange={e => {
+            onChange={(e) => {
               draft.value = !draft.value;
             }}
           />
-          <label class="form-check-label" for="flexCheckDefault" style={{ marginRight: '10px' }}>Draft</label>
+          <label
+            class="form-check-label"
+            for="flexCheckDefault"
+            style={{ marginRight: "10px" }}
+          >
+            Draft
+          </label>
           <button
             class="btn btn-primary"
             onClick={post}

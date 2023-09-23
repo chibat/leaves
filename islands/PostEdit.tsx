@@ -1,32 +1,45 @@
-import { useSignal } from "@preact/signals";
+import { effect, useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect, useState } from "preact/hooks";
 import { Post } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
+import Mousetrap from "mousetrap";
 
 export default function Edit(props: { post: Post }) {
   const postId = props.post.id;
 
-  const [flag, setFlag] = useState<boolean>(true);
+  const preview = useSignal(false);
   const text = useSignal(props.post.source);
   const draft = useSignal(props.post.draft);
   const sanitizedHtml = useSignal("");
   const [loading, setLoading] = useState<boolean>(false);
 
   function displayEdit() {
-    setFlag(true);
+    preview.value = false;
   }
 
   async function displayPreview() {
     sanitizedHtml.value = await trpc.md2html.query({
       source: text.value,
     });
-    setFlag(false);
+    preview.value = true;
   }
 
   useEffect(() => {
     (hljs as any).highlightAll();
   });
+
+  useEffect(() => {
+    if (!preview.value) {
+      Mousetrap(document.querySelector("textarea") as Element).bind(
+        "mod+enter",
+        () => {
+          text.value = (document.getElementById("textarea") as HTMLTextAreaElement).value
+          save();
+        },
+      );
+    }
+  }, [preview.value]);
 
   async function save() {
     setLoading(true);
@@ -49,7 +62,7 @@ export default function Edit(props: { post: Post }) {
           <ul class="nav nav-tabs">
             <li class="nav-item">
               <a
-                class={flag ? "nav-link active" : "nav-link"}
+                class={!preview.value ? "nav-link active" : "nav-link"}
                 onClick={displayEdit}
               >
                 Edit
@@ -57,16 +70,17 @@ export default function Edit(props: { post: Post }) {
             </li>
             <li class="nav-item">
               <a
-                class={!flag ? "nav-link active" : "nav-link"}
+                class={preview.value ? "nav-link active" : "nav-link"}
                 onClick={displayPreview}
               >
                 Preview
               </a>
             </li>
           </ul>
-          {flag &&
+          {!preview.value &&
             (
               <textarea
+                id="textarea"
                 class="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}
@@ -76,7 +90,7 @@ export default function Edit(props: { post: Post }) {
               >
               </textarea>
             )}
-          {!flag &&
+          {preview.value &&
             (
               <span
                 class="post"
