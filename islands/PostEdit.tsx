@@ -121,6 +121,9 @@ export default function Edit(props: { post: Post }) {
           >
             Draft
           </label>
+          <button class="btn btn-light me-2" onClick={() => location.href = `/posts/${postId}`}>
+            Cancel
+          </button>
           <button
             class="btn btn-primary"
             onClick={save}
