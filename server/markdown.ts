@@ -179,6 +179,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       math: ["xmlns"], // Only enabled when math is enabled
       annotation: ["encoding"], // Only enabled when math is enabled
       input: ["type", "checked", "disabled"],
+      code: ["class"],
     },
     allowedClasses: {
       div: ["highlight", "highlight-source-*", "notranslate"],
