@@ -30,11 +30,11 @@ export async function handler(
           `<url><loc>${baseUrl}/users/${user.user_id}</loc><lastmod>${
             new Date(user.updated_at).toISOString()
           }</lastmod></url>`
-        ).join() + posts.map((post) =>
+        ).join("") + posts.map((post) =>
           `<url><loc>${baseUrl}/posts/${post.id}</loc><lastmod>${
             new Date(post.updated_at).toISOString()
           }</lastmod></url>`
-        )
+        ).join("")
       }</urlset>`,
       {
         headers: { "content-type": 'application/xml; charset="UTF-8"' },
