@@ -36,7 +36,15 @@ export default function Post() {
   }, textarea.current);
 
   useEffect(() => {
-    if (!preview.value) {
+    if (preview.value) {
+      Mousetrap.bind(
+        "mod+p",
+        () => {
+          displayEdit();
+          return false;
+        },
+      );
+    } else {
       Mousetrap(textarea.current).bind(
         "mod+enter",
         () => {
@@ -48,14 +56,6 @@ export default function Post() {
         "mod+p",
         () => {
           displayPreview();
-          return false;
-        },
-      );
-    } else {
-      Mousetrap.bind(
-        "mod+p",
-        () => {
-          displayEdit();
           return false;
         },
       );
