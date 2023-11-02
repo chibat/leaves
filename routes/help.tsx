@@ -105,7 +105,11 @@ export default defineRoute(async (req, _ctx) => {
               </tr>
               <tr>
                 <td>Send/Save Post</td>
-                <td>CTRL+Enter</td>
+                <td>(CTRL|⌘)+Enter</td>
+              </tr>
+              <tr>
+                <td>Switch between Preview and Edit</td>
+                <td>(CTRL|⌘)+p</td>
               </tr>
             </tbody>
           </table>

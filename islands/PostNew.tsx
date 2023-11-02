@@ -13,16 +13,50 @@ export default function Post() {
   const sanitizedHtml = useSignal("");
   const textarea = createRef();
 
+  function displayEdit() {
+    preview.value = false;
+  }
+
+  async function displayPreview() {
+    text.value = textarea.current.value;
+    sanitizedHtml.value = await trpc.md2html.query({
+      source: text.value,
+    });
+    preview.value = true;
+  }
+
   useEffect(() => {
     (hljs as any).highlightAll();
   });
+
   useEffect(() => {
-    if (!preview.value) {
+    if (textarea.current) {
+      textarea.current.focus();
+    }
+  }, textarea.current);
+
+  useEffect(() => {
+    if (preview.value) {
+      Mousetrap.bind(
+        "mod+p",
+        () => {
+          displayEdit();
+          return false;
+        },
+      );
+    } else {
       Mousetrap(textarea.current).bind(
         "mod+enter",
         () => {
           text.value = textarea.current.value;
           post();
+        },
+      );
+      Mousetrap(textarea.current).bind(
+        "mod+p",
+        () => {
+          displayPreview();
+          return false;
         },
       );
     }
@@ -50,7 +84,7 @@ export default function Post() {
               <a
                 class={!preview.value ? "nav-link active" : "nav-link"}
                 style={{ cursor: "pointer" }}
-                onClick={() => preview.value = false}
+                onClick={displayEdit}
               >
                 Edit
               </a>
@@ -59,12 +93,7 @@ export default function Post() {
               <a
                 class={preview.value ? "nav-link active" : "nav-link"}
                 style={{ cursor: "pointer" }}
-                onClick={async () => {
-                  sanitizedHtml.value = await trpc.md2html.query({
-                    source: text.value,
-                  });
-                  preview.value = true;
-                }}
+                onClick={displayPreview}
               >
                 Preview
               </a>
