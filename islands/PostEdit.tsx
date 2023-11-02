@@ -21,6 +21,7 @@ export default function Edit(props: { post: Post }) {
   }
 
   async function displayPreview() {
+    text.value = textarea.current.value;
     sanitizedHtml.value = await trpc.md2html.query({
       source: text.value,
     });
@@ -32,12 +33,33 @@ export default function Edit(props: { post: Post }) {
   });
 
   useEffect(() => {
+    if (textarea.current) {
+      textarea.current.focus();
+    }
+  }, textarea.current);
+
+  useEffect(() => {
     if (!preview.value) {
       Mousetrap(textarea.current).bind(
         "mod+enter",
         () => {
           text.value = textarea.current.value;
           save();
+        },
+      );
+      Mousetrap(textarea.current).bind(
+        "mod+p",
+        () => {
+          displayPreview();
+          return false;
+        },
+      );
+    } else {
+      Mousetrap.bind(
+        "mod+p",
+        () => {
+          displayEdit();
+          return false;
         },
       );
     }
