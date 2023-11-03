@@ -18,7 +18,6 @@ export default function Post() {
   }
 
   async function displayPreview() {
-    text.value = textarea.current.value;
     sanitizedHtml.value = await trpc.md2html.query({
       source: text.value,
     });
@@ -48,7 +47,6 @@ export default function Post() {
       Mousetrap(textarea.current).bind(
         "mod+enter",
         () => {
-          text.value = textarea.current.value;
           post();
         },
       );
@@ -108,7 +106,7 @@ export default function Post() {
                 maxLength={10000}
                 value={text.value}
                 autofocus
-                onChange={(e) => text.value = (e.target as any).value}
+                onInput={(e) => text.value = (e.target as any).value}
                 placeholder="Write with markdown"
               >
               </textarea>
