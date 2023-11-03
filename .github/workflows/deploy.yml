@@ -2,8 +2,8 @@ name: Deploy
 on:
   push:
     branches: [main,develop]
-  pull_request:
-    branches: main
+#  pull_request:
+#    branches: main
 
 jobs:
   deploy:
