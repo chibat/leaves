@@ -1,3 +1,4 @@
 /.env
+/static/commit.txt
 *.gz
 _fresh/
