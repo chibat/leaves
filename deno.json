@@ -5,7 +5,7 @@
     "arm": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,/tmp --allow-run=deno,$HOME/.cache/esbuild/bin/esbuild-linux-arm64@0.19.4 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts",
     "linux": "export $(grep -v ^# .env) && deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 --allow-net=:8000,deno.land,dl.deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST,registry.npmjs.org dev.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update .",
-    "build": "git show --format='%H' --no-patch > static/commit.txt && deno run --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 --allow-net=deno.land,dl.deno.land,esm.sh,cdn.jsdelivr.net,registry.npmjs.org dev.ts build",
+    "build": "git show --format='%H' --no-patch > static/build.txt && date --iso-8601='seconds' >> static/build.txt && deno run --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 --allow-net=deno.land,dl.deno.land,esm.sh,cdn.jsdelivr.net,registry.npmjs.org dev.ts build",
     "env": "env",
     "preview": "export $(grep -v ^# .env) && deno run -A main.ts"
   },
