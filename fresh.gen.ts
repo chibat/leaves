@@ -20,17 +20,19 @@ import * as $14 from "./routes/posts/[postId]/edit.tsx";
 import * as $15 from "./routes/posts/[postId]/index.tsx";
 import * as $16 from "./routes/posts/new.tsx";
 import * as $17 from "./routes/search.tsx";
-import * as $18 from "./routes/signout.ts";
-import * as $19 from "./routes/users/[userId].tsx";
+import * as $18 from "./routes/settings.tsx";
+import * as $19 from "./routes/signout.ts";
+import * as $20 from "./routes/users/[userId].tsx";
 import * as $$0 from "./islands/AllPosts.tsx";
-import * as $$1 from "./islands/FollowingPosts.tsx";
-import * as $$2 from "./islands/Header.tsx";
-import * as $$3 from "./islands/LikePosts.tsx";
-import * as $$4 from "./islands/PostEdit.tsx";
-import * as $$5 from "./islands/PostNew.tsx";
-import * as $$6 from "./islands/PostView.tsx";
-import * as $$7 from "./islands/SearchedPosts.tsx";
-import * as $$8 from "./islands/UserPosts.tsx";
+import * as $$1 from "./islands/DeleteAccount.tsx";
+import * as $$2 from "./islands/FollowingPosts.tsx";
+import * as $$3 from "./islands/Header.tsx";
+import * as $$4 from "./islands/LikePosts.tsx";
+import * as $$5 from "./islands/PostEdit.tsx";
+import * as $$6 from "./islands/PostNew.tsx";
+import * as $$7 from "./islands/PostView.tsx";
+import * as $$8 from "./islands/SearchedPosts.tsx";
+import * as $$9 from "./islands/UserPosts.tsx";
 
 const manifest = {
   routes: {
@@ -52,19 +54,21 @@ const manifest = {
     "./routes/posts/[postId]/index.tsx": $15,
     "./routes/posts/new.tsx": $16,
     "./routes/search.tsx": $17,
-    "./routes/signout.ts": $18,
-    "./routes/users/[userId].tsx": $19,
+    "./routes/settings.tsx": $18,
+    "./routes/signout.ts": $19,
+    "./routes/users/[userId].tsx": $20,
   },
   islands: {
     "./islands/AllPosts.tsx": $$0,
-    "./islands/FollowingPosts.tsx": $$1,
-    "./islands/Header.tsx": $$2,
-    "./islands/LikePosts.tsx": $$3,
-    "./islands/PostEdit.tsx": $$4,
-    "./islands/PostNew.tsx": $$5,
-    "./islands/PostView.tsx": $$6,
-    "./islands/SearchedPosts.tsx": $$7,
-    "./islands/UserPosts.tsx": $$8,
+    "./islands/DeleteAccount.tsx": $$1,
+    "./islands/FollowingPosts.tsx": $$2,
+    "./islands/Header.tsx": $$3,
+    "./islands/LikePosts.tsx": $$4,
+    "./islands/PostEdit.tsx": $$5,
+    "./islands/PostNew.tsx": $$6,
+    "./islands/PostView.tsx": $$7,
+    "./islands/SearchedPosts.tsx": $$8,
+    "./islands/UserPosts.tsx": $$9,
   },
   baseUrl: import.meta.url,
 };
