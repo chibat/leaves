@@ -171,13 +171,12 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                       <li>
                         <a class="dropdown-item" href="/settings">
                           <img
-                            src="/assets/img/heart-fill.svg"
+                            src="/assets/img/gear-fill.svg"
                             alt="Settings"
                             width="16"
                             height="16"
                             class="me-2"
-                          >
-                          </img>
+                          />
                           Settings
                         </a>
                       </li>
