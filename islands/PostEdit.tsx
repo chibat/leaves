@@ -32,12 +32,32 @@ export default function Edit(props: { post: Post }) {
   });
 
   useEffect(() => {
-    if (!preview.value) {
+    if (textarea.current) {
+      textarea.current.focus();
+    }
+  }, textarea.current);
+
+  useEffect(() => {
+    if (preview.value) {
+      Mousetrap.bind(
+        "mod+p",
+        () => {
+          displayEdit();
+          return false;
+        },
+      );
+    } else {
       Mousetrap(textarea.current).bind(
         "mod+enter",
         () => {
-          text.value = textarea.current.value;
           save();
+        },
+      );
+      Mousetrap(textarea.current).bind(
+        "mod+p",
+        () => {
+          displayPreview();
+          return false;
         },
       );
     }
@@ -88,7 +108,7 @@ export default function Edit(props: { post: Post }) {
                 maxLength={10000}
                 value={text.value}
                 autofocus
-                onChange={(e) => text.value = (e.target as any).value}
+                onInput={(e) => text.value = (e.target as any).value}
               >
               </textarea>
             )}
