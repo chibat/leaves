@@ -40,6 +40,7 @@ export default defineRoute(async (req, _ctx) => {
           </li>
           <li>Markdown で投稿できるマイクロブログです。</li>
           <li>Google アカウントでログインできます。</li>
+          <li>投稿した本文の YouTube の URL は、プレビューされます。</li>
           <li>
             Production Runtime（次の無料枠を利用しています）
             <ul>
@@ -53,6 +54,7 @@ export default defineRoute(async (req, _ctx) => {
                   Supabase
                 </a>(Postgres database)
               </li>
+              <li><a href="https://github.com/features/actions" target="_blank">GitHub Actions</a>(Deploy and DB Backup)</li>
               <li>Google OAuth</li>
             </ul>
           </li>
@@ -60,12 +62,7 @@ export default defineRoute(async (req, _ctx) => {
             利用モジュール
             <ul>
               <li>
-                <a
-                  href="https://github.com/chibat/leaves/blob/main/import_map.json"
-                  target="_blank"
-                >
-                  import_map.json を参照
-                </a>
+                deno.json imports を参照
               </li>
               <li>
                 <a href="https://getbootstrap.com/" target="_blank">

@@ -1,3 +1,4 @@
 /.env
+/static/build.txt
 *.gz
 _fresh/

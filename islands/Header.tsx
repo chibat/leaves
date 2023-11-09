@@ -8,7 +8,15 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
   }, []);
 
   return (
-    <nav class="navbar navbar-expand-lg mb-3" style={{ backgroundColor: "#ffffff", borderBottomStyle: "solid", borderBottomWidth: "0.5px", borderBottomColor: "var(--bs-border-color-translucent)" }}>
+    <nav
+      class="navbar navbar-expand-lg mb-3"
+      style={{
+        backgroundColor: "#ffffff",
+        borderBottomStyle: "solid",
+        borderBottomWidth: "0.5px",
+        borderBottomColor: "var(--bs-border-color-translucent)",
+      }}
+    >
       <div class="container-fluid">
         <img
           src="/assets/img/icon-192x192.png"
@@ -17,7 +25,15 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
           alt="Leaves"
         />
         <a class="navbar-brand" href="/">Leaves</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -26,10 +42,13 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
               <a class="nav-link noDecoration" href="/">Home</a>
             </li>
             {props.user &&
-              <li class="nav-item">
-                <a class="nav-link noDecoration" href="/following">Following</a>
-              </li>
-            }
+              (
+                <li class="nav-item">
+                  <a class="nav-link noDecoration" href="/following">
+                    Following
+                  </a>
+                </li>
+              )}
             <li>
               <a class="nav-link noDecoration" href="/about">About</a>
             </li>
@@ -50,7 +69,11 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
               </a>
             </li>
             <li class="nav-item">
-              <a class="noDecoration nav-link" href="/posts/new" title="New Post">
+              <a
+                class="noDecoration nav-link"
+                href="/posts/new"
+                title="New Post"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -67,14 +90,19 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
               (
                 <>
                   <li class="nav-item">
-                    <a class="nav-link" href="/notification" title="Notification">
+                    <a
+                      class="nav-link"
+                      href="/notification"
+                      title="Notification"
+                    >
                       {!props.user.notification &&
                         (
                           <img
                             alt="bell"
                             src="/assets/img/bell.png"
                             width="20px"
-                            class="me-3" />
+                            class="me-3"
+                          />
                         )}
                       {props.user.notification &&
                         (
@@ -82,21 +110,33 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                             alt="bell"
                             src="/assets/img/bell2.png"
                             width="20px"
-                            class="me-3" />
+                            class="me-3"
+                          />
                         )}
                     </a>
                   </li>
                   <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a
+                      class="nav-link dropdown-toggle"
+                      href="#"
+                      id="navbarDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
                       <img
                         src={props.user.picture}
                         alt="mdo"
                         width="32"
                         height="32"
                         class="rounded-circle"
-                        referrerpolicy="no-referrer" />
+                        referrerpolicy="no-referrer"
+                      />
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <ul
+                      class="dropdown-menu dropdown-menu-end"
+                      aria-labelledby="navbarDropdown"
+                    >
                       <li>
                         <a
                           class="dropdown-item"
@@ -126,6 +166,18 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                           >
                           </img>
                           Likes
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="/settings">
+                          <img
+                            src="/assets/img/gear-fill.svg"
+                            alt="Settings"
+                            width="16"
+                            height="16"
+                            class="me-2"
+                          />
+                          Settings
                         </a>
                       </li>
                       <li>
@@ -164,10 +216,13 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                 </>
               )}
             {!props.user &&
-              <li class="nav-item">
-                <a class="nav-link noDecoration" href={props.authUrl}>Sign in</a>
-              </li>
-            }
+              (
+                <li class="nav-item">
+                  <a class="nav-link noDecoration" href={props.authUrl}>
+                    Sign in
+                  </a>
+                </li>
+              )}
           </ul>
         </div>
       </div>

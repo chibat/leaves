@@ -142,6 +142,17 @@ export async function upsertUser(
   return result.rows[0];
 }
 
+export async function deleteUser(
+  client: Client,
+  userId: number,
+) {
+  await client.queryObject`
+      DELETE FROM app_user
+      WHERE id = ${userId}
+    `;
+  return;
+}
+
 export async function selectUser(
   client: Client,
   userId: number,

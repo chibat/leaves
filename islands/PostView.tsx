@@ -6,13 +6,14 @@ import { AppUser, Comment, Post } from "~/server/db.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
+import { createRef } from "preact";
 
 export default function PostView(props: { post: Post; postTitle: string; user?: AppUser }) {
   const user = props.user;
   const post = props.post;
 
-  const [flag, setFlag] = useState<boolean>(true);
-  const [commentSource, setCommentSource] = useState<string>("");
+  const preview = useSignal(false);
+  const text = useSignal("");
   const sanitizedCommentHtml = useSignal("");
   const postSource = render(props.post.source, {});
   const [likes, setLikes] = useState<string>("0");
@@ -23,16 +24,17 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
   const [requesting, setRequesting] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
   const message = useSignal("");
+  const textarea = createRef();
 
   function displayEdit() {
-    setFlag(true);
+    preview.value = false;
   }
 
   async function displayPreview() {
     sanitizedCommentHtml.value = await trpc.md2html.query({
-      source: commentSource,
+      source: text.value,
     });
-    setFlag(false);
+    preview.value = true;
   }
 
   async function deletePost() {
@@ -58,9 +60,9 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
 
   async function reply() {
     setLoading(true);
-    await trpc.createComment.mutate({ postId: post.id, source: commentSource });
+    await trpc.createComment.mutate({ postId: post.id, source: text.value });
     await readComments();
-    setCommentSource("");
+    text.value = "";
     sanitizedCommentHtml.value = "";
     displayEdit();
     setLoading(false);
@@ -87,6 +89,16 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
   }
 
   useEffect(() => {
+    (hljs as any).highlightAll();
+  });
+
+  useEffect(() => {
+    if (textarea.current) {
+      textarea.current.focus();
+    }
+  }, textarea.current);
+
+  useEffect(() => {
     setLikes(post.likes);
     (async () => {
       const maybeliked = await trpc.isLiked.query({ postId: post.id });
@@ -111,8 +123,31 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
   }, []);
 
   useEffect(() => {
-    (hljs as any).highlightAll();
-  });
+    if (preview.value) {
+      Mousetrap.bind(
+        "mod+p",
+        () => {
+          displayEdit();
+          return false;
+        },
+      );
+    } else {
+      Mousetrap(textarea.current).bind(
+        "mod+enter",
+        () => {
+          reply();
+        },
+      );
+      Mousetrap(textarea.current).bind(
+        "mod+p",
+        () => {
+          displayPreview();
+          return false;
+        },
+      );
+    }
+  }, [preview.value]);
+
 
   const createdAt = new Date(post.created_at).toLocaleString();
   const updatedAt = new Date(post.updated_at).toLocaleString();
@@ -349,7 +384,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                         <ul class="nav nav-tabs">
                           <li class="nav-item">
                             <a
-                              class={flag ? "nav-link active" : "nav-link"}
+                              class={preview.value ? "nav-link" : "nav-link active"}
                               style={{ cursor: "pointer" }}
                               onClick={displayEdit}
                             >
@@ -358,7 +393,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                           </li>
                           <li class="nav-item">
                             <a
-                              class={!flag ? "nav-link active" : "nav-link"}
+                              class={preview.value ? "nav-link active" : "nav-link"}
                               style={{ cursor: "pointer" }}
                               onClick={displayPreview}
                             >
@@ -366,20 +401,21 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                             </a>
                           </li>
                         </ul>
-                        {flag &&
+                        {!preview.value &&
                           (
                             <textarea
+                              ref={textarea}
                               class="form-control mt-3"
                               style={{ height: "250px" }}
                               maxLength={5000}
-                              value={commentSource}
-                              onChange={(event) =>
-                                setCommentSource((event.target as any).value)}
+                              value={text.value}
+                              onInput={(event) =>
+                                text.value = (event.target as any).value}
                               placeholder="Write a comment with markdown"
                             >
                             </textarea>
                           )}
-                        {!flag &&
+                        {preview.value &&
                           (
                             <span
                               class="post"
@@ -394,7 +430,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                         <button
                           class="btn btn-primary"
                           onClick={reply}
-                          disabled={loading || commentSource.length === 0}
+                          disabled={loading || text.value.length === 0}
                         >
                           {loading &&
                             (

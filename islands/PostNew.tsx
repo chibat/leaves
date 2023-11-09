@@ -1,5 +1,7 @@
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
+import { createRef } from "preact";
+import Mousetrap from "mousetrap";
 import { useEffect } from "preact/hooks";
 import { trpc } from "~/client/trpc.ts";
 
@@ -9,10 +11,54 @@ export default function Post() {
   const draft = useSignal(false);
   const text = useSignal("");
   const sanitizedHtml = useSignal("");
+  const textarea = createRef();
+
+  function displayEdit() {
+    preview.value = false;
+  }
+
+  async function displayPreview() {
+    sanitizedHtml.value = await trpc.md2html.query({
+      source: text.value,
+    });
+    preview.value = true;
+  }
 
   useEffect(() => {
     (hljs as any).highlightAll();
   });
+
+  useEffect(() => {
+    if (textarea.current) {
+      textarea.current.focus();
+    }
+  }, textarea.current);
+
+  useEffect(() => {
+    if (preview.value) {
+      Mousetrap.bind(
+        "mod+p",
+        () => {
+          displayEdit();
+          return false;
+        },
+      );
+    } else {
+      Mousetrap(textarea.current).bind(
+        "mod+enter",
+        () => {
+          post();
+        },
+      );
+      Mousetrap(textarea.current).bind(
+        "mod+p",
+        () => {
+          displayPreview();
+          return false;
+        },
+      );
+    }
+  }, [preview.value]);
 
   async function post() {
     loading.value = true;
@@ -36,7 +82,7 @@ export default function Post() {
               <a
                 class={!preview.value ? "nav-link active" : "nav-link"}
                 style={{ cursor: "pointer" }}
-                onClick={() => preview.value = false}
+                onClick={displayEdit}
               >
                 Edit
               </a>
@@ -45,12 +91,7 @@ export default function Post() {
               <a
                 class={preview.value ? "nav-link active" : "nav-link"}
                 style={{ cursor: "pointer" }}
-                onClick={async () => {
-                  sanitizedHtml.value = await trpc.md2html.query({
-                    source: text.value,
-                  });
-                  preview.value = true;
-                }}
+                onClick={displayPreview}
               >
                 Preview
               </a>
@@ -59,12 +100,13 @@ export default function Post() {
           {!preview.value &&
             (
               <textarea
+                ref={textarea}
                 class="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}
                 value={text.value}
                 autofocus
-                onChange={(e) => text.value = (e.target as any).value}
+                onInput={(e) => text.value = (e.target as any).value}
                 placeholder="Write with markdown"
               >
               </textarea>
@@ -87,11 +129,17 @@ export default function Post() {
             type="checkbox"
             checked={draft.value}
             id="flexCheckDefault"
-            onChange={e => {
+            onChange={(e) => {
               draft.value = !draft.value;
             }}
           />
-          <label class="form-check-label" for="flexCheckDefault" style={{ marginRight: '10px' }}>Draft</label>
+          <label
+            class="form-check-label"
+            for="flexCheckDefault"
+            style={{ marginRight: "10px" }}
+          >
+            Draft
+          </label>
           <button
             class="btn btn-primary"
             onClick={post}

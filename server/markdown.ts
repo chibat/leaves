@@ -53,6 +53,12 @@ class Renderer extends Marked.Renderer {
     if (this.options.baseUrl) {
       href = new URL(href, this.options.baseUrl).href;
     }
+    if (title === undefined && href === text) {
+      const youtubeTag = youtube(href);
+      if (youtubeTag) {
+        return youtubeTag;
+      }
+    }
     return `<a href="${href}" title="${title}" rel="noopener noreferrer" target="_blank">${text}</a>`;
   }
 }
@@ -179,6 +185,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       math: ["xmlns"], // Only enabled when math is enabled
       annotation: ["encoding"], // Only enabled when math is enabled
       input: ["type", "checked", "disabled"],
+      code: ["class"],
     },
     allowedClasses: {
       div: ["highlight", "highlight-source-*", "notranslate"],
@@ -211,4 +218,20 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     },
     allowProtocolRelative: false,
   });
+}
+
+function youtube(url: string) {
+  let id: string | null = null;
+  if (url.startsWith("https://www.youtube.com/watch")) {
+    id = new URL(url).searchParams.get("v");
+  } else if (url.startsWith("https://youtu.be/")) {
+    id = new URL(url).pathname.substring(1);
+  }
+  if (id) {
+    const embedUrl = new URL("https://www.youtube.com");
+    embedUrl.pathname = `/embed/${id}`;
+    const src = embedUrl.toString();
+    return `<iframe width="560" height="315" src="${src}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+  }
+  return null;
 }

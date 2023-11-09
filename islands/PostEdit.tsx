@@ -1,32 +1,67 @@
-import { useSignal } from "@preact/signals";
+import { effect, useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect, useState } from "preact/hooks";
 import { Post } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
+import Mousetrap from "mousetrap";
+import { createRef } from "preact";
 
 export default function Edit(props: { post: Post }) {
   const postId = props.post.id;
 
-  const [flag, setFlag] = useState<boolean>(true);
+  const preview = useSignal(false);
   const text = useSignal(props.post.source);
   const draft = useSignal(props.post.draft);
   const sanitizedHtml = useSignal("");
   const [loading, setLoading] = useState<boolean>(false);
+  const textarea = createRef();
 
   function displayEdit() {
-    setFlag(true);
+    preview.value = false;
   }
 
   async function displayPreview() {
     sanitizedHtml.value = await trpc.md2html.query({
       source: text.value,
     });
-    setFlag(false);
+    preview.value = true;
   }
 
   useEffect(() => {
     (hljs as any).highlightAll();
   });
+
+  useEffect(() => {
+    if (textarea.current) {
+      textarea.current.focus();
+    }
+  }, textarea.current);
+
+  useEffect(() => {
+    if (preview.value) {
+      Mousetrap.bind(
+        "mod+p",
+        () => {
+          displayEdit();
+          return false;
+        },
+      );
+    } else {
+      Mousetrap(textarea.current).bind(
+        "mod+enter",
+        () => {
+          save();
+        },
+      );
+      Mousetrap(textarea.current).bind(
+        "mod+p",
+        () => {
+          displayPreview();
+          return false;
+        },
+      );
+    }
+  }, [preview.value]);
 
   async function save() {
     setLoading(true);
@@ -49,7 +84,7 @@ export default function Edit(props: { post: Post }) {
           <ul class="nav nav-tabs">
             <li class="nav-item">
               <a
-                class={flag ? "nav-link active" : "nav-link"}
+                class={!preview.value ? "nav-link active" : "nav-link"}
                 onClick={displayEdit}
               >
                 Edit
@@ -57,26 +92,27 @@ export default function Edit(props: { post: Post }) {
             </li>
             <li class="nav-item">
               <a
-                class={!flag ? "nav-link active" : "nav-link"}
+                class={preview.value ? "nav-link active" : "nav-link"}
                 onClick={displayPreview}
               >
                 Preview
               </a>
             </li>
           </ul>
-          {flag &&
+          {!preview.value &&
             (
               <textarea
+                ref={textarea}
                 class="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}
                 value={text.value}
                 autofocus
-                onChange={(e) => text.value = (e.target as any).value}
+                onInput={(e) => text.value = (e.target as any).value}
               >
               </textarea>
             )}
-          {!flag &&
+          {preview.value &&
             (
               <span
                 class="post"
@@ -105,6 +141,9 @@ export default function Edit(props: { post: Post }) {
           >
             Draft
           </label>
+          <button class="btn btn-light me-2" onClick={() => location.href = `/posts/${postId}`}>
+            Cancel
+          </button>
           <button
             class="btn btn-primary"
             onClick={save}
