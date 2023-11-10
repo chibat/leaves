@@ -6,6 +6,8 @@ ENV DENO_INSTALL=/deno
 RUN mkdir -p /deno \
     && curl -fsSL https://deno.land/x/install/install.sh | sh \
     && chown -R vscode /deno
+RUN wget https://github.com/supabase/cli/releases/download/v1.110.1/supabase_1.110.1_linux_amd64.deb \
+    && dpkg -i supabase_1.110.1_linux_amd64.deb
 
 ENV PATH=${DENO_INSTALL}/bin:${PATH} \
     DENO_DIR=${DENO_INSTALL}/.cache/deno

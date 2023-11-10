@@ -32,6 +32,7 @@ export interface Database {
           {
             foreignKeyName: "app_session_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "app_user"
             referencedColumns: ["id"]
           }
@@ -99,12 +100,14 @@ export interface Database {
           {
             foreignKeyName: "comment_post_id_fkey"
             columns: ["post_id"]
+            isOneToOne: false
             referencedRelation: "post"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "comment_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "app_user"
             referencedColumns: ["id"]
           }
@@ -133,6 +136,7 @@ export interface Database {
           {
             foreignKeyName: "follow_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "app_user"
             referencedColumns: ["id"]
           }
@@ -161,12 +165,14 @@ export interface Database {
           {
             foreignKeyName: "likes_post_id_fkey"
             columns: ["post_id"]
+            isOneToOne: false
             referencedRelation: "post"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "likes_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "app_user"
             referencedColumns: ["id"]
           }
@@ -219,18 +225,21 @@ export interface Database {
           {
             foreignKeyName: "notification_action_user_id_fkey"
             columns: ["action_user_id"]
+            isOneToOne: false
             referencedRelation: "app_user"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "notification_post_id_fkey"
             columns: ["post_id"]
+            isOneToOne: false
             referencedRelation: "post"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "notification_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "app_user"
             referencedColumns: ["id"]
           }
@@ -265,6 +274,7 @@ export interface Database {
           {
             foreignKeyName: "post_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "app_user"
             referencedColumns: ["id"]
           }
