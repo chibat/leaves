@@ -3,7 +3,7 @@
   "tasks": {
     "win": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$LOCALAPPDATA/Temp --allow-run=$(where deno),$LOCALAPPDATA/Cache/esbuild/bin/esbuild-windows-64@0.19.4 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts",
     "arm": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,/tmp --allow-run=deno,$HOME/.cache/esbuild/bin/esbuild-linux-arm64@0.19.4 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST dev.ts",
-    "linux": "export $(grep -v ^# .env) && deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 --allow-net=:8000,deno.land,dl.deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST,registry.npmjs.org dev.ts",
+    "linux": "export $(grep -v ^# .env) && deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 --allow-net=:8000,deno.land,dl.deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$PGHOST,$SUPABASE_HOST,registry.npmjs.org dev.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update .",
     "build": "git show --format='%H' --no-patch > static/build.txt && date --iso-8601='seconds' >> static/build.txt && deno run --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 --allow-net=deno.land,dl.deno.land,esm.sh,cdn.jsdelivr.net,registry.npmjs.org dev.ts build",
     "env": "env",
@@ -21,6 +21,7 @@
   "imports": {
     "$std/": "https://deno.land/std@0.193.0/",
     "postgres/": "https://deno.land/x/postgres@v0.17.0/",
+    "supabase-js": "https://esm.sh/v133/@supabase/supabase-js@2.38.4",
     "$fresh/": "https://deno.land/x/fresh@1.5.4/",
     "preact": "https://esm.sh/preact@10.18.1",
     "preact/": "https://esm.sh/preact@10.18.1/",

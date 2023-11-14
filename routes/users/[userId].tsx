@@ -8,25 +8,26 @@ import UserPosts from "~/islands/UserPosts.tsx";
 export default defineRoute(async (req, ctx) => {
   const session = await getSession(req);
   const authUrl = session ? undefined : getAuthUrl(req.url);
-  const pageUser = await pool((client) => selectUser(client, Number(ctx.params.userId)));
+  const pageUser = (await selectUser(Number(ctx.params.userId))).data;
   if (!pageUser) {
     return ctx.renderNotFound();
   }
+  const picture = pageUser.picture ?? undefined;
   return (
     <>
       <Head>
         <title>{pageUser.name} - Leaves</title>
         <meta property="og:url" content="https://leaves.deno.dev/"></meta>
         <meta property="og:title" content={`${pageUser.name} - Leaves`}></meta>
-        <meta property="og:description" content={pageUser.name}></meta>
-        <meta property="og:image" content={pageUser.picture} />
+        <meta property="og:description" content={pageUser.name ?? undefined}></meta>
+        <meta property="og:image" content={picture} />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
-        <meta name="twitter:image" content={pageUser.picture} />
+        <meta name="twitter:image" content={picture} />
       </Head>
       <Header user={session?.user} authUrl={authUrl} />
       <main class="container">
-        <h1><img src={pageUser.picture} class="img-thumbnail" alt="" referrerpolicy="no-referrer" /> {pageUser.name}</h1>
+        <h1><img src={picture} class="img-thumbnail" alt="" referrerpolicy="no-referrer" /> {pageUser.name}</h1>
         <UserPosts pageUser={pageUser} loginUser={session?.user} />
       </main>
     </>

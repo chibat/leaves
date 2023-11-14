@@ -1,4 +1,4 @@
-function get(name: string) {
+export function get(name: string) {
   const value = Deno.env.get(name);
   if (!value) {
     console.error("Cannot get the environment variable: " + name);
@@ -16,10 +16,10 @@ class Env {
     this.#clientSecret = get("LEAVES_AUTH_CLIENT_SECRET");
   }
   get clientId() {
-    return this.#clientId ?? "";
+    return this.#clientId!;
   }
   get clientSecret() {
-    return this.#clientSecret ?? "";
+    return this.#clientSecret!;
   }
 }
 

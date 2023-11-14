@@ -53,8 +53,8 @@ export const handler: Handlers = {
         new URLSearchParams([["token", access_token]]),
       );
 
+      const user = (await selectUserByGoogleId(googleUser.id)).data;
       const appUser = await transaction(async (client) => {
-        const user = await selectUserByGoogleId(client, googleUser.id);
         if (user) {
           if (
             user.name !== googleUser.name || user.picture !== googleUser.picture

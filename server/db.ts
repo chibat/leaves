@@ -3,6 +3,23 @@ import { PAGE_ROWS } from "~/common/constants.ts";
 import { SessionType } from "~/server/auth.ts";
 import * as uuid from "$std/uuid/mod.ts";
 import { QueryBuilder } from "./query_builder.ts";
+import * as env from "~/server/env.ts";
+import { createClient, SupabaseClient } from "supabase-js";
+import { Database } from "~/server/database.types.ts";
+
+let supabase: SupabaseClient<Database>;
+
+export function initSupabase() {
+  const url = "https://" + env.get("SUPABASE_HOST");
+  const anon = env.get("SUPABASE_ANON");
+  supabase = createClient<Database>(url, anon, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
+  });
+}
 
 export type Client = PoolClient | Transaction;
 
@@ -107,13 +124,11 @@ export async function transaction<T>(
   }
 }
 
-export async function selectUserByGoogleId(
-  client: Client,
-  googleId: string,
-) {
-  const result = await client.queryObject<AppUser>`
-      SELECT * FROM app_user WHERE google_id=${googleId}`;
-  return result.rowCount ? result.rows[0] : null;
+export function selectUserByGoogleId(googleId: string) {
+  return supabase.from("app_user").select("id,name,picture").eq(
+    "google_id",
+    googleId,
+  ).maybeSingle();
 }
 
 export async function updateUser(
@@ -153,14 +168,12 @@ export async function deleteUser(
   return;
 }
 
-export async function selectUser(
-  client: Client,
-  userId: number,
-): Promise<AppUser | null> {
-  const result = await client.queryObject<AppUser>`
-      SELECT * FROM app_user WHERE id = ${userId}
-    `;
-  return result.rowCount ? result.rows[0] : null;
+export function selectUser(userId: number) {
+  return supabase.from("app_user").select("id,name,picture,notification").eq(
+    "id",
+    userId,
+  )
+    .maybeSingle();
 }
 
 export async function selectUsers(
