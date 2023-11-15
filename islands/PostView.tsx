@@ -93,7 +93,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
   });
 
   useEffect(() => {
-    if (textarea.current) {
+    if (textarea.current && location.hash === "#comment") {
       textarea.current.focus();
     }
   }, textarea.current);
