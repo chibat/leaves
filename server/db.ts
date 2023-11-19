@@ -158,14 +158,9 @@ export async function upsertUser(
 }
 
 export async function deleteUser(
-  client: Client,
   userId: number,
 ) {
-  await client.queryObject`
-      DELETE FROM app_user
-      WHERE id = ${userId}
-    `;
-  return;
+  await supabase.from("app_user").delete().eq("id", userId);
 }
 
 export function selectUser(userId: number) {
@@ -416,29 +411,23 @@ export async function deleteComment(
 }
 
 export async function insertFollow(
-  client: Client,
   params: { userId: number; followingUserId: number },
 ): Promise<void> {
-  await client.queryObject<void>`
-      INSERT INTO follow (user_id, following_user_id)
-      VALUES (${params.userId}, ${params.followingUserId})
-    `;
+  await supabase.from("follow").insert({
+    "user_id": params.userId,
+    "following_user_id": params.followingUserId,
+  });
 
-  try {
-    // TODO async for performance
-    await client.queryObject<void>`
-      INSERT INTO notification (user_id, type, action_user_id)
-      VALUES (${params.followingUserId}, 'follow', ${params.userId})
-    `;
+  await supabase.from("notification").insert({
+    "user_id": params.followingUserId,
+    "type": "follow",
+    action_user_id: params.userId,
+  });
 
-    await client.queryObject`
-      UPDATE app_user
-      SET notification = true
-      WHERE id = ${params.followingUserId}
-    `;
-  } catch (error) {
-    console.error(error);
-  }
+  await supabase.from("app_user").update({ notification: true }).eq(
+    "id",
+    params.followingUserId,
+  );
 }
 
 export async function deleteFollow(
@@ -503,13 +492,13 @@ export async function selectCountFollower(
 }
 
 export async function judgeFollowing(
-  client: Client,
   params: { userId: number; followingUserId: number },
 ): Promise<boolean> {
-  const result = await client.queryObject<{ cnt: string }>`
-      SELECT 1 FROM follow WHERE user_id = ${params.userId} AND following_user_id = ${params.followingUserId}
-    `;
-  return result.rows.length === 1;
+  const result = await supabase.from("follow").select("user_id").match({
+    "user_id": params.userId,
+    "following_user_id": params.followingUserId,
+  });
+  return result.data?.length === 1;
 }
 
 export async function selectNotificationsWithUpdate(
@@ -543,10 +532,10 @@ export async function insertLike(
   client: Client,
   params: { userId: number; postId: number },
 ): Promise<void> {
-  await client.queryObject<void>`
-      INSERT INTO likes (user_id, post_id)
-      VALUES (${params.userId}, ${params.postId})
-    `;
+  await supabase.from("likes").insert({
+    "user_id": params.userId,
+    "post_id": params.postId,
+  });
 
   try {
     // TODO async for performance
@@ -638,9 +627,7 @@ export async function deleteSession(
   client: Client,
   session: SessionType,
 ): Promise<void> {
-  await client.queryObject<void>`
-  DELETE FROM app_session WHERE id = ${session.id}
-`;
+  await supabase.from("app_session").delete().match({ id: session.id });
   await deleteExpiredSession(client, session.user.id);
 }
 

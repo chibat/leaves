@@ -10,11 +10,9 @@ export const createFollow = publicProcedure.input(
   if (!session) {
     return null;
   }
-  await pool((client) =>
-    insertFollow(client, {
-      userId: session.user.id,
-      followingUserId: input.followingUserId,
-    })
-  );
+  await insertFollow({
+    userId: session.user.id,
+    followingUserId: input.followingUserId,
+  });
   return {};
 });

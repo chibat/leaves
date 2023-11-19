@@ -9,7 +9,7 @@ export const deleteUser = publicProcedure.mutation(async ({ ctx }) => {
     return null;
   }
   await db.pool(async (client) => {
-    await db.deleteUser(client, session.user.id);
+    await db.deleteUser(session.user.id);
     await db.deleteSession(client, session);
   });
   return { userId: session.user.id };

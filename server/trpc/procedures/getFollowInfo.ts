@@ -17,7 +17,7 @@ export const getFollowInfo = publicProcedure.input(
     const isFollowing = await (async () => {
       const session = await getSession(ctx.req);
       if (session) {
-        return await judgeFollowing(client, {
+        return await judgeFollowing({
           userId: session.user.id,
           followingUserId: input.userId,
         });
