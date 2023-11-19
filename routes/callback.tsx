@@ -1,7 +1,7 @@
 import { Handlers } from "$fresh/server.ts";
 import { env } from "~/server/env.ts";
 import { createSession, getCallbackUrl } from "~/server/auth.ts";
-import { selectUserByGoogleId, transaction, updateUser, upsertUser } from "~/server/db.ts";
+import { selectUserByGoogleId, upsertUser } from "~/server/db.ts";
 
 export type Token = { access_token: string; refresh_token: string };
 
@@ -53,28 +53,24 @@ export const handler: Handlers = {
         new URLSearchParams([["token", access_token]]),
       );
 
-      const user = (await selectUserByGoogleId(googleUser.id)).data;
-      const appUser = await transaction(async (client) => {
-        if (user) {
-          if (
-            user.name !== googleUser.name || user.picture !== googleUser.picture
-          ) {
-            await updateUser(client, {
-              id: user.id,
-              name: googleUser.name,
-              picture: googleUser.picture,
-            });
-          }
-          return user;
+      let user = (await selectUserByGoogleId(googleUser.id)).data;
+      if (user) {
+        if (
+          user.name === googleUser.name && user.picture === googleUser.picture
+        ) {
+          await createSession(res, user.id);
+          return res;
         }
-        return await upsertUser(client, {
-          googleId: googleUser.id,
-          name: googleUser.name,
-          picture: googleUser.picture,
-        });
-      });
+      }
 
-      await createSession(res, appUser.id);
+      user = (await upsertUser({
+        googleId: googleUser.id,
+        name: googleUser.name,
+        picture: googleUser.picture,
+      })).data!;
+
+      console.log(user);
+      await createSession(res, user.id);
     }
     return res;
   }

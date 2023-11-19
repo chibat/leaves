@@ -131,30 +131,15 @@ export function selectUserByGoogleId(googleId: string) {
   ).maybeSingle();
 }
 
-export async function updateUser(
-  client: Client,
-  params: { id: number; name: string; picture: string },
-) {
-  await client.queryObject<{ id: number }>`
-      UPDATE app_user
-      SET name=${params.name}, picture=${params.picture}, updated_at=CURRENT_TIMESTAMP
-      WHERE id = ${params.id}
-    `;
-  return;
-}
-
-export async function upsertUser(
-  client: Client,
+export function upsertUser(
   params: { googleId: string; name: string; picture: string },
 ) {
-  const result = await client.queryObject<AppUser>`
-  INSERT INTO app_user (google_id, name, picture)
-  VALUES (${params.googleId}, ${params.name}, ${params.picture})
-  ON CONFLICT(google_id)
-  DO UPDATE SET google_id=${params.googleId}, name=${params.name}, picture=${params.picture}, updated_at=CURRENT_TIMESTAMP
-  RETURNING *
-`;
-  return result.rows[0];
+  return supabase.from("app_user").upsert({
+    google_id: params.googleId,
+    name: params.name,
+    picture: params.picture,
+  }, { onConflict: "google_id" }).select("id,google_id,name,picture")
+    .maybeSingle();
 }
 
 export async function deleteUser(
