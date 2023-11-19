@@ -10,11 +10,9 @@ export const deleteFollow = publicProcedure.input(
   if (!session) {
     return null; // TODO
   }
-  await db.pool((client) =>
-    db.deleteFollow(client, {
-      userId: session.user.id,
-      followingUserId: input.followingUserId,
-    })
-  );
+  await db.deleteFollow({
+    userId: session.user.id,
+    followingUserId: input.followingUserId,
+  });
   return {};
 });

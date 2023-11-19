@@ -45,7 +45,7 @@ export interface Database {
           google_id: string | null
           id: number
           name: string
-          notification: boolean | null
+          notification: boolean
           picture: string | null
           updated_at: string | null
         }
@@ -55,7 +55,7 @@ export interface Database {
           google_id?: string | null
           id?: number
           name: string
-          notification?: boolean | null
+          notification?: boolean
           picture?: string | null
           updated_at?: string | null
         }
@@ -65,7 +65,7 @@ export interface Database {
           google_id?: string | null
           id?: number
           name?: string
-          notification?: boolean | null
+          notification?: boolean
           picture?: string | null
           updated_at?: string | null
         }

@@ -10,11 +10,9 @@ export const deleteComment = publicProcedure.input(
   if (!session) {
     return null; // TODO
   }
-  await db.pool((client) =>
-    db.deleteComment(client, {
-      id: input.commentId,
-      userId: session.user.id,
-    })
-  );
+  await db.deleteComment({
+    id: input.commentId,
+    userId: session.user.id,
+  });
   return {};
 });

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { publicProcedure } from "~/server/trpc/context.ts";
-import { insertPost, pool } from "~/server/db.ts";
+import { insertPost } from "~/server/db.ts";
 import { getSession } from "~/server/auth.ts";
 
 export const createPost = publicProcedure.input(
@@ -11,12 +11,10 @@ export const createPost = publicProcedure.input(
     return null;
   }
   const userId = session.user.id;
-  const postId = await pool((client) =>
-    insertPost(client, {
-      userId,
-      source: input.source,
-      draft: input.draft,
-    })
-  );
+  const postId = await insertPost({
+    userId,
+    source: input.source,
+    draft: input.draft,
+  });
   return { postId };
 });

@@ -35,7 +35,8 @@ export default function UserPosts(
 
     const io = new IntersectionObserver((entries) => {
       if (
-        !allLoaded.value && !requesting.value && entries[0].intersectionRatio !== 0
+        !allLoaded.value && !requesting.value &&
+        entries[0].intersectionRatio !== 0
       ) {
         const postId = posts.value.length === 0
           ? undefined

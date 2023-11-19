@@ -11,8 +11,6 @@ export const deletePost = publicProcedure.input(
   if (!session) {
     return null;
   }
-  await db.pool((client) =>
-    db.deletePost(client, { id: input.postId, userId: session.user.id })
-  );
+  await db.deletePost({ id: input.postId, userId: session.user.id });
   return { postId: input.postId };
 });

@@ -1,6 +1,7 @@
 import { useEffect } from "preact/hooks";
 import { AppUser } from "~/server/db.ts";
 import { shortcut } from "~/client/shortcut.ts";
+import { DEFAULT_AVATOR } from "~/common/constants.ts";
 
 export default function Header(props: { user?: AppUser; authUrl?: string }) {
   useEffect(() => {
@@ -125,7 +126,7 @@ export default function Header(props: { user?: AppUser; authUrl?: string }) {
                       aria-expanded="false"
                     >
                       <img
-                        src={props.user.picture}
+                        src={props.user.picture ?? DEFAULT_AVATOR}
                         alt="mdo"
                         width="32"
                         height="32"

@@ -14,15 +14,13 @@ export const updatePost = publicProcedure.input(
   if (!session) {
     return null; // TODO
   }
-  await db.pool((client) =>
-    db.updatePost(client, {
-      postId: input.postId,
-      userId: session.user.id,
-      source: input.source,
-      draft: input.draft,
-    }).catch((error) => {
-      console.log(error);
-    })
-  );
+  await db.updatePost({
+    postId: input.postId,
+    userId: session.user.id,
+    source: input.source,
+    draft: input.draft,
+  }).catch((error) => {
+    console.log(error);
+  });
   return {};
 });

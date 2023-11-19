@@ -10,11 +10,9 @@ export const cancelLike = publicProcedure.input(
   if (!session) {
     return null; // TODO
   }
-  await pool((client) =>
-    deleteLike(client, {
-      userId: session.user.id,
-      postId: input.postId,
-    })
-  );
+  await deleteLike({
+    userId: session.user.id,
+    postId: input.postId,
+  });
   return {};
 });

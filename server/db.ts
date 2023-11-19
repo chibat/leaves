@@ -27,7 +27,7 @@ export type AppUser = {
   id: number;
   google_id?: string;
   name: string;
-  picture?: string;
+  picture: string | null;
   notification: boolean;
   updated_at?: string;
   created_at?: string;
@@ -186,36 +186,35 @@ export async function selectUsers(
 }
 
 export async function insertPost(
-  client: Client,
   params: { userId: number; source: string; draft: boolean },
 ): Promise<number> {
-  const result = await client.queryObject<{ id: number }>`
-      INSERT INTO post (user_id, source, draft)
-      VALUES (${params.userId}, ${params.source}, ${params.draft})
-      RETURNING id
-    `;
-  return result.rows[0].id;
+  const result = await supabase.from("post").insert({
+    user_id: params.userId,
+    source: params.source,
+    draft: params.draft,
+  }).select("id").maybeSingle();
+  return result.data?.id!;
 }
 
 export async function updatePost(
-  client: Client,
   params: { postId: number; userId: number; source: string; draft: boolean },
 ) {
-  await client.queryObject`
-      UPDATE post
-      SET source= ${params.source}, draft= ${params.draft}, updated_at=CURRENT_TIMESTAMP
-      WHERE id = ${params.postId} and user_id = ${params.userId}
-      RETURNING id
-    `;
+  await supabase.from("post")
+    .update({
+      id: params.postId,
+      source: params.source,
+      draft: params.draft,
+      updated_at: new Date().toISOString(),
+    }).match({ "id": params.postId, "user_id": params.userId });
 }
 
 export async function deletePost(
-  client: Client,
   params: { id: number; userId: number },
 ) {
-  await client.queryObject`
-      DELETE FROM post where id = ${params.id} and user_id = ${params.userId}
-    `;
+  await supabase.from("post").delete().match({
+    "id": params.id,
+    "user_id": params.userId,
+  });
 }
 
 const SELECT_POST = `
@@ -360,11 +359,11 @@ export async function insertComment(
   client: Client,
   params: { postId: number; userId: number; source: string },
 ): Promise<void> {
-  await client.queryObject<{ id: number }>`
-      INSERT INTO comment (post_id, user_id, source)
-      VALUES (${params.postId}, ${params.userId}, ${params.source})
-      RETURNING id
-    `;
+  await supabase.from("comment").insert({
+    "post_id": params.postId,
+    "user_id": params.userId,
+    "source": params.source,
+  });
 
   try {
     // TODO async for performance
@@ -408,12 +407,12 @@ export async function selectComments(
 }
 
 export async function deleteComment(
-  client: Client,
   params: { id: number; userId: number },
 ): Promise<void> {
-  await client.queryObject`
-      DELETE FROM comment where id = ${params.id} and user_id = ${params.userId}
-    `;
+  await supabase.from("comment").delete().match({
+    id: params.id,
+    user_id: params.userId,
+  });
 }
 
 export async function insertFollow(
@@ -443,13 +442,12 @@ export async function insertFollow(
 }
 
 export async function deleteFollow(
-  client: Client,
   params: { userId: number; followingUserId: number },
 ): Promise<void> {
-  await client.queryObject<void>`
-      DELETE FROM follow
-      WHERE user_id = ${params.userId} and following_user_id = ${params.followingUserId}
-    `;
+  await supabase.from("follow").delete().match({
+    "user_id": params.userId,
+    "following_user_id": params.followingUserId,
+  });
 }
 
 export async function selectFollowingUsers(
@@ -574,13 +572,12 @@ export async function insertLike(
 }
 
 export async function deleteLike(
-  client: Client,
   params: { userId: number; postId: number },
 ): Promise<void> {
-  await client.queryObject<void>`
-      DELETE FROM likes
-      WHERE user_id = ${params.userId} AND post_id = ${params.postId}
-    `;
+  await supabase.from("likes").delete().match({
+    "post_id": params.postId,
+    "user_id": params.userId,
+  });
 }
 
 export async function selectLikes(
