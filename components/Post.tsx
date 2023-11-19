@@ -94,7 +94,7 @@ export default function Post(props: { post: ResponsePost, user?: AppUser }) {
           <div>
             <a
               class="btn btn-outline-secondary btn-sm"
-              href={props.user ? `/posts/${post.value.id}` : "/auth"}
+              href={props.user ? `/posts/${post.value.id}#comment` : "/auth"}
             >
               Comment
             </a>
