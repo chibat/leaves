@@ -15,11 +15,10 @@ export async function handler(
   }
   const url = new URL(_req.url);
   if (url.pathname === "/sitemap.xml") {
-    const [users, posts] = await pool(async (client) => {
-      const users = await selectUsers(client);
-      const posts = await selectPostIds(client);
-      return [users, posts];
+    const users = await pool(async (client) => {
+      return await selectUsers(client);
     });
+    const posts = (await selectPostIds()).data!;
     const baseUrl = `${url.protocol}//${url.hostname}${
       url.hostname === "localhost" ? (":" + url.port) : ""
     }`;

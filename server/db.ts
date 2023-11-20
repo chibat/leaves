@@ -11,14 +11,9 @@ let supabase: SupabaseClient<Database>;
 
 export function initSupabase() {
   const url = "https://" + env.get("SUPABASE_HOST");
-  const anon = env.get("SUPABASE_ANON");
-  supabase = createClient<Database>(url, anon, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-      detectSessionInUrl: false,
-    },
-  });
+  // const anon = env.get("SUPABASE_ANON");
+  const serviceRoleKey = env.get("SUPABASE_SERVICE_ROLE_KEY");
+  supabase = createClient<Database>(url, serviceRoleKey);
 }
 
 export type Client = PoolClient | Transaction;
@@ -159,6 +154,7 @@ export function selectUser(userId: number) {
 export async function selectUsers(
   client: Client,
 ): Promise<Post[]> {
+  // TODO view かな。
   const result = await client.queryObject<Post>`
   SELECT user_id, max(updated_at) as updated_at FROM post GROUP BY user_id ORDER BY user_id
     `;
@@ -219,13 +215,11 @@ export async function selectPost(
   return result.rowCount ? result.rows[0] : null;
 }
 
-export async function selectPostIds(
-  client: Client,
-): Promise<Array<Post>> {
-  const result = await client.queryObject<
-    Post
-  >`SELECT id,updated_at FROM post WHERE draft = false ORDER BY id DESC LIMIT 1000`;
-  return result.rows;
+export function selectPostIds() {
+  return supabase.from("post").select("id,updated_at").eq("draft", false).order(
+    "id",
+    { ascending: false },
+  ).limit(1000);
 }
 
 export async function selectPosts(
@@ -359,31 +353,22 @@ export async function insertComment(
       RETURNING user_id, post_id
   `;
 
-    for (const row of results.rows) {
-      client.queryObject`
-        UPDATE app_user
-        SET notification = true
-        WHERE id = ${row.user_id}
-  `;
-    }
+    const userIds = results.rows.map((row) => row.user_id);
+    await supabase.from("app_user").update({ notification: true }).in(
+      "id",
+      userIds,
+    );
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function selectComments(
-  client: Client,
+export function selectComments(
   postId: number,
-): Promise<Array<Comment>> {
-  const result = await client.queryObject<Comment>`
-      SELECT
-        c.*,
-        u.name, u.picture
-      FROM comment c
-      LEFT JOIN app_user u ON (c.user_id = u.id)
-      where c.post_id = ${postId}
-      ORDER BY c.id LIMIT 100`;
-  return result.rows;
+) {
+  return supabase.from("comment").select(
+    "id,user_id,source,updated_at,app_user(name,picture)",
+  ).eq("post_id", postId).order("id").limit(100);
 }
 
 export async function deleteComment(
@@ -424,30 +409,27 @@ export async function deleteFollow(
   });
 }
 
-export async function selectFollowingUsers(
-  client: Client,
-  userId: number,
-): Promise<Array<AppUser>> {
-  const result = await client.queryObject<AppUser>`
-      SELECT *
-      FROM app_user
-      WHERE id
-      IN (SELECT following_user_id FROM follow WHERE user_id = ${userId} ORDER BY created_at DESC)
-    `;
-  return result.rows;
+export function selectFollowingUsers(userId: number) {
+  return supabase.from("follow").select(
+    "user:following_user_id(id,name,picture)",
+  ).eq(
+    "user_id",
+    userId,
+  )
+    .order("created_at", { ascending: false }).returns<
+    { user: { id: number; name: string; picture: string } }[]
+  >();
 }
 
-export async function selectFollowerUsers(
-  client: Client,
-  followingUserId: number,
-): Promise<Array<AppUser>> {
-  const result = await client.queryObject<AppUser>`
-      SELECT *
-      FROM app_user
-      WHERE id
-      IN (SELECT user_id FROM follow WHERE following_user_id = ${followingUserId} ORDER BY created_at DESC)
-    `;
-  return result.rows;
+export function selectFollowerUsers(followingUserId: number) {
+  return supabase.from("follow").select("user:user_id(id,name,picture)")
+    .eq(
+      "following_user_id",
+      followingUserId,
+    )
+    .order("created_at", { ascending: false }).returns<
+    { user: { id: number; name: string; picture: string } }[]
+  >();
 }
 
 export async function selectCountFollowing(

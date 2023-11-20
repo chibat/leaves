@@ -2,11 +2,13 @@ import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import Mousetrap from "mousetrap";
-import { AppUser, Comment, Post } from "~/server/db.ts";
+import { AppUser, Post } from "~/server/db.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
 import { createRef } from "preact";
+
+type Comments = ReturnType<typeof trpc.getComments.query> extends Promise<infer T> ? T : never;
 
 export default function PostView(props: { post: Post; postTitle: string; user?: AppUser }) {
   const user = props.user;
@@ -18,7 +20,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
   const postSource = render(props.post.source, {});
   const [likes, setLikes] = useState<string>("0");
   const [liked, setLiked] = useState<boolean>();
-  const [comments, setComments] = useState<Comment[]>();
+  const [comments, setComments] = useState<Comments>();
   const [loading, setLoading] = useState<boolean>(false);
   const [commentLoading, setCommentLoading] = useState<boolean>(true);
   const [requesting, setRequesting] = useState<boolean>(false);
@@ -333,7 +335,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                       <div class="d-flex justify-content-between">
                         <div>
                           <img
-                            src={comment.picture}
+                            src={comment.app_user?.picture!}
                             alt="mdo"
                             width="32"
                             height="32"
@@ -344,7 +346,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                             href={`/users/${comment.user_id}`}
                             class="ms-2 me-2 noDecoration"
                           >
-                            {comment.name}
+                            {comment.app_user?.name}
                           </a>
                           {new Date(comment.updated_at).toLocaleString()}
                         </div>

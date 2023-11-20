@@ -73,27 +73,27 @@ export interface Database {
       }
       comment: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
           post_id: number | null
-          source: string | null
-          updated_at: string | null
+          source: string
+          updated_at: string
           user_id: number | null
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           post_id?: number | null
-          source?: string | null
-          updated_at?: string | null
+          source: string
+          updated_at?: string
           user_id?: number | null
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           post_id?: number | null
-          source?: string | null
-          updated_at?: string | null
+          source?: string
+          updated_at?: string
           user_id?: number | null
         }
         Relationships: [
@@ -133,6 +133,13 @@ export interface Database {
           user_id?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "follow_following_user_id_fkey"
+            columns: ["following_user_id"]
+            isOneToOne: false
+            referencedRelation: "app_user"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "follow_user_id_fkey"
             columns: ["user_id"]
@@ -247,27 +254,27 @@ export interface Database {
       }
       post: {
         Row: {
-          created_at: string | null
+          created_at: string
           draft: boolean | null
           id: number
           source: string | null
-          updated_at: string | null
+          updated_at: string
           user_id: number | null
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           draft?: boolean | null
           id?: number
           source?: string | null
-          updated_at?: string | null
+          updated_at?: string
           user_id?: number | null
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           draft?: boolean | null
           id?: number
           source?: string | null
-          updated_at?: string | null
+          updated_at?: string
           user_id?: number | null
         }
         Relationships: [
