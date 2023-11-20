@@ -432,30 +432,20 @@ export function selectFollowerUsers(followingUserId: number) {
   >();
 }
 
-export async function selectCountFollowing(
-  client: Client,
-  userId: number,
-): Promise<string> {
-  const result = await client.queryObject<{ cnt: string }>`
-      SELECT count(*) || '' as cnt
-      FROM app_user
-      WHERE id
-      IN (SELECT following_user_id FROM follow WHERE user_id = ${userId} ORDER BY created_at DESC)
-    `;
-  return result.rows[0].cnt;
+export async function selectCountFollowing(userId: number): Promise<string> {
+  const { count } = await supabase.from("follow").select("user_id", {
+    count: "exact",
+  }).eq("user_id", userId);
+  return "" + count;
 }
 
 export async function selectCountFollower(
-  client: Client,
   followingUserId: number,
 ): Promise<string> {
-  const result = await client.queryObject<{ cnt: string }>`
-      SELECT count(*) || '' as cnt
-      FROM app_user
-      WHERE id
-      IN (SELECT user_id FROM follow WHERE following_user_id = ${followingUserId} ORDER BY created_at DESC)
-    `;
-  return result.rows[0].cnt;
+  const { count } = await supabase.from("follow").select("user_id", {
+    count: "exact",
+  }).eq("following_user_id", followingUserId);
+  return "" + count;
 }
 
 export async function judgeFollowing(
@@ -468,31 +458,32 @@ export async function judgeFollowing(
   return result.data?.length === 1;
 }
 
-export async function selectNotificationsWithUpdate(
-  client: Client,
-  userId: number,
-): Promise<Array<AppNotification>> {
-  const result = await client.queryObject<AppNotification>`
-      SELECT n.*, u.name
-      FROM notification n
-      LEFT OUTER JOIN app_user U on (n.action_user_id = u.id)
-      WHERE user_id = ${userId}
-      ORDER BY created_at DESC
-      LIMIT 10
-    `;
+export async function selectNotificationsWithUpdate(userId: number) {
+  const { data } = await supabase.from("notification").select(
+    "*,action_user:action_user_id(name)",
+  ).eq("user_id", userId).order("created_at", { ascending: false }).limit(10)
+    .returns<
+      {
+        id: number;
+        type: string;
+        post_id: number;
+        action_user_id: number;
+        created_at: string;
+        action_user: { name: string };
+      }[]
+    >();
 
   try {
     // TODO async for performance
-    await client.queryObject`
-        UPDATE app_user
-        SET notification = false
-        WHERE id = ${userId}
-      `;
+    await supabase.from("app_user").update({ "notification": false }).eq(
+      "id",
+      userId,
+    );
   } catch (error) {
     console.error(error);
   }
 
-  return result.rows;
+  return data!;
 }
 
 export async function insertLike(
@@ -510,17 +501,17 @@ export async function insertLike(
       { user_id: number; post_id: number }
     >`
         INSERT INTO notification (user_id, type, post_id, action_user_id)
-        SELECT user_id, 'like', id, ${params.userId} FROM post
+        SELECT user_id, 'like', ${params.postId}, ${params.userId} FROM post
         WHERE id=${params.postId} AND user_id != ${params.userId}
         RETURNING user_id, post_id
       `;
 
     for (const row of results.rows) {
-      await client.queryObject`
-          UPDATE app_user
-          SET notification = true
-          WHERE id = ${row.user_id}
-        `;
+      console.log("### insertLike");
+      await supabase.from("app_user").update({ notification: true }).eq(
+        "id",
+        row.user_id,
+      );
     }
   } catch (error) {
     console.error(error);

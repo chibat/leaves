@@ -203,29 +203,29 @@ export interface Database {
       notification: {
         Row: {
           action_user_id: number | null
-          created_at: string | null
+          created_at: string
           id: number
           post_id: number | null
           type: Database["public"]["Enums"]["notification_type"]
-          updated_at: string | null
+          updated_at: string
           user_id: number | null
         }
         Insert: {
           action_user_id?: number | null
-          created_at?: string | null
+          created_at?: string
           id?: number
           post_id?: number | null
           type: Database["public"]["Enums"]["notification_type"]
-          updated_at?: string | null
+          updated_at?: string
           user_id?: number | null
         }
         Update: {
           action_user_id?: number | null
-          created_at?: string | null
+          created_at?: string
           id?: number
           post_id?: number | null
           type?: Database["public"]["Enums"]["notification_type"]
-          updated_at?: string | null
+          updated_at?: string
           user_id?: number | null
         }
         Relationships: [

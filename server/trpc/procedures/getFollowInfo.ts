@@ -1,6 +1,5 @@
 import {
   judgeFollowing,
-  pool,
   selectCountFollower,
   selectCountFollowing,
 } from "~/server/db.ts";
@@ -10,20 +9,16 @@ import { z } from "zod";
 
 export const getFollowInfo = publicProcedure.input(
   z.object({ userId: z.number() }),
-).query(({ input, ctx }) => {
-  return pool(async (client) => {
-    const following = await selectCountFollowing(client, input.userId);
-    const followers = await selectCountFollower(client, input.userId);
-    const isFollowing = await (async () => {
-      const session = await getSession(ctx.req);
-      if (session) {
-        return await judgeFollowing({
-          userId: session.user.id,
-          followingUserId: input.userId,
-        });
-      }
-      return false;
-    })();
-    return { following, followers, isFollowing };
-  });
+).query(async ({ input, ctx }) => {
+  const following = await selectCountFollowing(input.userId);
+  const followers = await selectCountFollower(input.userId);
+  const session = await getSession(ctx.req);
+  let isFollowing = false;
+  if (session) {
+    isFollowing = await judgeFollowing({
+      userId: session.user.id,
+      followingUserId: input.userId,
+    });
+  }
+  return { following, followers, isFollowing };
 });
