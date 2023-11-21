@@ -18,7 +18,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
   const text = useSignal("");
   const sanitizedCommentHtml = useSignal("");
   const postSource = render(props.post.source, {});
-  const [likes, setLikes] = useState<string>("0");
+  const [likes, setLikes] = useState<bigint>(0n);
   const [liked, setLiked] = useState<boolean>();
   const [comments, setComments] = useState<Comments>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -78,7 +78,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
     setRequesting(true);
     await trpc.createLike.mutate({ postId });
     setLiked(true);
-    setLikes("" + (Number(likes) + 1));
+    setLikes(likes + 1n);
     setRequesting(false);
   }
 
@@ -86,7 +86,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
     setRequesting(true);
     await trpc.cancelLike.mutate({ postId });
     setLiked(false);
-    setLikes("" + (Number(likes) - 1));
+    setLikes(likes - 1n);
     setRequesting(false);
   }
 
@@ -284,7 +284,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
                             style={{ cursor: "pointer" }}
                             onClick={() => setModal(true)}
                           >
-                            {likes} Like{likes === "1" ? "" : "s"}
+                            {likes} Like{likes === 1n ? "" : "s"}
                           </a>
                         )}
                     </div>

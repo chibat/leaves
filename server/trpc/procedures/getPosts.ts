@@ -71,10 +71,10 @@ export const getPosts = publicProcedure.input(
       source: p.source,
       updated_at: p.updated_at,
       created_at: p.created_at,
-      comments: p.comments,
+      comments: String(p.comments),
       name: p.name,
       picture: p.picture,
-      likes: p.likes,
+      likes: String(p.likes),
       liked: likedPostIds.includes(p.id),
       draft: p.draft,
     };

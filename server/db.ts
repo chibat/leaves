@@ -1,10 +1,9 @@
 import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
-import { PAGE_ROWS } from "~/common/constants.ts";
-import { SessionType } from "~/server/auth.ts";
-import * as uuid from "$std/uuid/mod.ts";
-import { QueryBuilder } from "./query_builder.ts";
-import * as env from "~/server/env.ts";
 import { createClient, SupabaseClient } from "supabase-js";
+import * as uuid from "$std/uuid/mod.ts";
+import { PAGE_ROWS } from "~/common/constants.ts";
+import { QueryBuilder } from "~/server/query_builder.ts";
+import * as env from "~/server/env.ts";
 import { Database } from "~/server/database.types.ts";
 
 export type AppUser = Database["public"]["Tables"]["app_user"]["Row"];
@@ -28,8 +27,8 @@ export type Post = {
   created_at: string;
   name?: string; // app_user
   picture?: string; // app_user
-  comments?: string; // comment
-  likes: string; // likes
+  comments: bigint; // comment
+  likes: bigint; // likes
   draft: boolean;
 };
 
@@ -191,13 +190,8 @@ export async function deletePost(
 }
 
 const SELECT_POST = `
-  SELECT
-    p.*,
-    u.name, u.picture,
-    (SELECT count(*) || '' as comments FROM comment WHERE post_id=p.id),
-    (SELECT count(*) || '' as likes FROM likes WHERE post_id=p.id)
-  FROM post p
-  LEFT JOIN app_user u ON (p.user_id = u.id)
+  SELECT *
+  FROM post_view p
 `;
 
 export async function selectPost(

@@ -27,12 +27,12 @@ export default function Post(props: { post: ResponsePost, userId?: number }) {
       return;
     }
     await trpc.createLike.mutate({ postId: post.value.id });
-    post.value = { ...post.value, liked: true, likes: "" + (Number(post.value.likes) + 1) };
+    post.value = { ...post.value, liked: true, likes: String(BigInt(post.value.likes) + 1n) };
   }
 
   async function cancelLike() {
     await trpc.cancelLike.mutate({ postId: post.value.id });
-    post.value = { ...post.value, liked: false, likes: "" + (Number(post.value.likes) - 1) };
+    post.value = { ...post.value, liked: false, likes: String(BigInt(post.value.likes) - 1n) };
   }
 
   function openModal(postId: number) {
@@ -97,7 +97,7 @@ export default function Post(props: { post: ResponsePost, userId?: number }) {
             >
               Comment
             </a>
-            {Number(post.value.comments) > 0 &&
+            {BigInt(post.value.comments) > 0 &&
               (
                 <a class="ms-2 noDecoration" href={`/posts/${post.value.id}`}>
                   {post.value.comments}{" "}
@@ -138,7 +138,7 @@ export default function Post(props: { post: ResponsePost, userId?: number }) {
                   </img>
                 </a>
               )}
-            {Number(post.value.likes) > 0 &&
+            {BigInt(post.value.likes) > 0n &&
               (
                 <a
                   href={void (0)}
