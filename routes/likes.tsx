@@ -19,7 +19,7 @@ export default defineRoute(async (req, _ctx) => {
       </Head>
       <Header user={session.user} />
       <main class="container">
-        <LikePosts loginUser={session.user} />
+        <LikePosts loginUserId={session.user.id} />
       </main>
     </>
   );

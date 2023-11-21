@@ -2,7 +2,6 @@ import * as hljs from "highlightjs";
 
 import type { ResponsePost } from "~/common/types.ts";
 import { useEffect } from "preact/hooks";
-import { AppUser } from "~/server/db.ts";
 import { Signal } from "@preact/signals-core";
 import Mousetrap from "mousetrap";
 import { useSignal } from "@preact/signals";
@@ -10,7 +9,7 @@ import Post from "~/components/Post.tsx";
 
 type Props = {
   posts: Signal<ResponsePost[]>;
-  user?: AppUser;
+  userId?: number;
 };
 
 export default function Posts(props: Props) {
@@ -23,7 +22,7 @@ export default function Posts(props: Props) {
     });
     Mousetrap.bind("e", () => {
       const post = props.posts.value[selectedIndex.value];
-      if (props.user?.id === post.user_id) {
+      if (props.userId === post.user_id) {
         location.href = `/posts/${post.id}/edit`;
       }
     });
@@ -72,7 +71,7 @@ export default function Posts(props: Props) {
   return (
     <>
       {props.posts.value && props.posts.value.map((post) =>
-        <Post post={post} user={props.user} />
+        <Post post={post} userId={props.userId} />
       )}
     </>
   );

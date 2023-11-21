@@ -37,7 +37,7 @@ export default defineRoute(async (req, ctx) => {
       </Head>
       <Header user={user} authUrl={authUrl} />
       <main class="container">
-        <PostView post={post} postTitle={title} user={user} />
+        <PostView post={post} postTitle={title} userId={user?.id} />
       </main>
     </>
   );

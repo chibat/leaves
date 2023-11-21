@@ -18,7 +18,7 @@ export async function handler(
     const users = await pool(async (client) => {
       return await selectUsers(client);
     });
-    const posts = (await selectPostIds()).data!;
+    const posts = await selectPostIds();
     const baseUrl = `${url.protocol}//${url.hostname}${
       url.hostname === "localhost" ? (":" + url.port) : ""
     }`;

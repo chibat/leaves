@@ -47,7 +47,7 @@ export default defineRoute(async (req, ctx) => {
           (
             <SearchedPosts
               searchWord={searchParams}
-              loginUser={session?.user}
+              loginUserId={session?.user.id}
             />
           )}
       </main>

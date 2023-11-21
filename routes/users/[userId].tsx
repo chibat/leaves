@@ -2,13 +2,13 @@ import { Head } from "$fresh/runtime.ts";
 import { defineRoute } from "$fresh/server.ts";
 import { getAuthUrl, getSession } from "~/server/auth.ts";
 import Header from "~/islands/Header.tsx";
-import { pool, selectUser } from "~/server/db.ts";
+import { selectUser } from "~/server/db.ts";
 import UserPosts from "~/islands/UserPosts.tsx";
 
 export default defineRoute(async (req, ctx) => {
   const session = await getSession(req);
   const authUrl = session ? undefined : getAuthUrl(req.url);
-  const pageUser = (await selectUser(Number(ctx.params.userId))).data;
+  const pageUser = await selectUser(Number(ctx.params.userId));
   if (!pageUser) {
     return ctx.renderNotFound();
   }
@@ -28,7 +28,7 @@ export default defineRoute(async (req, ctx) => {
       <Header user={session?.user} authUrl={authUrl} />
       <main class="container">
         <h1><img src={picture} class="img-thumbnail" alt="" referrerpolicy="no-referrer" /> {pageUser.name}</h1>
-        <UserPosts pageUser={pageUser} loginUser={session?.user} />
+        <UserPosts pageUserId={pageUser.id} loginUserId={session?.user.id} />
       </main>
     </>
   );

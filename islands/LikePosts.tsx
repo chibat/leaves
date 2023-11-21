@@ -3,10 +3,9 @@ import { useSignal } from "@preact/signals";
 import Posts from "~/components/Posts.tsx";
 import { ResponsePost } from "~/common/types.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
-import { AppUser } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
 
-export default function LikePosts(props: { loginUser?: AppUser }) {
+export default function LikePosts(props: { loginUserId?: number }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const spinning = useSignal<boolean>(true);
@@ -58,7 +57,7 @@ export default function LikePosts(props: { loginUser?: AppUser }) {
         >
         </img>Likes
       </h1>
-      <Posts posts={posts} user={props.loginUser} />
+      <Posts posts={posts} userId={props.loginUserId} />
       <br />
       <br />
       {spinning.value &&

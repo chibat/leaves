@@ -1,18 +1,15 @@
 import { getCookies, setCookie } from "$std/http/cookie.ts";
-import { AppUser, insertSession, pool, selectSession } from "~/server/db.ts";
+import { AppUser, insertSession, selectSession } from "~/server/db.ts";
 import { env } from "~/server/env.ts";
 
 export type SessionType = { id: string; user: AppUser };
-
-export async function getSession(
-  req: Request,
-): Promise<SessionType | undefined> {
+export async function getSession(req: Request) {
   const cookies = getCookies(req.headers);
   const sessionId = cookies["session"];
   if (!sessionId) {
     return undefined;
   }
-  const user = await pool((client) => selectSession(client, sessionId));
+  const user = await selectSession(sessionId);
   if (!user) {
     return undefined;
   }
@@ -20,7 +17,7 @@ export async function getSession(
 }
 
 export async function createSession(response: Response, userId: number) {
-  const sessionId = await pool((client) => insertSession(client, userId));
+  const sessionId = await insertSession(userId);
   setCookie(response.headers, {
     name: "session",
     value: sessionId,

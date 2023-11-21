@@ -19,7 +19,7 @@ export default defineRoute(async (req, _ctx) => {
       </Head>
       <Header user={session.user} />
       <main class="container">
-        <FollowingPosts loginUser={session.user} />
+        <FollowingPosts loginUserId={session.user.id} />
       </main>
     </>
   );

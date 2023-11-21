@@ -7,6 +7,8 @@ import * as env from "~/server/env.ts";
 import { createClient, SupabaseClient } from "supabase-js";
 import { Database } from "~/server/database.types.ts";
 
+export type AppUser = Database["public"]["Tables"]["app_user"]["Row"];
+
 let supabase: SupabaseClient<Database>;
 
 export function initSupabase() {
@@ -17,16 +19,6 @@ export function initSupabase() {
 }
 
 export type Client = PoolClient | Transaction;
-
-export type AppUser = {
-  id: number;
-  google_id?: string;
-  name: string;
-  picture: string | null;
-  notification: boolean;
-  updated_at?: string;
-  created_at?: string;
-};
 
 export type Post = {
   id: number;
@@ -119,22 +111,24 @@ export async function transaction<T>(
   }
 }
 
-export function selectUserByGoogleId(googleId: string) {
-  return supabase.from("app_user").select("id,name,picture").eq(
+export async function selectUserByGoogleId(googleId: string) {
+  const { data } = await supabase.from("app_user").select("id,name,picture").eq(
     "google_id",
     googleId,
   ).maybeSingle();
+  return data;
 }
 
-export function upsertUser(
+export async function upsertUser(
   params: { googleId: string; name: string; picture: string },
 ) {
-  return supabase.from("app_user").upsert({
+  const { data } = await supabase.from("app_user").upsert({
     google_id: params.googleId,
     name: params.name,
     picture: params.picture,
   }, { onConflict: "google_id" }).select("id,google_id,name,picture")
     .maybeSingle();
+  return data!;
 }
 
 export async function deleteUser(
@@ -143,12 +137,15 @@ export async function deleteUser(
   await supabase.from("app_user").delete().eq("id", userId);
 }
 
-export function selectUser(userId: number) {
-  return supabase.from("app_user").select("id,name,picture,notification").eq(
+export async function selectUser(userId: number) {
+  const { data } = await supabase.from("app_user").select(
+    "id,name,picture,notification",
+  ).eq(
     "id",
     userId,
   )
     .maybeSingle();
+  return data;
 }
 
 export async function selectUsers(
@@ -164,12 +161,12 @@ export async function selectUsers(
 export async function insertPost(
   params: { userId: number; source: string; draft: boolean },
 ): Promise<number> {
-  const result = await supabase.from("post").insert({
+  const { data } = await supabase.from("post").insert({
     user_id: params.userId,
     source: params.source,
     draft: params.draft,
   }).select("id").maybeSingle();
-  return result.data?.id!;
+  return data?.id!;
 }
 
 export async function updatePost(
@@ -215,11 +212,15 @@ export async function selectPost(
   return result.rowCount ? result.rows[0] : null;
 }
 
-export function selectPostIds() {
-  return supabase.from("post").select("id,updated_at").eq("draft", false).order(
+export async function selectPostIds() {
+  const { data } = await supabase.from("post").select("id,updated_at").eq(
+    "draft",
+    false,
+  ).order(
     "id",
     { ascending: false },
   ).limit(1000);
+  return data!;
 }
 
 export async function selectPosts(
@@ -363,12 +364,13 @@ export async function insertComment(
   }
 }
 
-export function selectComments(
+export async function selectComments(
   postId: number,
 ) {
-  return supabase.from("comment").select(
+  const { data } = await supabase.from("comment").select(
     "id,user_id,source,updated_at,app_user(name,picture)",
   ).eq("post_id", postId).order("id").limit(100);
+  return data!;
 }
 
 export async function deleteComment(
@@ -409,8 +411,8 @@ export async function deleteFollow(
   });
 }
 
-export function selectFollowingUsers(userId: number) {
-  return supabase.from("follow").select(
+export async function selectFollowingUsers(userId: number) {
+  const { data } = await supabase.from("follow").select(
     "user:following_user_id(id,name,picture)",
   ).eq(
     "user_id",
@@ -419,10 +421,13 @@ export function selectFollowingUsers(userId: number) {
     .order("created_at", { ascending: false }).returns<
     { user: { id: number; name: string; picture: string } }[]
   >();
+  return data!.map((row) => row.user);
 }
 
-export function selectFollowerUsers(followingUserId: number) {
-  return supabase.from("follow").select("user:user_id(id,name,picture)")
+export async function selectFollowerUsers(followingUserId: number) {
+  const { data } = await supabase.from("follow").select(
+    "user:user_id(id,name,picture)",
+  )
     .eq(
       "following_user_id",
       followingUserId,
@@ -430,6 +435,7 @@ export function selectFollowerUsers(followingUserId: number) {
     .order("created_at", { ascending: false }).returns<
     { user: { id: number; name: string; picture: string } }[]
   >();
+  return data!.map((row) => row.user);
 }
 
 export async function selectCountFollowing(userId: number): Promise<string> {
@@ -460,7 +466,7 @@ export async function judgeFollowing(
 
 export async function selectNotificationsWithUpdate(userId: number) {
   const { data } = await supabase.from("notification").select(
-    "*,action_user:action_user_id(name)",
+    "id,type,action_user_id,post_id,created_at,action_user:action_user_id(name)",
   ).eq("user_id", userId).order("created_at", { ascending: false }).limit(10)
     .returns<
       {
@@ -489,7 +495,7 @@ export async function selectNotificationsWithUpdate(userId: number) {
 export async function insertLike(
   client: Client,
   params: { userId: number; postId: number },
-): Promise<void> {
+) {
   await supabase.from("likes").insert({
     "user_id": params.userId,
     "post_id": params.postId,
@@ -507,7 +513,6 @@ export async function insertLike(
       `;
 
     for (const row of results.rows) {
-      console.log("### insertLike");
       await supabase.from("app_user").update({ notification: true }).eq(
         "id",
         row.user_id,
@@ -541,69 +546,66 @@ export async function selectLikes(
   return result.rows.map((row) => row.post_id);
 }
 
-export async function selectLikeUsers(
-  client: Client,
-  postId: number,
-): Promise<Array<AppUser>> {
-  const result = await client.queryObject<AppUser>`
-      SELECT *
-      FROM app_user
-      WHERE id
-      IN (SELECT user_id FROM likes WHERE post_id = ${postId} ORDER BY created_at DESC)
-    `;
-  return result.rows;
+export async function selectLikeUsers(postId: number) {
+  const { data } = await supabase.from("likes").select(
+    "app_user(id,name,picture)",
+  ).eq(
+    "post_id",
+    postId,
+  ).order("created_at", { ascending: false });
+  if (!data) {
+    return [];
+  }
+  return data.map((row) => row.app_user!);
 }
 
-export async function selectSession(
-  client: Client,
-  sessionId: string,
-): Promise<AppUser | undefined> {
+export async function selectSession(sessionId: string) {
   if (!uuid.validate(sessionId)) {
     return undefined;
   }
-  const result = await client.queryObject<AppUser>`
-  SELECT * FROM app_user u WHERE EXISTS (SELECT 1 FROM app_session WHERE user_id = u.id AND id = ${sessionId})
-`;
-  return result.rowCount ? result.rows[0] : undefined;
+  const { data } = await supabase.from("app_session").select(
+    "app_user(id,name,picture,notification)",
+  ).eq(
+    "id",
+    sessionId,
+  ).maybeSingle();
+  if (!data) {
+    return undefined;
+  }
+  return data.app_user;
 }
 
-export async function insertSession(
-  client: Client,
-  userId: number,
-): Promise<string> {
-  const result = await client.queryObject<{ id: string }>`
-      INSERT INTO app_session (user_id)
-      VALUES (${userId})
-      RETURNING id
-    `;
-  const sessionId = result.rows[0].id;
-  await deleteExpiredSession(client, userId);
-  return sessionId;
+export async function insertSession(userId: number): Promise<string> {
+  const { data } = await supabase.from("app_session").insert({
+    user_id: userId,
+  })
+    .select("id").maybeSingle();
+  const sessionId = data?.id;
+  await deleteExpiredSession(userId);
+  return sessionId!;
 }
 
 export async function deleteSession(
-  client: Client,
-  session: SessionType,
+  session: { id: string; user: { id: number } },
 ): Promise<void> {
   await supabase.from("app_session").delete().match({ id: session.id });
-  await deleteExpiredSession(client, session.user.id);
+  await deleteExpiredSession(session.user.id);
 }
 
 /**
  * 作成後、1ヶ月経過しているセッションを削除する
  * TODO セッション取得時に updated_at を更新するか？
  *
- * @param client
  * @param userId
  */
-export async function deleteExpiredSession(
-  client: Client,
-  userId: number,
-): Promise<void> {
+export async function deleteExpiredSession(userId: number): Promise<void> {
   try {
-    await client.queryObject<void>`
-  DELETE FROM app_session WHERE user_id = ${userId} AND updated_at < NOW() - CAST('1 months' AS INTERVAL)
-`;
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1);
+    await supabase.from("app_session").delete().eq("user_id", userId).lt(
+      "updated_at",
+      date.toISOString(),
+    );
   } catch (ignore) {
     console.error(ignore);
   }

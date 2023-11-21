@@ -3,17 +3,16 @@ import { PAGE_ROWS } from "~/common/constants.ts";
 import FollowingUsersModal from "~/components/FollowingUsersModal.tsx";
 import FollowerUsersModal from "~/components/FollowerUsersModal.tsx";
 import { ResponsePost } from "~/common/types.ts";
-import { AppUser } from "~/server/db.ts";
 
 import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import { trpc } from "~/client/trpc.ts";
 
 export default function UserPosts(
-  props: { pageUser: AppUser; loginUser?: AppUser },
+  props: { pageUserId: number; loginUserId?: number },
 ) {
-  const loginUser = props.loginUser;
-  const userId = props.pageUser.id;
+  const loginUserId = props.loginUserId;
+  const userId = props.pageUserId;
   const allLoaded = useSignal(false);
 
   const posts = useSignal<Array<ResponsePost>>([]);
@@ -69,7 +68,7 @@ export default function UserPosts(
 
   async function follow() {
     setFollowLoading(true);
-    await trpc.createFollow.mutate({ followingUserId: props.pageUser.id });
+    await trpc.createFollow.mutate({ followingUserId: props.pageUserId });
     setFollowers((Number(followers) + 1).toString());
     setIsFollowing(!isFollowing);
     setFollowLoading(false);
@@ -77,7 +76,7 @@ export default function UserPosts(
 
   async function unfollow() {
     setFollowLoading(true);
-    await trpc.deleteFollow.mutate({ followingUserId: props.pageUser.id });
+    await trpc.deleteFollow.mutate({ followingUserId: props.pageUserId });
     const _followers = Number(followers) - 1;
     setFollowers((_followers < 0 ? 0 : _followers).toString());
     setIsFollowing(!isFollowing);
@@ -94,7 +93,7 @@ export default function UserPosts(
 
   return (
     <div>
-      {(loginUser && props.pageUser.id !== loginUser.id) &&
+      {(loginUserId && props.pageUserId !== loginUserId) &&
         (
           <>
             {isFollowing === false &&
@@ -163,14 +162,14 @@ export default function UserPosts(
               {followers} Follower{followers === "1" ? "" : "s"}
             </a>
           ))}
-        {(loginUser && props.pageUser.id === loginUser.id) &&
+        {(loginUserId && props.pageUserId === loginUserId) &&
           <a class="noDecoration" href="/likes">Likes</a>}
       </div>
       {followingModal &&
         <FollowingUsersModal userId={userId} setModal={setFollowingModal} />}
       {followerModal &&
         <FollowerUsersModal userId={userId} setModal={setFollowerModal} />}
-      <Posts posts={posts} user={loginUser} />
+      <Posts posts={posts} userId={loginUserId} />
       <br />
       <br />
       {spinning.value &&

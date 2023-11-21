@@ -53,7 +53,7 @@ export const handler: Handlers = {
         new URLSearchParams([["token", access_token]]),
       );
 
-      let user = (await selectUserByGoogleId(googleUser.id)).data;
+      let user = await selectUserByGoogleId(googleUser.id);
       if (user) {
         if (
           user.name === googleUser.name && user.picture === googleUser.picture
@@ -63,11 +63,11 @@ export const handler: Handlers = {
         }
       }
 
-      user = (await upsertUser({
+      user = await upsertUser({
         googleId: googleUser.id,
         name: googleUser.name,
         picture: googleUser.picture,
-      })).data!;
+      });
 
       console.log(user);
       await createSession(res, user.id);

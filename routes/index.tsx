@@ -51,7 +51,7 @@ export default defineRoute(async (req, _ctx) => {
             </a>
           </div>
         </div>
-        <AllPosts loginUser={session?.user} />
+        <AllPosts loginUserId={session?.user.id} />
       </main>
     </>
   );

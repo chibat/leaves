@@ -1,12 +1,11 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { ResponsePost } from "~/common/types.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
 import Posts from "~/components/Posts.tsx";
 import { useSignal } from "@preact/signals";
-import { AppUser } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
 
-export default function FollowingPosts(props: { loginUser?: AppUser }) {
+export default function FollowingPosts(props: { loginUserId?: number }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const allLoaded = useSignal(false);
@@ -45,7 +44,7 @@ export default function FollowingPosts(props: { loginUser?: AppUser }) {
   return (
     <div>
       <h1>Following</h1>
-      <Posts posts={posts} user={props.loginUser} />
+      <Posts posts={posts} userId={props.loginUserId} />
       <br />
       <br />
       {spinning.value &&

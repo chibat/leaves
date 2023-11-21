@@ -3,9 +3,8 @@ import { ResponsePost } from "~/common/types.ts";
 import { useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
-import { AppUser } from "~/server/db.ts";
 
-export default function Post(props: { post: ResponsePost, user?: AppUser }) {
+export default function Post(props: { post: ResponsePost, userId?: number }) {
 
   const post = useSignal(props.post);
   const now = new Date();
@@ -23,7 +22,7 @@ export default function Post(props: { post: ResponsePost, user?: AppUser }) {
   }
 
   async function like() {
-    if (!props.user) {
+    if (!props.userId) {
       location.href = "/auth";
       return;
     }
@@ -94,7 +93,7 @@ export default function Post(props: { post: ResponsePost, user?: AppUser }) {
           <div>
             <a
               class="btn btn-outline-secondary btn-sm"
-              href={props.user ? `/posts/${post.value.id}#comment` : "/auth"}
+              href={props.userId ? `/posts/${post.value.id}#comment` : "/auth"}
             >
               Comment
             </a>
@@ -105,7 +104,7 @@ export default function Post(props: { post: ResponsePost, user?: AppUser }) {
                   Comment{post.value.comments === "1" ? "" : "s"}
                 </a>
               )}
-            {props.user && post.value.liked &&
+            {props.userId && post.value.liked &&
               (
                 <a
                   href={void (0)}
@@ -151,7 +150,7 @@ export default function Post(props: { post: ResponsePost, user?: AppUser }) {
                 </a>
               )}
           </div>
-          {props.user && props.user.id === post.value.user_id &&
+          {props.userId === post.value.user_id &&
             (
               <div>
                 <a

@@ -2,7 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import Mousetrap from "mousetrap";
-import { AppUser, Post } from "~/server/db.ts";
+import { Post } from "~/server/db.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
@@ -10,8 +10,8 @@ import { createRef } from "preact";
 
 type Comments = ReturnType<typeof trpc.getComments.query> extends Promise<infer T> ? T : never;
 
-export default function PostView(props: { post: Post; postTitle: string; user?: AppUser }) {
-  const user = props.user;
+export default function PostView(props: { post: Post; postTitle: string; userId?: number }) {
+  const userId = props.userId;
   const post = props.post;
 
   const preview = useSignal(false);
@@ -71,7 +71,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
   }
 
   async function like(postId: number) {
-    if (!props.user) {
+    if (!props.userId) {
       location.href = "/auth";
       return;
     }
@@ -118,7 +118,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
       history.replaceState(null, "", location.pathname);
     }
     Mousetrap.bind("e", () => {
-      if (user?.id === post.user_id) {
+      if (userId === post.user_id) {
         location.href = `/posts/${post.id}/edit`;
       }
     });
@@ -240,7 +240,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                             <span class="visually-hidden">Loading...</span>
                           </div>
                         )}
-                      {user && !requesting && liked &&
+                      {userId && !requesting && liked &&
                         (
                           <a
                             href={void (0)}
@@ -289,7 +289,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                         )}
                     </div>
                     <div>
-                      {user?.id === post.user_id &&
+                      {userId === post.user_id &&
                         (
                           <>
                             <a
@@ -350,7 +350,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                           </a>
                           {new Date(comment.updated_at).toLocaleString()}
                         </div>
-                        {user?.id === comment.user_id &&
+                        {userId === comment.user_id &&
                           (
                             <a
                               href={void (0)}
@@ -380,7 +380,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                     </div>
                   ))}
                 <div class="ms-4 mt-2">
-                  {user && (
+                  {userId && (
                     <>
                       <div class="">
                         <ul class="nav nav-tabs">
@@ -448,7 +448,7 @@ export default function PostView(props: { post: Post; postTitle: string; user?: 
                       </div>
                     </>
                   )}
-                  {!user &&
+                  {!userId &&
                     (
                       <a class="btn btn-outline-secondary btn-sm" href="/auth">
                         Comment

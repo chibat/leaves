@@ -3,10 +3,9 @@ import Posts from "~/components/Posts.tsx";
 import { ResponsePost } from "~/common/types.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
 import { useSignal } from "@preact/signals";
-import { AppUser } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
 
-export default function SearchedPosts(props: { searchWord: string, loginUser?: AppUser }) {
+export default function SearchedPosts(props: { searchWord: string, loginUserId?: number }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const requesting = useSignal<boolean>(false);
@@ -49,7 +48,7 @@ export default function SearchedPosts(props: { searchWord: string, loginUser?: A
   return (
     <div>
       {notFound.value && <span>Not Found</span>}
-      <Posts posts={posts} user={props.loginUser} />
+      <Posts posts={posts} userId={props.loginUserId} />
       <br />
       <br />
       {spinning.value &&

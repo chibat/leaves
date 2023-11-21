@@ -4,10 +4,9 @@ import Posts from "~/components/Posts.tsx";
 import type { ResponsePost } from "~/common/types.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
 import { useSignal } from "@preact/signals";
-import { AppUser } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
 
-export default function AllPosts(props: { loginUser?: AppUser }) {
+export default function AllPosts(props: { loginUserId?: number }) {
 
   const posts = useSignal<Array<ResponsePost>>([]);
   const requesting = useSignal<boolean>(false);
@@ -45,7 +44,7 @@ export default function AllPosts(props: { loginUser?: AppUser }) {
 
   return (
     <div>
-      <Posts posts={posts} user={props.loginUser} />
+      <Posts posts={posts} userId={props.loginUserId} />
       <br />
       <br />
       {spinning.value &&
