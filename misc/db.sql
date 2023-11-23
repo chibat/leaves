@@ -205,3 +205,27 @@ RETURN QUERY (
 END;
 $$ LANGUAGE plpgsql;
 
+create view user_view
+as
+SELECT user_id, max(updated_at) as updated_at FROM post GROUP BY user_id ORDER BY user_id
+;
+
+
+CREATE OR REPLACE PROCEDURE insert_notification_for_comment(p_post_id integer, p_user_id integer)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  user_ids integer[];
+BEGIN
+  INSERT INTO notification (user_id, type, post_id, action_user_id)
+  SELECT user_id, 'comment'::notification_type, id, p_user_id FROM post
+  WHERE id = p_post_id AND user_id != p_user_id
+  UNION
+  SELECT DISTINCT user_id, 'comment'::notification_type, post_id, p_user_id FROM comment
+  WHERE post_id = p_post_id AND user_id != p_user_id
+  RETURNING user_id INTO user_ids
+  ;
+  UPDATE app_user SET NOTIFICATION = true where id in (user_ids)
+  ;
+END
+$$;

@@ -28,7 +28,6 @@ class Renderer extends Marked.Renderer {
   // }
 
   // code(code: string, language?: string) {
-  //   console.log("#### debug", code, language);
   //   // a language of `ts, ignore` should really be `ts`
   //   // and it should be lowercase to ensure it has parity with regular github markdown
   //   language = language?.split(",")?.[0].toLocaleLowerCase();

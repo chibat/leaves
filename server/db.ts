@@ -22,6 +22,11 @@ export type PostViewType = {
   user_id: number;
 };
 
+export type UserViewType = {
+  user_id: number;
+  updated_at: string;
+};
+
 let supabase: SupabaseClient<Database>;
 
 export function initSupabase() {
@@ -161,14 +166,11 @@ export async function selectUser(userId: number) {
   return data;
 }
 
-export async function selectUsers(
-  client: Client,
-): Promise<Post[]> {
-  // TODO view かな。
-  const result = await client.queryObject<Post>`
-  SELECT user_id, max(updated_at) as updated_at FROM post GROUP BY user_id ORDER BY user_id
-    `;
-  return result.rows;
+export async function selectUsers() {
+  const { data } = await supabase.from("user_view").select(
+    "user_id,updated_at",
+  ).returns<UserViewType[]>();
+  return data ?? [];
 }
 
 export async function insertPost(
@@ -218,7 +220,7 @@ export async function selectPostIds() {
     "id",
     { ascending: false },
   ).limit(1000);
-  return data!;
+  return data ?? [];
 }
 
 export async function selectPosts(ltId: number | null) {
@@ -294,7 +296,7 @@ export async function selectPostsBySearchWord(
 export async function insertComment(
   client: Client,
   params: { postId: number; userId: number; source: string },
-): Promise<void> {
+) {
   await supabase.from("comment").insert({
     "post_id": params.postId,
     "user_id": params.userId,
@@ -331,7 +333,7 @@ export async function selectComments(
   const { data } = await supabase.from("comment").select(
     "id,user_id,source,updated_at,app_user(name,picture)",
   ).eq("post_id", postId).order("id").limit(100);
-  return data!;
+  return data ?? [];
 }
 
 export async function deleteComment(
@@ -450,7 +452,7 @@ export async function selectNotificationsWithUpdate(userId: number) {
     console.error(error);
   }
 
-  return data!;
+  return data ?? [];
 }
 
 export async function insertLike(
@@ -494,17 +496,14 @@ export async function deleteLike(
 }
 
 export async function selectLikes(
-  client: Client,
   { userId, postIds }: { userId: number; postIds: number[] },
-): Promise<number[]> {
-  const result = await client.queryObject<{ post_id: number }>`
-      SELECT post_id
-      FROM likes p
-      WHERE user_id = ${userId}
-      AND post_id = ANY(${postIds}::int[])
-    `;
-
-  return result.rows.map((row) => row.post_id);
+) {
+  console.log("### selectLikes");
+  const { data } = await supabase.from("likes").select("post_id").eq(
+    "user_id",
+    userId,
+  ).in("post_id", postIds);
+  return data?.map((row) => row.post_id) ?? [];
 }
 
 export async function selectLikeUsers(postId: number) {

@@ -357,6 +357,21 @@ export interface Database {
           }
         ]
       }
+      user_view: {
+        Row: {
+          updated_at: string | null
+          user_id: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "app_user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Functions: {
       select_following_users_posts: {

@@ -11,7 +11,7 @@ export const isLiked = publicProcedure.input(
     return null;
   }
   const results = await pool((client) =>
-    selectLikes(client, {
+    selectLikes({
       userId: session.user.id,
       postIds: [input.postId],
     }) // TODO: to one postId
