@@ -1,10 +1,10 @@
 import { trpc } from "~/client/trpc.ts";
-import { ResponsePost } from "~/common/types.ts";
 import { useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
+import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
-export default function Post(props: { post: ResponsePost, userId?: number }) {
+export default function Post(props: { post: GetPostsOutput, userId?: number }) {
 
   const post = useSignal(props.post);
   const now = new Date();
@@ -27,12 +27,12 @@ export default function Post(props: { post: ResponsePost, userId?: number }) {
       return;
     }
     await trpc.createLike.mutate({ postId: post.value.id });
-    post.value = { ...post.value, liked: true, likes: String(BigInt(post.value.likes) + 1n) };
+    post.value = { ...post.value, liked: true, likes: post.value.likes + 1 };
   }
 
   async function cancelLike() {
     await trpc.cancelLike.mutate({ postId: post.value.id });
-    post.value = { ...post.value, liked: false, likes: String(BigInt(post.value.likes) - 1n) };
+    post.value = { ...post.value, liked: false, likes: post.value.likes - 1 };
   }
 
   function openModal(postId: number) {
@@ -45,7 +45,7 @@ export default function Post(props: { post: ResponsePost, userId?: number }) {
       <div class="card-header bg-transparent d-flex justify-content-between">
         <div>
           <img
-            src={post.value.picture}
+            src={post.value.picture!}
             alt="mdo"
             width="32"
             height="32"
@@ -101,7 +101,7 @@ export default function Post(props: { post: ResponsePost, userId?: number }) {
               (
                 <a class="ms-2 noDecoration" href={`/posts/${post.value.id}`}>
                   {post.value.comments}{" "}
-                  Comment{post.value.comments === "1" ? "" : "s"}
+                  Comment{post.value.comments === 1 ? "" : "s"}
                 </a>
               )}
             {props.userId && post.value.liked &&
@@ -146,7 +146,7 @@ export default function Post(props: { post: ResponsePost, userId?: number }) {
                   onClick={() => openModal(post.value.id)}
                   style={{ cursor: "pointer" }}
                 >
-                  {post.value.likes} Like{post.value.likes === "1" ? "" : "s"}
+                  {post.value.likes} Like{post.value.likes === 1 ? "" : "s"}
                 </a>
               )}
           </div>

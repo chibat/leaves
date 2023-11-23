@@ -2,13 +2,13 @@ import { Head } from "$fresh/runtime.ts";
 import { defineRoute } from "$fresh/server.ts";
 import Header from "~/islands/Header.tsx";
 import { getAuthUrl, getSession } from "~/server/auth.ts";
-import { pool, selectPost } from "~/server/db.ts";
+import { selectPost } from "~/server/db.ts";
 import PostView from "~/islands/PostView.tsx";
 import { getTitle } from "~/server/getTitle.ts";
 
 export default defineRoute(async (req, ctx) => {
   const postId = Number(ctx.params.postId);
-  const post = await pool((client) => selectPost(client, postId));
+  const post = await selectPost(postId);
   if (!post) {
     return ctx.renderNotFound();
   }
@@ -29,11 +29,15 @@ export default defineRoute(async (req, ctx) => {
         <title>{title}</title>
         <meta property="og:url" content="https://leaves.deno.dev/"></meta>
         <meta property="og:title" content={title}></meta>
-        <meta property="og:description" content={post.source?.substring(0, 1000)?.replaceAll("\n", " ")}></meta>
-        <meta property="og:image" content={post.picture} />
+        <meta
+          property="og:description"
+          content={post.source.substring(0, 1000)?.replaceAll("\n", " ")}
+        >
+        </meta>
+        <meta property="og:image" content={post.picture!} />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
-        <meta name="twitter:image" content={post.picture} />
+        <meta name="twitter:image" content={post.picture!} />
       </Head>
       <Header user={user} authUrl={authUrl} />
       <main class="container">

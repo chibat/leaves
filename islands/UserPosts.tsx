@@ -2,11 +2,11 @@ import Posts from "~/components/Posts.tsx";
 import { PAGE_ROWS } from "~/common/constants.ts";
 import FollowingUsersModal from "~/components/FollowingUsersModal.tsx";
 import FollowerUsersModal from "~/components/FollowerUsersModal.tsx";
-import { ResponsePost } from "~/common/types.ts";
 
 import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import { trpc } from "~/client/trpc.ts";
+import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
 export default function UserPosts(
   props: { pageUserId: number; loginUserId?: number },
@@ -15,7 +15,7 @@ export default function UserPosts(
   const userId = props.pageUserId;
   const allLoaded = useSignal(false);
 
-  const posts = useSignal<Array<ResponsePost>>([]);
+  const posts = useSignal<Array<GetPostsOutput>>([]);
   const requesting = useSignal<boolean>(false);
   const spinning = useSignal<boolean>(true);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
@@ -38,12 +38,11 @@ export default function UserPosts(
         entries[0].intersectionRatio !== 0
       ) {
         const postId = posts.value.length === 0
-          ? undefined
+          ? null
           : posts.value[posts.value.length - 1].id;
         requesting.value = true;
         spinning.value = true;
         trpc.getPosts.query({ postId, userId }).then((results) => {
-          console.log("###", results);
           if (results.length > 0) {
             posts.value = posts.value.concat(results);
           }

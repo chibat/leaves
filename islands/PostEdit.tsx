@@ -1,12 +1,12 @@
-import { effect, useSignal } from "@preact/signals";
+import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import { useEffect, useState } from "preact/hooks";
-import { Post } from "~/server/db.ts";
+import { PostViewType } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";
 import Mousetrap from "mousetrap";
 import { createRef } from "preact";
 
-export default function Edit(props: { post: Post }) {
+export default function Edit(props: { post: PostViewType }) {
   const postId = props.post.id;
 
   const preview = useSignal(false);

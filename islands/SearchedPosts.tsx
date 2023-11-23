@@ -1,13 +1,13 @@
 import { useEffect } from "preact/hooks";
 import Posts from "~/components/Posts.tsx";
-import { ResponsePost } from "~/common/types.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
 import { useSignal } from "@preact/signals";
 import { trpc } from "~/client/trpc.ts";
+import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
 export default function SearchedPosts(props: { searchWord: string, loginUserId?: number }) {
 
-  const posts = useSignal<Array<ResponsePost>>([]);
+  const posts = useSignal<Array<GetPostsOutput>>([]);
   const requesting = useSignal<boolean>(false);
   const spinning = useSignal<boolean>(true);
   const allLoaded = useSignal(false);
@@ -16,7 +16,7 @@ export default function SearchedPosts(props: { searchWord: string, loginUserId?:
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
       if (!requesting.value && entries[0].intersectionRatio !== 0 && !allLoaded.value) {
-        const postId = posts.value.length === 0 ? undefined : posts.value[posts.value.length - 1].id;
+        const postId = posts.value.length === 0 ? null : posts.value[posts.value.length - 1].id;
         requesting.value = true;
         spinning.value = true;
         trpc.getPosts.query({ postId, searchWord: props.searchWord }).then(results => {

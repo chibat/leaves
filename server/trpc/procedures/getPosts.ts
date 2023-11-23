@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { inferProcedureOutput } from "@trpc/server";
 import {
   pool,
-  Post,
+  PostViewType,
   selectFollowingUsersPosts,
   selectLikes,
   selectPosts,
@@ -14,7 +15,7 @@ import { render } from "~/server/markdown.ts";
 
 export const getPosts = publicProcedure.input(
   z.object({
-    postId: z.number().optional(),
+    postId: z.number().nullable(),
     userId: z.number().optional(),
     following: z.boolean().optional(),
     searchWord: z.string().optional(),
@@ -23,10 +24,10 @@ export const getPosts = publicProcedure.input(
   const session = await getSession(ctx.req);
 
   const { posts, likedPostIds } = await pool(async (client) => {
-    let posts: Post[] = [];
+    let posts: PostViewType[] = [];
     if (input.userId) {
       // specified user only
-      posts = await selectUserPost(client, {
+      posts = await selectUserPost({
         userId: input.userId,
         self: input.userId === session?.user.id,
         ltId: input.postId,
@@ -34,19 +35,16 @@ export const getPosts = publicProcedure.input(
     } else if (input.following && session) {
       // following user only
       const userId = session.user.id;
-      posts = await selectFollowingUsersPosts(client, {
-        userId,
-        ltId: input.postId,
-      });
+      posts = await selectFollowingUsersPosts({ userId, ltId: input.postId });
     } else if (input.searchWord) {
-      posts = await selectPostsBySearchWord(client, {
+      posts = await selectPostsBySearchWord({
         searchWord: input.searchWord,
         postId: input.postId,
-        loginUserId: session?.user.id,
+        loginUserId: session ? session.user.id : null,
       });
     } else {
       // all user
-      posts = await selectPosts(client, input.postId);
+      posts = await selectPosts(input.postId);
     }
 
     const likedPostIds = session
@@ -71,12 +69,14 @@ export const getPosts = publicProcedure.input(
       source: p.source,
       updated_at: p.updated_at,
       created_at: p.created_at,
-      comments: String(p.comments),
+      comments: p.comments,
       name: p.name,
       picture: p.picture,
-      likes: String(p.likes),
+      likes: p.likes,
       liked: likedPostIds.includes(p.id),
       draft: p.draft,
     };
   });
 });
+
+export type GetPostsOutput = (inferProcedureOutput<typeof getPosts>)[number];

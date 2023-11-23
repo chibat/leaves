@@ -2,7 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
 import * as hljs from "highlightjs";
 import Mousetrap from "mousetrap";
-import { Post } from "~/server/db.ts";
+import { PostViewType } from "~/server/db.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
@@ -10,15 +10,15 @@ import { createRef } from "preact";
 
 type Comments = ReturnType<typeof trpc.getComments.query> extends Promise<infer T> ? T : never;
 
-export default function PostView(props: { post: Post; postTitle: string; userId?: number }) {
+export default function PostView(props: { post: PostViewType; postTitle: string; userId?: number }) {
   const userId = props.userId;
   const post = props.post;
 
   const preview = useSignal(false);
   const text = useSignal("");
   const sanitizedCommentHtml = useSignal("");
-  const postSource = render(props.post.source, {});
-  const [likes, setLikes] = useState<bigint>(0n);
+  const postSource = render(props.post.source!, {});
+  const [likes, setLikes] = useState<number>(0);
   const [liked, setLiked] = useState<boolean>();
   const [comments, setComments] = useState<Comments>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -78,7 +78,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
     setRequesting(true);
     await trpc.createLike.mutate({ postId });
     setLiked(true);
-    setLikes(likes + 1n);
+    setLikes(likes + 1);
     setRequesting(false);
   }
 
@@ -86,7 +86,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
     setRequesting(true);
     await trpc.cancelLike.mutate({ postId });
     setLiked(false);
-    setLikes(likes - 1n);
+    setLikes(likes - 1);
     setRequesting(false);
   }
 
@@ -186,7 +186,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
               <div class="card-header bg-transparent d-flex justify-content-between">
                 <div>
                   <img
-                    src={post.picture}
+                    src={post.picture!}
                     alt="mdo"
                     width="32"
                     height="32"
@@ -284,7 +284,7 @@ export default function PostView(props: { post: Post; postTitle: string; userId?
                             style={{ cursor: "pointer" }}
                             onClick={() => setModal(true)}
                           >
-                            {likes} Like{likes === 1n ? "" : "s"}
+                            {likes} Like{likes === 1 ? "" : "s"}
                           </a>
                         )}
                     </div>

@@ -92,3 +92,116 @@ CREATE TABLE likes (
  PRIMARY KEY (user_id, post_id)
 );
 
+
+----
+
+select * from select_posts_by_word('todo', null, null);
+
+CREATE OR REPLACE FUNCTION select_posts_by_word(search_word TEXT, login_user_id INTEGER , post_id INTEGER)
+RETURNS TABLE(
+    id integer,
+    user_id integer,
+    source text,
+    updated_at timestamp with time zone,
+    created_at timestamp with time zone,
+    draft boolean,
+    name text,
+    picture text,
+    comments int8,
+    likes int8
+) AS
+$$
+BEGIN
+RETURN QUERY (
+  SELECT
+    v.id,
+    v.user_id,
+    v.source,
+    v.updated_at,
+    v.created_at,
+    v.draft,
+    v.name,
+    v.picture,
+    v.comments,
+    v.likes
+  FROM post_view v
+  WHERE v.source &@~ search_word
+  AND (v.draft = false 
+  OR (login_user_id IS NOT NULL AND v.user_id = login_user_id)
+  )
+  AND (v.id < post_id OR post_id IS NULL)
+  ORDER BY v.id DESC LIMIT 10
+);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION select_following_users_posts(login_user_id INTEGER , post_id INTEGER)
+RETURNS TABLE(
+    id integer,
+    user_id integer,
+    source text,
+    updated_at timestamp with time zone,
+    created_at timestamp with time zone,
+    draft boolean,
+    name text,
+    picture text,
+    comments int8,
+    likes int8
+) AS
+$$
+BEGIN
+RETURN QUERY (
+  SELECT
+    v.id,
+    v.user_id,
+    v.source,
+    v.updated_at,
+    v.created_at,
+    v.draft,
+    v.name,
+    v.picture,
+    v.comments,
+    v.likes
+  FROM post_view v
+  WHERE v.draft = false AND  v.user_id IN (SELECT f.following_user_id FROM follow f WHERE f.user_id = login_user_id)
+  AND (post_id IS NULL OR v.id < post_id)
+  ORDER BY v.id DESC LIMIT 10
+);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION select_liked_posts(login_user_id INTEGER , post_id INTEGER)
+RETURNS TABLE(
+    id integer,
+    user_id integer,
+    source text,
+    updated_at timestamp with time zone,
+    created_at timestamp with time zone,
+    draft boolean,
+    name text,
+    picture text,
+    comments int8,
+    likes int8
+) AS
+$$
+BEGIN
+RETURN QUERY (
+  SELECT
+    v.id,
+    v.user_id,
+    v.source,
+    v.updated_at,
+    v.created_at,
+    v.draft,
+    v.name,
+    v.picture,
+    v.comments,
+    v.likes
+  FROM post_view v
+  WHERE v.draft = false AND v.id IN (SELECT l.post_id FROM likes l WHERE l.user_id = login_user_id)
+  AND (post_id IS NULL OR v.id < post_id)
+  ORDER BY v.id DESC LIMIT 10
+);
+END;
+$$ LANGUAGE plpgsql;
+

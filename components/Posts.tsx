@@ -1,14 +1,14 @@
 import * as hljs from "highlightjs";
 
-import type { ResponsePost } from "~/common/types.ts";
 import { useEffect } from "preact/hooks";
 import { Signal } from "@preact/signals-core";
 import Mousetrap from "mousetrap";
 import { useSignal } from "@preact/signals";
 import Post from "~/components/Post.tsx";
+import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
 type Props = {
-  posts: Signal<ResponsePost[]>;
+  posts: Signal<GetPostsOutput[]>;
   userId?: number;
 };
 

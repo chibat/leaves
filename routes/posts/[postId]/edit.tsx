@@ -1,6 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import { defineRoute } from "$fresh/server.ts";
-import { pool, selectPost } from "~/server/db.ts";
+import { selectPost } from "~/server/db.ts";
 import Header from "~/islands/Header.tsx";
 import { getAuthUrl, getSession } from "~/server/auth.ts";
 import PostEdit from "~/islands/PostEdit.tsx";
@@ -16,7 +16,7 @@ export default defineRoute(async (req, ctx) => {
   const authUrl = session ? undefined : getAuthUrl(req.url);
 
   const postId = Number(ctx.params.postId);
-  const post = await pool((client) => selectPost(client, postId));
+  const post = await selectPost(postId);
   if (!post) {
     return ctx.renderNotFound();
   }

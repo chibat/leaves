@@ -105,6 +105,13 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "comment_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "post_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "comment_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -177,6 +184,13 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "post_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "likes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -241,6 +255,13 @@ export interface Database {
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "post"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "post_view"
             referencedColumns: ["id"]
           },
           {
@@ -313,10 +334,86 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      post_view: {
+        Row: {
+          comments: number | null
+          created_at: string | null
+          draft: boolean | null
+          id: number | null
+          likes: number | null
+          name: string | null
+          picture: string | null
+          source: string | null
+          updated_at: string | null
+          user_id: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "app_user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Functions: {
-      [_ in never]: never
+      select_following_users_posts: {
+        Args: {
+          login_user_id: number
+          post_id: number
+        }
+        Returns: {
+          id: number
+          user_id: number
+          source: string
+          updated_at: string
+          created_at: string
+          draft: boolean
+          name: string
+          picture: string
+          comments: number
+          likes: number
+        }[]
+      }
+      select_liked_posts: {
+        Args: {
+          login_user_id: number
+          post_id: number
+        }
+        Returns: {
+          id: number
+          user_id: number
+          source: string
+          updated_at: string
+          created_at: string
+          draft: boolean
+          name: string
+          picture: string
+          comments: number
+          likes: number
+        }[]
+      }
+      select_posts_by_word: {
+        Args: {
+          search_word: string
+          login_user_id: number
+          post_id: number
+        }
+        Returns: {
+          id: number
+          user_id: number
+          source: string
+          updated_at: string
+          created_at: string
+          draft: boolean
+          name: string
+          picture: string
+          comments: number
+          likes: number
+        }[]
+      }
     }
     Enums: {
       notification_type: "follow" | "like" | "comment"

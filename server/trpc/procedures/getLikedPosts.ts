@@ -6,7 +6,7 @@ import { render } from "~/server/markdown.ts";
 
 export const getLikedPosts = publicProcedure.input(
   z.object({
-    postId: z.number().optional(),
+    postId: z.number().nullable(),
   }),
 ).query(async ({ input, ctx }) => {
   const session = await getSession(ctx.req);
@@ -16,7 +16,7 @@ export const getLikedPosts = publicProcedure.input(
   const user = session.user;
 
   const { posts, likedPostIds } = await pool(async (client) => {
-    const posts = await selectLikedPosts(client, {
+    const posts = await selectLikedPosts({
       userId: user.id,
       ltId: input.postId,
     });

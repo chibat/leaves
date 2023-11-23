@@ -2,11 +2,25 @@ import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
 import { createClient, SupabaseClient } from "supabase-js";
 import * as uuid from "$std/uuid/mod.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
-import { QueryBuilder } from "~/server/query_builder.ts";
 import * as env from "~/server/env.ts";
 import { Database } from "~/server/database.types.ts";
 
 export type AppUser = Database["public"]["Tables"]["app_user"]["Row"];
+export type PostViewTypeA = Database["public"]["Views"]["post_view"]["Row"];
+
+// View の型定義の自動生成はフィールドが全部 null 許可になってしまうので明示的に定義
+export type PostViewType = {
+  comments: number;
+  created_at: string;
+  draft: boolean;
+  id: number;
+  likes: number;
+  name: string;
+  picture: string | null;
+  source: string;
+  updated_at: string;
+  user_id: number;
+};
 
 let supabase: SupabaseClient<Database>;
 
@@ -189,21 +203,11 @@ export async function deletePost(
   });
 }
 
-const SELECT_POST = `
-  SELECT *
-  FROM post_view p
-`;
-
-export async function selectPost(
-  client: Client,
-  id: number,
-): Promise<Post | null> {
-  const result = await client.queryObject<Post>(
-    `${SELECT_POST}
-      WHERE p.id=$1`,
-    [id],
-  );
-  return result.rowCount ? result.rows[0] : null;
+export async function selectPost(id: number) {
+  const { data } = await supabase.from("post_view").select("*").eq("id", id)
+    .returns<PostViewType[]>()
+    .maybeSingle();
+  return data;
 }
 
 export async function selectPostIds() {
@@ -217,111 +221,74 @@ export async function selectPostIds() {
   return data!;
 }
 
-export async function selectPosts(
-  client: Client,
-  ltId?: number,
-): Promise<Array<Post>> {
-  const builder = new QueryBuilder().append(SELECT_POST).append(
-    "WHERE p.draft = false",
-  );
+export async function selectPosts(ltId: number | null) {
+  const builder = supabase.from("post_view").select("*").eq("draft", false);
   if (ltId) {
-    builder.append`AND p.id < ${ltId}`;
+    builder.lt("id", ltId);
   }
-  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
-  const result = await client.queryObject<Post>(
-    builder.query,
-    builder.args,
-  );
-  return result.rows;
+  const { data } = await builder.order("id", { ascending: false }).limit(
+    PAGE_ROWS,
+  ).returns<PostViewType[]>();
+  return data ?? [];
 }
 
 export async function selectUserPost(
-  client: Client,
-  params: { userId: number; self: boolean; ltId?: number },
-): Promise<Array<Post>> {
-  const builder = new QueryBuilder()
-    .append(SELECT_POST)
-    .append`WHERE p.user_id = ${params.userId}`;
+  params: { userId: number; self: boolean; ltId: number | null },
+) {
+  const builder = supabase.from("post_view").select("*").eq(
+    "user_id",
+    params.userId,
+  );
   if (!params.self) {
-    builder.append`AND p.draft = false`;
+    builder.eq("draft", false);
   }
   if (params.ltId) {
-    builder.append`AND p.id < ${params.ltId}`;
+    builder.lt("id", params.ltId);
   }
-  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
-  const result = await client.queryObject<Post>(
-    builder.query,
-    builder.args,
-  );
-  return result.rows;
+  const { data } = await builder.order("id", { ascending: false }).limit(
+    PAGE_ROWS,
+  ).returns<PostViewType[]>();
+  return data ?? [];
 }
 
 export async function selectFollowingUsersPosts(
-  client: Client,
-  params: { userId: number; ltId?: number },
-): Promise<Array<Post>> {
-  const builder = new QueryBuilder()
-    .append(SELECT_POST)
-    .append`WHERE p.draft = false AND  p.user_id IN (SELECT following_user_id FROM follow WHERE user_id = ${params.userId})`;
-  if (params.ltId) {
-    builder.append`AND p.id < ${params.ltId}`;
-  }
-  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
-  const result = await client.queryObject<Post>(
-    builder.query,
-    builder.args,
-  );
-  return result.rows;
+  params: { userId: number; ltId: number | null },
+) {
+  const { data } = await supabase.rpc("select_following_users_posts", {
+    login_user_id: params.userId,
+    post_id: params.ltId!,
+  });
+  return data ?? [];
 }
 
 export async function selectLikedPosts(
-  client: Client,
-  params: { userId: number; ltId?: number },
-): Promise<Array<Post>> {
-  const builder = new QueryBuilder()
-    .append(SELECT_POST)
-    .append`WHERE p.draft = false AND p.id IN (SELECT post_id FROM likes WHERE user_id = ${params.userId}`;
-  if (params.ltId) {
-    builder.append`AND post_id < ${params.ltId} `;
-  }
-  builder.append(
-    `ORDER BY post_id DESC) ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`,
-  );
-  const result = await client.queryObject<Post>(
-    builder.query,
-    builder.args,
-  );
-  return result.rows;
+  params: { userId: number; ltId: number | null },
+) {
+  const { data } = await supabase.rpc("select_liked_posts", {
+    login_user_id: params.userId,
+    post_id: params.ltId!,
+  });
+  return data ?? [];
 }
 
 export async function selectPostsBySearchWord(
-  client: Client,
   params: {
     searchWord: string;
-    postId?: number;
-    loginUserId?: number;
+    postId: number | null;
+    loginUserId: number | null;
   },
-): Promise<Array<Post>> {
+) {
   const searchWord = params.searchWord.trim();
   if (searchWord.trim().length === 0) {
     return [];
   }
-  const builder = new QueryBuilder()
-    .append(SELECT_POST)
-    .append`WHERE p.source &@~ ${searchWord.trim()} AND (p.draft = false`;
-  if (params.loginUserId) {
-    builder.append`OR p.user_id = ${params.loginUserId}`;
-  }
-  builder.append(")");
-  if (params.postId) {
-    builder.append`AND p.id < ${params.postId}`;
-  }
-  builder.append(`ORDER BY p.id DESC LIMIT ${PAGE_ROWS}`);
-  const result = await client.queryObject<Post>(
-    builder.query,
-    builder.args,
-  );
-  return result.rows;
+  const { data } = await supabase.rpc("select_posts_by_word", {
+    search_word: searchWord,
+    login_user_id: params.loginUserId!,
+    post_id: params.postId!,
+  });
+  console.log("selectPostsBySearchWord", params, data);
+  return data ?? [];
 }
 
 export async function insertComment(
