@@ -34,131 +34,133 @@ export function initSupabase() {
   supabase = createClient<Database>(url, serviceRoleKey);
 }
 
-export type Post = {
-  id: number;
-  user_id: number;
-  source: string;
-  updated_at: string;
-  created_at: string;
-  name?: string; // app_user
-  picture?: string; // app_user
-  comments: bigint; // comment
-  likes: bigint; // likes
-  draft: boolean;
-};
-
-export type Comment = {
-  id: number;
-  post_id: number;
-  user_id: number;
-  source: string;
-  updated_at: string;
-  created_at: string;
-  name?: string; // app_user
-  picture?: string; // app_user
-};
-
-export type AppNotification = {
-  id: number;
-  user_id: number;
-  type: "follow" | "like" | "comment" | null;
-  action_user_id: number;
-  post_id: number;
-  created_at: string;
-  name?: string; // app_user
-};
-
 export async function selectUserByGoogleId(googleId: string) {
-  const { data } = await supabase.from("app_user").select("id,name,picture").eq(
+  const { data, error } = await supabase.from("app_user").select(
+    "id,name,picture",
+  ).eq(
     "google_id",
     googleId,
   ).maybeSingle();
+  if (error) {
+    throw error;
+  }
   return data;
 }
 
 export async function upsertUser(
   params: { googleId: string; name: string; picture: string },
 ) {
-  const { data } = await supabase.from("app_user").upsert({
+  const { data, error } = await supabase.from("app_user").upsert({
     google_id: params.googleId,
     name: params.name,
     picture: params.picture,
   }, { onConflict: "google_id" }).select("id,google_id,name,picture")
     .maybeSingle();
+  if (error) {
+    throw error;
+  }
   return data!;
 }
 
 export async function deleteUser(
   userId: number,
 ) {
-  await supabase.from("app_user").delete().eq("id", userId);
+  const { error } = await supabase.from("app_user").delete().eq("id", userId);
+  if (error) {
+    throw error;
+  }
 }
 
 export async function selectUser(userId: number) {
-  const { data } = await supabase.from("app_user").select(
+  const { data, error } = await supabase.from("app_user").select(
     "id,name,picture,notification",
   ).eq(
     "id",
     userId,
   )
     .maybeSingle();
+  if (error) {
+    throw error;
+  }
   return data;
 }
 
 export async function selectUsers() {
-  const { data } = await supabase.from("user_view").select(
+  const { data, error } = await supabase.from("user_view").select(
     "user_id,updated_at",
   ).returns<UserViewType[]>();
+  if (error) {
+    throw error;
+  }
   return data ?? [];
 }
 
 export async function insertPost(
   params: { userId: number; source: string; draft: boolean },
-): Promise<number> {
-  const { data } = await supabase.from("post").insert({
+) {
+  const { data, error } = await supabase.from("post").insert({
     user_id: params.userId,
     source: params.source,
     draft: params.draft,
   }).select("id").maybeSingle();
+  if (error) {
+    throw error;
+  }
   return data?.id!;
 }
 
 export async function updatePost(
   params: { postId: number; userId: number; source: string; draft: boolean },
 ) {
-  await supabase.from("post")
+  const { error } = await supabase.from("post")
     .update({
       id: params.postId,
       source: params.source,
       draft: params.draft,
       updated_at: new Date().toISOString(),
     }).match({ "id": params.postId, "user_id": params.userId });
+  if (error) {
+    throw error;
+  }
 }
 
 export async function deletePost(
   params: { id: number; userId: number },
 ) {
-  await supabase.from("post").delete().match({
+  const { error } = await supabase.from("post").delete().match({
     "id": params.id,
     "user_id": params.userId,
   });
+  if (error) {
+    throw error;
+  }
 }
 
 export async function selectPost(id: number) {
-  const { data } = await supabase.from("post_view").select("*").eq("id", id)
+  const { data, error } = await supabase.from("post_view").select("*").eq(
+    "id",
+    id,
+  )
     .returns<PostViewType[]>()
     .maybeSingle();
+  if (error) {
+    throw error;
+  }
   return data;
 }
 
 export async function selectPostIds() {
-  const { data } = await supabase.from("post").select("id,updated_at").eq(
-    "draft",
-    false,
-  ).order(
-    "id",
-    { ascending: false },
-  ).limit(1000);
+  const { data, error } = await supabase.from("post").select("id,updated_at")
+    .eq(
+      "draft",
+      false,
+    ).order(
+      "id",
+      { ascending: false },
+    ).limit(1000);
+  if (error) {
+    throw error;
+  }
   return data ?? [];
 }
 
@@ -167,9 +169,12 @@ export async function selectPosts(ltId: number | null) {
   if (ltId) {
     builder.lt("id", ltId);
   }
-  const { data } = await builder.order("id", { ascending: false }).limit(
+  const { data, error } = await builder.order("id", { ascending: false }).limit(
     PAGE_ROWS,
   ).returns<PostViewType[]>();
+  if (error) {
+    throw error;
+  }
   return data ?? [];
 }
 
@@ -186,29 +191,38 @@ export async function selectUserPost(
   if (params.ltId) {
     builder.lt("id", params.ltId);
   }
-  const { data } = await builder.order("id", { ascending: false }).limit(
+  const { data, error } = await builder.order("id", { ascending: false }).limit(
     PAGE_ROWS,
   ).returns<PostViewType[]>();
+  if (error) {
+    throw error;
+  }
   return data ?? [];
 }
 
 export async function selectFollowingUsersPosts(
   params: { userId: number; ltId: number | null },
 ) {
-  const { data } = await supabase.rpc("select_following_users_posts", {
+  const { data, error } = await supabase.rpc("select_following_users_posts", {
     login_user_id: params.userId,
     post_id: params.ltId!,
   });
+  if (error) {
+    throw error;
+  }
   return data ?? [];
 }
 
 export async function selectLikedPosts(
   params: { userId: number; ltId: number | null },
 ) {
-  const { data } = await supabase.rpc("select_liked_posts", {
+  const { data, error } = await supabase.rpc("select_liked_posts", {
     login_user_id: params.userId,
     post_id: params.ltId!,
   });
+  if (error) {
+    throw error;
+  }
   return data ?? [];
 }
 
@@ -223,11 +237,14 @@ export async function selectPostsBySearchWord(
   if (searchWord.trim().length === 0) {
     return [];
   }
-  const { data } = await supabase.rpc("select_posts_by_word", {
+  const { data, error } = await supabase.rpc("select_posts_by_word", {
     search_word: searchWord,
     login_user_id: params.loginUserId!,
     post_id: params.postId!,
   });
+  if (error) {
+    throw error;
+  }
   console.log("selectPostsBySearchWord", params, data);
   return data ?? [];
 }
@@ -235,18 +252,21 @@ export async function selectPostsBySearchWord(
 export async function insertComment(
   params: { postId: number; userId: number; source: string },
 ) {
-  await supabase.from("comment").insert({
+  const { error } = await supabase.from("comment").insert({
     "post_id": params.postId,
     "user_id": params.userId,
     "source": params.source,
   });
+  if (error) {
+    throw error;
+  }
 
   supabase.rpc("insert_notification_for_comment", {
     p_post_id: params.postId,
     p_user_id: params.userId,
   }).then(({ error }) => {
     if (error) {
-      console.log(error);
+      console.error(error);
     }
   });
 }
@@ -254,52 +274,70 @@ export async function insertComment(
 export async function selectComments(
   postId: number,
 ) {
-  const { data } = await supabase.from("comment").select(
+  const { data, error } = await supabase.from("comment").select(
     "id,user_id,source,updated_at,app_user(name,picture)",
   ).eq("post_id", postId).order("id").limit(100);
+  if (error) {
+    throw error;
+  }
   return data ?? [];
 }
 
-export async function deleteComment(
-  params: { id: number; userId: number },
-): Promise<void> {
-  await supabase.from("comment").delete().match({
+export async function deleteComment(params: { id: number; userId: number }) {
+  const { error } = await supabase.from("comment").delete().match({
     id: params.id,
     user_id: params.userId,
   });
+  if (error) {
+    throw error;
+  }
 }
 
 export async function insertFollow(
   params: { userId: number; followingUserId: number },
-): Promise<void> {
-  await supabase.from("follow").insert({
+) {
+  const { error } = await supabase.from("follow").insert({
     "user_id": params.userId,
     "following_user_id": params.followingUserId,
   });
+  if (error) {
+    throw error;
+  }
 
-  await supabase.from("notification").insert({
+  supabase.from("notification").insert({
     "user_id": params.followingUserId,
     "type": "follow",
     action_user_id: params.userId,
+  }).then((error) => {
+    if (error) {
+      console.error(error);
+    } else {
+      supabase.from("app_user").update({ notification: true }).eq(
+        "id",
+        params.followingUserId,
+      ).then(({ error }) => {
+        if (error) {
+          console.error(error);
+        }
+      });
+    }
   });
-
-  await supabase.from("app_user").update({ notification: true }).eq(
-    "id",
-    params.followingUserId,
-  );
 }
 
 export async function deleteFollow(
   params: { userId: number; followingUserId: number },
-): Promise<void> {
-  await supabase.from("follow").delete().match({
+) {
+  const { error } = await supabase.from("follow").delete().match({
     "user_id": params.userId,
     "following_user_id": params.followingUserId,
   });
+  if (error) {
+    throw error;
+  }
 }
 
 export async function selectFollowingUsers(userId: number) {
-  const { data } = await supabase.from("follow").select(
+  const { data, error } = await supabase.from("follow").select(
     "user:following_user_id(id,name,picture)",
   ).eq(
     "user_id",
@@ -308,11 +346,14 @@ export async function selectFollowingUsers(userId: number) {
     .order("created_at", { ascending: false }).returns<
     { user: { id: number; name: string; picture: string } }[]
   >();
+  if (error) {
+    throw error;
+  }
   return data!.map((row) => row.user);
 }
 
 export async function selectFollowerUsers(followingUserId: number) {
-  const { data } = await supabase.from("follow").select(
+  const { data, error } = await supabase.from("follow").select(
     "user:user_id(id,name,picture)",
   )
     .eq(
@@ -322,37 +363,49 @@ export async function selectFollowerUsers(followingUserId: number) {
     .order("created_at", { ascending: false }).returns<
     { user: { id: number; name: string; picture: string } }[]
   >();
+  if (error) {
+    throw error;
+  }
   return data!.map((row) => row.user);
 }
 
-export async function selectCountFollowing(userId: number): Promise<string> {
-  const { count } = await supabase.from("follow").select("user_id", {
+export async function selectCountFollowing(userId: number) {
+  const { count, error } = await supabase.from("follow").select("user_id", {
     count: "exact",
   }).eq("user_id", userId);
+  if (error) {
+    throw error;
+  }
   return "" + count;
 }
 
-export async function selectCountFollower(
-  followingUserId: number,
-): Promise<string> {
-  const { count } = await supabase.from("follow").select("user_id", {
+export async function selectCountFollower(followingUserId: number) {
+  const { count, error } = await supabase.from("follow").select("user_id", {
     count: "exact",
   }).eq("following_user_id", followingUserId);
+  if (error) {
+    throw error;
+  }
   return "" + count;
 }
 
 export async function judgeFollowing(
   params: { userId: number; followingUserId: number },
-): Promise<boolean> {
-  const result = await supabase.from("follow").select("user_id").match({
-    "user_id": params.userId,
-    "following_user_id": params.followingUserId,
-  });
-  return result.data?.length === 1;
+) {
+  const { data, error } = await supabase.from("follow").select("user_id").match(
+    {
+      "user_id": params.userId,
+      "following_user_id": params.followingUserId,
+    },
+  );
+  if (error) {
+    throw error;
+  }
+  return data?.length === 1;
 }
 
 export async function selectNotificationsWithUpdate(userId: number) {
-  const { data } = await supabase.from("notification").select(
+  const { data, error } = await supabase.from("notification").select(
     "id,type,action_user_id,post_id,created_at,action_user:action_user_id(name)",
   ).eq("user_id", userId).order("created_at", { ascending: false }).limit(10)
     .returns<
@@ -365,16 +418,16 @@ export async function selectNotificationsWithUpdate(userId: number) {
         action_user: { name: string };
       }[]
     >();
-
-  try {
-    // TODO async for performance
-    await supabase.from("app_user").update({ "notification": false }).eq(
-      "id",
-      userId,
-    );
-  } catch (error) {
-    console.error(error);
+  if (error) {
+    throw error;
   }
+
+  supabase.from("app_user").update({ "notification": false }).eq(
+    "id",
+    userId,
+  ).then(({ error }) => {
+    console.error(error);
+  });
 
   return data ?? [];
 }
@@ -382,47 +435,57 @@ export async function selectNotificationsWithUpdate(userId: number) {
 export async function insertLike(
   params: { userId: number; postId: number },
 ) {
-  await supabase.from("likes").insert({
+  const { error } = await supabase.from("likes").insert({
     "user_id": params.userId,
     "post_id": params.postId,
   });
+  if (error) {
+    throw error;
+  }
 
   supabase.rpc("insert_notification_for_like", {
     p_post_id: params.postId,
     p_user_id: params.userId,
   }).then(({ error }) => {
     if (error) {
-      console.log(error);
+      console.error(error);
     }
   });
 }
 
-export async function deleteLike(
-  params: { userId: number; postId: number },
-): Promise<void> {
-  await supabase.from("likes").delete().match({
+export async function deleteLike(params: { userId: number; postId: number }) {
+  const { error } = await supabase.from("likes").delete().match({
     "post_id": params.postId,
     "user_id": params.userId,
   });
+  if (error) {
+    throw error;
+  }
 }
 
 export async function selectLikes(
   { userId, postIds }: { userId: number; postIds: number[] },
 ) {
-  const { data } = await supabase.from("likes").select("post_id").eq(
+  const { data, error } = await supabase.from("likes").select("post_id").eq(
     "user_id",
     userId,
   ).in("post_id", postIds);
+  if (error) {
+    throw error;
+  }
   return data?.map((row) => row.post_id) ?? [];
 }
 
 export async function selectLikeUsers(postId: number) {
-  const { data } = await supabase.from("likes").select(
+  const { data, error } = await supabase.from("likes").select(
     "app_user(id,name,picture)",
   ).eq(
     "post_id",
     postId,
   ).order("created_at", { ascending: false });
+  if (error) {
+    throw error;
+  }
   if (!data) {
     return [];
   }
@@ -433,33 +496,44 @@ export async function selectSession(sessionId: string) {
   if (!uuid.validate(sessionId)) {
     return undefined;
   }
-  const { data } = await supabase.from("app_session").select(
+  const { data, error } = await supabase.from("app_session").select(
     "app_user(id,name,picture,notification)",
   ).eq(
     "id",
     sessionId,
   ).maybeSingle();
+  if (error) {
+    throw error;
+  }
   if (!data) {
     return undefined;
   }
   return data.app_user;
 }
 
-export async function insertSession(userId: number): Promise<string> {
-  const { data } = await supabase.from("app_session").insert({
+export async function insertSession(userId: number) {
+  const { data, error } = await supabase.from("app_session").insert({
     user_id: userId,
   })
     .select("id").maybeSingle();
+  if (error) {
+    throw error;
+  }
   const sessionId = data?.id;
-  await deleteExpiredSession(userId);
+  deleteExpiredSession(userId);
   return sessionId!;
 }
 
 export async function deleteSession(
   session: { id: string; user: { id: number } },
-): Promise<void> {
-  await supabase.from("app_session").delete().match({ id: session.id });
-  await deleteExpiredSession(session.user.id);
+) {
+  const { error } = await supabase.from("app_session").delete().match({
+    id: session.id,
+  });
+  if (error) {
+    throw error;
+  }
+  deleteExpiredSession(session.user.id);
 }
 
 /**
@@ -468,15 +542,13 @@ export async function deleteSession(
  *
  * @param userId
  */
-export async function deleteExpiredSession(userId: number): Promise<void> {
-  try {
-    const date = new Date();
-    date.setMonth(date.getMonth() - 1);
-    await supabase.from("app_session").delete().eq("user_id", userId).lt(
-      "updated_at",
-      date.toISOString(),
-    );
-  } catch (ignore) {
-    console.error(ignore);
-  }
+function deleteExpiredSession(userId: number) {
+  const date = new Date();
+  date.setMonth(date.getMonth() - 1);
+  supabase.from("app_session").delete().eq("user_id", userId).lt(
+    "updated_at",
+    date.toISOString(),
+  ).then(({ error }) => {
+    console.error(error);
+  });
 }

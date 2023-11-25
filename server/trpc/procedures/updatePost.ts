@@ -19,8 +19,6 @@ export const updatePost = publicProcedure.input(
     userId: session.user.id,
     source: input.source,
     draft: input.draft,
-  }).catch((error) => {
-    console.log(error);
   });
   return {};
 });
