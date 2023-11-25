@@ -425,7 +425,9 @@ export async function selectNotificationsWithUpdate(userId: number) {
     "id",
     userId,
   ).then(({ error }) => {
-    console.error(error);
+    if (error) {
+      console.error(error);
+    }
   });
 
   return data ?? [];
