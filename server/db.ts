@@ -245,7 +245,6 @@ export async function selectPostsBySearchWord(
   if (error) {
     throw error;
   }
-  console.log("selectPostsBySearchWord", params, data);
   return data ?? [];
 }
 

@@ -156,7 +156,6 @@ export default function PostView(props: { post: PostViewType; postTitle: string;
 
   function tweet() {
     const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(props.postTitle + "\n" + location.href);
-    console.log(url);
     window.open(url);
     // location.href = url;
   }

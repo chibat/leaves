@@ -32,7 +32,6 @@ export function shortcut() {
   Mousetrap.bind("g p", () => {
     trpc.getSession.query().then((session) => {
       if (session?.user.id) {
-        console.log(session);
         location.href = `/users/${session.user.id}`;
       }
     });

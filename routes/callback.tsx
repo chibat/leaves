@@ -69,7 +69,6 @@ export const handler: Handlers = {
         picture: googleUser.picture,
       });
 
-      console.log(user);
       await createSession(res, user.id);
     }
     return res;
