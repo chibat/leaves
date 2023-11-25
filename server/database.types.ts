@@ -374,6 +374,25 @@ export interface Database {
       }
     }
     Functions: {
+      get_notification_for_comment: {
+        Args: {
+          p_post_id: number
+          p_user_id: number
+        }
+        Returns: {
+          user_id: number
+          type: Database["public"]["Enums"]["notification_type"]
+          post_id: number
+          action_user_id: number
+        }[]
+      }
+      insert_notification_for_comment: {
+        Args: {
+          p_post_id: number
+          p_user_id: number
+        }
+        Returns: undefined
+      }
       select_following_users_posts: {
         Args: {
           login_user_id: number

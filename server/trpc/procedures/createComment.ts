@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { insertComment, pool } from "~/server/db.ts";
+import { insertComment } from "~/server/db.ts";
 import { getSession } from "~/server/auth.ts";
 import { publicProcedure } from "~/server/trpc/context.ts";
 
@@ -15,11 +15,9 @@ export const createComment = publicProcedure.input(
   if (input.source.length > 5000) {
     return;
   }
-  await pool((client) =>
-    insertComment(client, {
-      postId: input.postId,
-      userId: session.user.id,
-      source: input.source,
-    })
-  );
+  await insertComment({
+    postId: input.postId,
+    userId: session.user.id,
+    source: input.source,
+  });
 });

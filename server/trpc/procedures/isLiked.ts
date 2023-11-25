@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { getSession } from "~/server/auth.ts";
-import { pool, selectLikes } from "~/server/db.ts";
+import { selectLikes } from "~/server/db.ts";
 import { publicProcedure } from "~/server/trpc/context.ts";
 
 export const isLiked = publicProcedure.input(
@@ -10,11 +10,9 @@ export const isLiked = publicProcedure.input(
   if (!session) {
     return null;
   }
-  const results = await pool((client) =>
-    selectLikes({
-      userId: session.user.id,
-      postIds: [input.postId],
-    }) // TODO: to one postId
-  );
+  const results = await selectLikes({
+    userId: session.user.id,
+    postIds: [input.postId],
+  }); // TODO: to one postId
   return results.length === 1;
 });

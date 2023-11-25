@@ -211,21 +211,36 @@ SELECT user_id, max(updated_at) as updated_at FROM post GROUP BY user_id ORDER B
 ;
 
 
-CREATE OR REPLACE PROCEDURE insert_notification_for_comment(p_post_id integer, p_user_id integer)
+
+
+
+CREATE OR REPLACE FUNCTION get_notification_for_comment(p_post_id integer, p_user_id integer)
+RETURNS TABLE("user_id" integer, "type" notification_type, "post_id" integer, "action_user_id" integer)
 LANGUAGE plpgsql
 AS $$
-DECLARE
-  user_ids integer[];
 BEGIN
-  INSERT INTO notification (user_id, type, post_id, action_user_id)
-  SELECT user_id, 'comment'::notification_type, id, p_user_id FROM post
-  WHERE id = p_post_id AND user_id != p_user_id
+  RETURN QUERY (
+  SELECT p.user_id, 'comment'::notification_type, p_post_id, p_user_id
+  FROM post p
+  WHERE p.id=p_post_id AND p.user_id != p_user_id
   UNION
-  SELECT DISTINCT user_id, 'comment'::notification_type, post_id, p_user_id FROM comment
-  WHERE post_id = p_post_id AND user_id != p_user_id
-  RETURNING user_id INTO user_ids
-  ;
-  UPDATE app_user SET NOTIFICATION = true where id in (user_ids)
-  ;
+  SELECT DISTINCT c.user_id, 'comment'::notification_type, p_post_id, p_user_id
+  FROM comment c
+  WHERE c.post_id=p_post_id AND c.user_id != p_user_id
+  );
 END
 $$;
+
+CREATE OR REPLACE FUNCTION insert_notification_for_comment(p_post_id integer, p_user_id integer)
+RETURNS void
+AS $$
+BEGIN
+  INSERT INTO notification ("user_id", "type", "post_id", "action_user_id")
+  SELECT "user_id", "type", "post_id", "action_user_id" FROM get_notification_for_comment(p_post_id, p_user_id)
+  ;
+  -- TODO I want to store the result of insert "user_id" in a variable and use it in update.
+  UPDATE app_user SET NOTIFICATION = true WHERE id in (SELECT user_id FROM get_notification_for_comment(p_post_id, p_user_id))
+  ;
+END;
+$$ LANGUAGE plpgsql;
+

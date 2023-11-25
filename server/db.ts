@@ -294,7 +294,6 @@ export async function selectPostsBySearchWord(
 }
 
 export async function insertComment(
-  client: Client,
   params: { postId: number; userId: number; source: string },
 ) {
   await supabase.from("comment").insert({
@@ -303,28 +302,12 @@ export async function insertComment(
     "source": params.source,
   });
 
-  try {
-    // TODO async for performance
-    const results = await client.queryObject<
-      { user_id: number; post_id: number }
-    >`
-      INSERT INTO notification (user_id, type, post_id, action_user_id)
-      SELECT user_id, 'comment'::notification_type, id, ${params.userId}::integer FROM post
-      WHERE id=${params.postId} AND user_id != ${params.userId}
-      UNION
-      SELECT DISTINCT user_id, 'comment'::notification_type, post_id, ${params.userId}::integer FROM comment
-      WHERE post_id=${params.postId} AND user_id != ${params.userId}
-      RETURNING user_id, post_id
-  `;
-
-    const userIds = results.rows.map((row) => row.user_id);
-    await supabase.from("app_user").update({ notification: true }).in(
-      "id",
-      userIds,
-    );
-  } catch (error) {
-    console.error(error);
-  }
+  // TODO async for performance
+  const { error } = await supabase.rpc("insert_notification_for_comment", {
+    p_post_id: params.postId,
+    p_user_id: params.userId,
+  });
+  console.log(error);
 }
 
 export async function selectComments(
@@ -498,7 +481,6 @@ export async function deleteLike(
 export async function selectLikes(
   { userId, postIds }: { userId: number; postIds: number[] },
 ) {
-  console.log("### selectLikes");
   const { data } = await supabase.from("likes").select("post_id").eq(
     "user_id",
     userId,
