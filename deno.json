@@ -20,7 +20,6 @@
   },
   "imports": {
     "$std/": "https://deno.land/std@0.193.0/",
-    "postgres/": "https://deno.land/x/postgres@v0.17.0/",
     "supabase-js": "https://esm.sh/v133/@supabase/supabase-js@2.38.4",
     "$fresh/": "https://deno.land/x/fresh@1.5.4/",
     "preact": "https://esm.sh/preact@10.18.1",

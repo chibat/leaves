@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { deleteLike, pool } from "~/server/db.ts";
+import { deleteLike } from "~/server/db.ts";
 import { getSession } from "~/server/auth.ts";
 import { publicProcedure } from "~/server/trpc/context.ts";
 

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { publicProcedure } from "~/server/trpc/context.ts";
-import { insertFollow, pool } from "~/server/db.ts";
+import { insertFollow } from "~/server/db.ts";
 import { getSession } from "~/server/auth.ts";
 
 export const createFollow = publicProcedure.input(

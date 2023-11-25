@@ -1,4 +1,3 @@
-import { Pool, PoolClient, Transaction } from "postgres/mod.ts";
 import { createClient, SupabaseClient } from "supabase-js";
 import * as uuid from "$std/uuid/mod.ts";
 import { PAGE_ROWS } from "~/common/constants.ts";
@@ -31,12 +30,9 @@ let supabase: SupabaseClient<Database>;
 
 export function initSupabase() {
   const url = "https://" + env.get("SUPABASE_HOST");
-  // const anon = env.get("SUPABASE_ANON");
   const serviceRoleKey = env.get("SUPABASE_SERVICE_ROLE_KEY");
   supabase = createClient<Database>(url, serviceRoleKey);
 }
-
-export type Client = PoolClient | Transaction;
 
 export type Post = {
   id: number;
@@ -71,63 +67,6 @@ export type AppNotification = {
   created_at: string;
   name?: string; // app_user
 };
-
-let connectionPool: Pool;
-
-export function initPool() {
-  // build 時に処理が動かないように初期化を遅延させる
-  connectionPool = new Pool(
-    {
-      tls: {
-        enforce: false,
-        caCertificates: [
-          `-----BEGIN CERTIFICATE-----\n${
-            Deno.env.get("MDSNS_DATABASE_CA_CERTIFICATE")
-          }\n-----END CERTIFICATE-----`,
-        ],
-      },
-    },
-    5,
-    true,
-  );
-}
-
-export async function pool<T>(
-  handler: (client: PoolClient) => Promise<T>,
-): Promise<T> {
-  const client = await connectionPool.connect();
-  try {
-    return handler(client);
-  } catch (error) {
-    console.info(JSON.stringify(error));
-    await client.end();
-    console.error(error);
-    throw error;
-  } finally {
-    client.release();
-  }
-}
-
-export async function transaction<T>(
-  handler: (client: Client) => Promise<T>,
-): Promise<T> {
-  const client = await connectionPool.connect();
-  const transaction = client.createTransaction(crypto.randomUUID());
-  try {
-    await transaction.begin();
-    const result = await handler(transaction);
-    await transaction.commit();
-    return result;
-  } catch (error) {
-    await transaction.rollback();
-    console.info(JSON.stringify(error));
-    await client.end();
-    console.error(error);
-    throw error;
-  } finally {
-    client.release();
-  }
-}
 
 export async function selectUserByGoogleId(googleId: string) {
   const { data } = await supabase.from("app_user").select("id,name,picture").eq(
