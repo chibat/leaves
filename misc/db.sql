@@ -239,7 +239,25 @@ BEGIN
   SELECT "user_id", "type", "post_id", "action_user_id" FROM get_notification_for_comment(p_post_id, p_user_id)
   ;
   -- TODO I want to store the result of insert "user_id" in a variable and use it in update.
-  UPDATE app_user SET NOTIFICATION = true WHERE id in (SELECT user_id FROM get_notification_for_comment(p_post_id, p_user_id))
+  UPDATE app_user SET NOTIFICATION = true WHERE id IN (SELECT user_id FROM get_notification_for_comment(p_post_id, p_user_id))
+  ;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insert_notification_for_like(p_post_id integer, p_user_id integer)
+RETURNS void
+AS $$
+BEGIN
+  INSERT INTO notification ("user_id", "type", "post_id", "action_user_id")
+  SELECT user_id, 'like', p_post_id, p_user_id
+  FROM post
+  WHERE id= p_post_id AND user_id != p_user_id
+  ;
+
+  -- TODO I want to store the result of insert "user_id" in a variable and use it in update.
+  UPDATE app_user
+  SET NOTIFICATION = true
+  WHERE id IN (select user_id FROM post WHERE id= p_post_id AND user_id != p_user_id)
   ;
 END;
 $$ LANGUAGE plpgsql;

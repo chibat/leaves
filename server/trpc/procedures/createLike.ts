@@ -10,11 +10,9 @@ export const createLike = publicProcedure.input(
   if (!session) {
     return null; // TODO
   }
-  await pool((client) =>
-    insertLike(client, {
-      userId: session.user.id,
-      postId: input.postId,
-    })
-  );
+  await insertLike({
+    userId: session.user.id,
+    postId: input.postId,
+  });
   return {};
 });

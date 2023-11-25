@@ -302,12 +302,14 @@ export async function insertComment(
     "source": params.source,
   });
 
-  // TODO async for performance
-  const { error } = await supabase.rpc("insert_notification_for_comment", {
+  supabase.rpc("insert_notification_for_comment", {
     p_post_id: params.postId,
     p_user_id: params.userId,
+  }).then(({ error }) => {
+    if (error) {
+      console.log(error);
+    }
   });
-  console.log(error);
 }
 
 export async function selectComments(
@@ -439,7 +441,6 @@ export async function selectNotificationsWithUpdate(userId: number) {
 }
 
 export async function insertLike(
-  client: Client,
   params: { userId: number; postId: number },
 ) {
   await supabase.from("likes").insert({
@@ -447,26 +448,14 @@ export async function insertLike(
     "post_id": params.postId,
   });
 
-  try {
-    // TODO async for performance
-    const results = await client.queryObject<
-      { user_id: number; post_id: number }
-    >`
-        INSERT INTO notification (user_id, type, post_id, action_user_id)
-        SELECT user_id, 'like', ${params.postId}, ${params.userId} FROM post
-        WHERE id=${params.postId} AND user_id != ${params.userId}
-        RETURNING user_id, post_id
-      `;
-
-    for (const row of results.rows) {
-      await supabase.from("app_user").update({ notification: true }).eq(
-        "id",
-        row.user_id,
-      );
+  supabase.rpc("insert_notification_for_like", {
+    p_post_id: params.postId,
+    p_user_id: params.userId,
+  }).then(({ error }) => {
+    if (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
+  });
 }
 
 export async function deleteLike(

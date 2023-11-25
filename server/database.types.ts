@@ -393,6 +393,13 @@ export interface Database {
         }
         Returns: undefined
       }
+      insert_notification_for_like: {
+        Args: {
+          p_post_id: number
+          p_user_id: number
+        }
+        Returns: undefined
+      }
       select_following_users_posts: {
         Args: {
           login_user_id: number
