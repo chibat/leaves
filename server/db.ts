@@ -550,6 +550,8 @@ function deleteExpiredSession(userId: number) {
     "updated_at",
     date.toISOString(),
   ).then(({ error }) => {
-    console.error(error);
+    if (error) {
+      console.error(error);
+    }
   });
 }

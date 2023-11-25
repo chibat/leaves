@@ -18,9 +18,12 @@ export async function getSession(req: Request) {
 
 export async function createSession(response: Response, userId: number) {
   const sessionId = await insertSession(userId);
+  const expires = new Date();
+  expires.setMonth(expires.getMonth() + 1);
   setCookie(response.headers, {
     name: "session",
     value: sessionId,
+    expires,
     sameSite: "Lax",
     httpOnly: true,
     secure: true,
