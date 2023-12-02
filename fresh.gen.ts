@@ -2,75 +2,76 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/_404.tsx";
-import * as $1 from "./routes/_500.tsx";
-import * as $2 from "./routes/_app.tsx";
-import * as $3 from "./routes/_middleware.ts";
-import * as $4 from "./routes/about.tsx";
-import * as $5 from "./routes/api/trpc/[path].ts";
-import * as $6 from "./routes/auth.ts";
-import * as $7 from "./routes/callback.tsx";
-import * as $8 from "./routes/debug_auth.tsx";
-import * as $9 from "./routes/following.tsx";
-import * as $10 from "./routes/help.tsx";
-import * as $11 from "./routes/index.tsx";
-import * as $12 from "./routes/likes.tsx";
-import * as $13 from "./routes/notification.tsx";
-import * as $14 from "./routes/posts/[postId]/edit.tsx";
-import * as $15 from "./routes/posts/[postId]/index.tsx";
-import * as $16 from "./routes/posts/new.tsx";
-import * as $17 from "./routes/search.tsx";
-import * as $18 from "./routes/settings.tsx";
-import * as $19 from "./routes/signout.ts";
-import * as $20 from "./routes/users/[userId].tsx";
-import * as $$0 from "./islands/AllPosts.tsx";
-import * as $$1 from "./islands/DeleteAccount.tsx";
-import * as $$2 from "./islands/FollowingPosts.tsx";
-import * as $$3 from "./islands/Header.tsx";
-import * as $$4 from "./islands/LikePosts.tsx";
-import * as $$5 from "./islands/PostEdit.tsx";
-import * as $$6 from "./islands/PostNew.tsx";
-import * as $$7 from "./islands/PostView.tsx";
-import * as $$8 from "./islands/SearchedPosts.tsx";
-import * as $$9 from "./islands/UserPosts.tsx";
+import * as $_404 from "./routes/_404.tsx";
+import * as $_500 from "./routes/_500.tsx";
+import * as $_app from "./routes/_app.tsx";
+import * as $_middleware from "./routes/_middleware.ts";
+import * as $about from "./routes/about.tsx";
+import * as $api_trpc_path_ from "./routes/api/trpc/[path].ts";
+import * as $auth from "./routes/auth.ts";
+import * as $callback from "./routes/callback.tsx";
+import * as $debug_auth from "./routes/debug_auth.tsx";
+import * as $following from "./routes/following.tsx";
+import * as $help from "./routes/help.tsx";
+import * as $index from "./routes/index.tsx";
+import * as $likes from "./routes/likes.tsx";
+import * as $notification from "./routes/notification.tsx";
+import * as $posts_postId_edit from "./routes/posts/[postId]/edit.tsx";
+import * as $posts_postId_index from "./routes/posts/[postId]/index.tsx";
+import * as $posts_new from "./routes/posts/new.tsx";
+import * as $search from "./routes/search.tsx";
+import * as $settings from "./routes/settings.tsx";
+import * as $signout from "./routes/signout.ts";
+import * as $users_userId_ from "./routes/users/[userId].tsx";
+import * as $AllPosts from "./islands/AllPosts.tsx";
+import * as $DeleteAccount from "./islands/DeleteAccount.tsx";
+import * as $FollowingPosts from "./islands/FollowingPosts.tsx";
+import * as $Header from "./islands/Header.tsx";
+import * as $LikePosts from "./islands/LikePosts.tsx";
+import * as $PostEdit from "./islands/PostEdit.tsx";
+import * as $PostNew from "./islands/PostNew.tsx";
+import * as $PostView from "./islands/PostView.tsx";
+import * as $SearchedPosts from "./islands/SearchedPosts.tsx";
+import * as $UserPosts from "./islands/UserPosts.tsx";
+import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
-    "./routes/_404.tsx": $0,
-    "./routes/_500.tsx": $1,
-    "./routes/_app.tsx": $2,
-    "./routes/_middleware.ts": $3,
-    "./routes/about.tsx": $4,
-    "./routes/api/trpc/[path].ts": $5,
-    "./routes/auth.ts": $6,
-    "./routes/callback.tsx": $7,
-    "./routes/debug_auth.tsx": $8,
-    "./routes/following.tsx": $9,
-    "./routes/help.tsx": $10,
-    "./routes/index.tsx": $11,
-    "./routes/likes.tsx": $12,
-    "./routes/notification.tsx": $13,
-    "./routes/posts/[postId]/edit.tsx": $14,
-    "./routes/posts/[postId]/index.tsx": $15,
-    "./routes/posts/new.tsx": $16,
-    "./routes/search.tsx": $17,
-    "./routes/settings.tsx": $18,
-    "./routes/signout.ts": $19,
-    "./routes/users/[userId].tsx": $20,
+    "./routes/_404.tsx": $_404,
+    "./routes/_500.tsx": $_500,
+    "./routes/_app.tsx": $_app,
+    "./routes/_middleware.ts": $_middleware,
+    "./routes/about.tsx": $about,
+    "./routes/api/trpc/[path].ts": $api_trpc_path_,
+    "./routes/auth.ts": $auth,
+    "./routes/callback.tsx": $callback,
+    "./routes/debug_auth.tsx": $debug_auth,
+    "./routes/following.tsx": $following,
+    "./routes/help.tsx": $help,
+    "./routes/index.tsx": $index,
+    "./routes/likes.tsx": $likes,
+    "./routes/notification.tsx": $notification,
+    "./routes/posts/[postId]/edit.tsx": $posts_postId_edit,
+    "./routes/posts/[postId]/index.tsx": $posts_postId_index,
+    "./routes/posts/new.tsx": $posts_new,
+    "./routes/search.tsx": $search,
+    "./routes/settings.tsx": $settings,
+    "./routes/signout.ts": $signout,
+    "./routes/users/[userId].tsx": $users_userId_,
   },
   islands: {
-    "./islands/AllPosts.tsx": $$0,
-    "./islands/DeleteAccount.tsx": $$1,
-    "./islands/FollowingPosts.tsx": $$2,
-    "./islands/Header.tsx": $$3,
-    "./islands/LikePosts.tsx": $$4,
-    "./islands/PostEdit.tsx": $$5,
-    "./islands/PostNew.tsx": $$6,
-    "./islands/PostView.tsx": $$7,
-    "./islands/SearchedPosts.tsx": $$8,
-    "./islands/UserPosts.tsx": $$9,
+    "./islands/AllPosts.tsx": $AllPosts,
+    "./islands/DeleteAccount.tsx": $DeleteAccount,
+    "./islands/FollowingPosts.tsx": $FollowingPosts,
+    "./islands/Header.tsx": $Header,
+    "./islands/LikePosts.tsx": $LikePosts,
+    "./islands/PostEdit.tsx": $PostEdit,
+    "./islands/PostNew.tsx": $PostNew,
+    "./islands/PostView.tsx": $PostView,
+    "./islands/SearchedPosts.tsx": $SearchedPosts,
+    "./islands/UserPosts.tsx": $UserPosts,
   },
   baseUrl: import.meta.url,
-};
+} satisfies Manifest;
 
 export default manifest;
