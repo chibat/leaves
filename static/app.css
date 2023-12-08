@@ -40,6 +40,7 @@ a.doc {
 body {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+  font-family: "YakuHanJPs","-apple-system","BlinkMacSystemFont","Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
 }
 
 img {
