@@ -277,14 +277,13 @@ export default function PostView(
                         )}
                       {Number(likes) > 0 &&
                         (
-                          <a
-                            href={void (0)}
+                          <span
                             class="noDecoration ms-2"
                             style={{ cursor: "pointer" }}
                             onClick={() => setModal(true)}
                           >
                             {likes} Like{likes === 1 ? "" : "s"}
-                          </a>
+                          </span>
                         )}
                     </div>
                     <div>

@@ -132,14 +132,13 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
                 )}
               {BigInt(post.value.likes) > 0n &&
                 (
-                  <a
-                    href={void (0)}
+                  <span
                     class="noDecoration ms-2"
                     onClick={() => openModal(post.value.id)}
                     style={{ cursor: "pointer" }}
                   >
                     {post.value.likes} Like{post.value.likes === 1 ? "" : "s"}
-                  </a>
+                  </span>
                 )}
             </div>
             {props.userId === post.value.user_id &&
