@@ -4,8 +4,7 @@ import { useSignal } from "@preact/signals";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
-export default function Post(props: { post: GetPostsOutput, userId?: number }) {
-
+export default function Post(props: { post: GetPostsOutput; userId?: number }) {
   const post = useSignal(props.post);
   const now = new Date();
   const createdDate = new Date(post.value.created_at);
@@ -40,149 +39,145 @@ export default function Post(props: { post: GetPostsOutput, userId?: number }) {
     setModal(true);
   }
 
-  return <>
-    <div class="card mb-3 postCard" key={post.value.id}>
-      <div class="card-header bg-transparent d-flex justify-content-between">
-        <div>
-          <img
-            src={post.value.picture!}
-            alt="mdo"
-            width="32"
-            height="32"
-            class="rounded-circle"
-            referrerpolicy="no-referrer"
-          />
-          <a href={`/users/${post.value.user_id}`} class="ms-2 noDecoration">
-            {post.value.name}
-          </a>
-        </div>
-        <div>
-          <a
-            href={`/posts/${post.value.id}`}
-            class="ms-2 noDecoration"
-            title={`Created at: ${createdDate.toLocaleString()} , Updated at: ${updatedDate.toLocaleString()}`}
-          >
-            {formatDate(now, updatedDate)}
-          </a>
-        </div>
-      </div>
-      <div class="card-body">
-        {post.value.draft &&
-          (
-            <div
-              class="alert alert-danger d-flex align-items-center"
-              role="alert"
-            >
-              <span
-                class="badge bg-danger"
-                style={{ marginRight: "5px" }}
-              >
-                DRAFT
-              </span>
-              <div>This post is visible only to you.</div>
-            </div>
-          )}
-        <span
-          class="post"
-          dangerouslySetInnerHTML={{
-            __html: post.value.source,
-          }}
-        >
-        </span>
-        <div class="d-flex justify-content-between">
+  return (
+    <>
+      <div class="card mb-3 postCard" key={post.value.id}>
+        <div class="card-header bg-transparent d-flex justify-content-between">
+          <div>
+            <img
+              src={post.value.picture!}
+              alt="mdo"
+              width="32"
+              height="32"
+              class="rounded-circle"
+              referrerpolicy="no-referrer"
+            />
+            <a href={`/users/${post.value.user_id}`} class="ms-2 noDecoration">
+              {post.value.name}
+            </a>
+          </div>
           <div>
             <a
-              class="btn btn-outline-secondary btn-sm"
-              href={props.userId ? `/posts/${post.value.id}#comment` : "/auth"}
+              href={`/posts/${post.value.id}`}
+              class="ms-2 noDecoration"
+              title={`Created at: ${createdDate.toLocaleString()} , Updated at: ${updatedDate.toLocaleString()}`}
             >
-              Comment
+              {formatDate(now, updatedDate)}
             </a>
-            {BigInt(post.value.comments) > 0 &&
-              (
-                <a class="ms-2 noDecoration" href={`/posts/${post.value.id}`}>
-                  {post.value.comments}{" "}
-                  Comment{post.value.comments === 1 ? "" : "s"}
-                </a>
-              )}
-            {props.userId && post.value.liked &&
-              (
-                <a
-                  href={void (0)}
-                  onClick={() => cancelLike()}
-                  class="ms-3"
-                  style={{ cursor: "pointer" }}
+          </div>
+        </div>
+        <div class="card-body">
+          {post.value.draft &&
+            (
+              <div
+                class="alert alert-danger d-flex align-items-center"
+                role="alert"
+              >
+                <span
+                  class="badge bg-danger"
+                  style={{ marginRight: "5px" }}
                 >
+                  DRAFT
+                </span>
+                <div>This post is visible only to you.</div>
+              </div>
+            )}
+          <span
+            class="post"
+            dangerouslySetInnerHTML={{
+              __html: post.value.source,
+            }}
+          >
+          </span>
+          <div class="d-flex justify-content-between">
+            <div>
+              <a
+                class="btn btn-outline-secondary btn-sm"
+                href={props.userId
+                  ? `/posts/${post.value.id}#comment`
+                  : "/auth"}
+              >
+                Comment
+              </a>
+              {BigInt(post.value.comments) > 0 &&
+                (
+                  <a class="ms-2 noDecoration" href={`/posts/${post.value.id}`}>
+                    {post.value.comments}{" "}
+                    Comment{post.value.comments === 1 ? "" : "s"}
+                  </a>
+                )}
+              {props.userId && post.value.liked &&
+                (
                   <img
                     src="/assets/img/heart-fill.svg"
                     alt="Edit"
                     width="20"
                     height="20"
-                  >
-                  </img>
-                </a>
-              )}
-            {!post.value.liked &&
-              (
-                <a
-                  href={void (0)}
-                  onClick={() => like()}
-                  class="ms-3"
-                  style={{ cursor: "pointer" }}
-                >
+                    onClick={() => cancelLike()}
+                    class="ms-3"
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
+              {!post.value.liked &&
+                (
                   <img
                     src="/assets/img/heart.svg"
                     alt="Edit"
                     width="20"
                     height="20"
+                    onClick={() => like()}
+                    class="ms-3"
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
+              {BigInt(post.value.likes) > 0n &&
+                (
+                  <a
+                    href={void (0)}
+                    class="noDecoration ms-2"
+                    onClick={() => openModal(post.value.id)}
+                    style={{ cursor: "pointer" }}
                   >
-                  </img>
-                </a>
-              )}
-            {BigInt(post.value.likes) > 0n &&
+                    {post.value.likes} Like{post.value.likes === 1 ? "" : "s"}
+                  </a>
+                )}
+            </div>
+            {props.userId === post.value.user_id &&
               (
-                <a
-                  href={void (0)}
-                  class="noDecoration ms-2"
-                  onClick={() => openModal(post.value.id)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {post.value.likes} Like{post.value.likes === 1 ? "" : "s"}
-                </a>
+                <div>
+                  <a
+                    href={void (0)}
+                    class="me-2"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => deletePost(post.value.id)}
+                  >
+                    <img
+                      src="/assets/img/trash-fill.svg"
+                      alt="Delete"
+                      width="20"
+                      height="20"
+                    >
+                    </img>
+                  </a>
+                  <a href={`/posts/${post.value.id}/edit`}>
+                    <img
+                      src="/assets/img/pencil-fill.svg"
+                      alt="Edit"
+                      width="20"
+                      height="20"
+                    >
+                    </img>
+                  </a>
+                </div>
               )}
           </div>
-          {props.userId === post.value.user_id &&
-            (
-              <div>
-                <a
-                  href={void (0)}
-                  class="me-2"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => deletePost(post.value.id)}
-                >
-                  <img
-                    src="/assets/img/trash-fill.svg"
-                    alt="Delete"
-                    width="20"
-                    height="20"
-                  >
-                  </img>
-                </a>
-                <a href={`/posts/${post.value.id}/edit`}>
-                  <img
-                    src="/assets/img/pencil-fill.svg"
-                    alt="Edit"
-                    width="20"
-                    height="20"
-                  >
-                  </img>
-                </a>
-              </div>
-            )}
         </div>
       </div>
-    </div>
-    {modal && selectedPostId && <LikeUsersModal postId={selectedPostId} setModal={setModal} />}
-  </>;
+      {modal && selectedPostId && (
+        <LikeUsersModal postId={selectedPostId} setModal={setModal} />
+      )}
+    </>
+  );
 }
 
 function formatDate(now: Date, date: Date) {

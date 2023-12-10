@@ -8,9 +8,12 @@ import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
 import { createRef } from "preact";
 
-type Comments = ReturnType<typeof trpc.getComments.query> extends Promise<infer T> ? T : never;
+type Comments = ReturnType<typeof trpc.getComments.query> extends
+  Promise<infer T> ? T : never;
 
-export default function PostView(props: { post: PostViewType; postTitle: string; userId?: number }) {
+export default function PostView(
+  props: { post: PostViewType; postTitle: string; userId?: number },
+) {
   const userId = props.userId;
   const post = props.post;
 
@@ -150,12 +153,12 @@ export default function PostView(props: { post: PostViewType; postTitle: string;
     }
   }, [preview.value]);
 
-
   const createdAt = new Date(post.created_at).toLocaleString();
   const updatedAt = new Date(post.updated_at).toLocaleString();
 
   function tweet() {
-    const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(props.postTitle + "\n" + location.href);
+    const url = "https://twitter.com/intent/tweet?text=" +
+      encodeURIComponent(props.postTitle + "\n" + location.href);
     window.open(url);
     // location.href = url;
   }
@@ -229,7 +232,14 @@ export default function PostView(props: { post: PostViewType; postTitle: string;
                   </span>
                   <div class="d-flex justify-content-between">
                     <div>
-                      <img src="/assets/img/twitter.svg" title="Tweet" alt="Tweet" width={20} onClick={tweet} style={{ cursor: "pointer" }} />
+                      <img
+                        src="/assets/img/twitter.svg"
+                        title="Tweet"
+                        alt="Tweet"
+                        width={20}
+                        onClick={tweet}
+                        style={{ cursor: "pointer" }}
+                      />
                       {requesting &&
                         (
                           <div
@@ -241,39 +251,29 @@ export default function PostView(props: { post: PostViewType; postTitle: string;
                         )}
                       {userId && !requesting && liked &&
                         (
-                          <a
-                            href={void (0)}
+                          <img
+                            src="/assets/img/heart-fill.svg"
+                            title="Unlike"
+                            alt="Unlike"
+                            width="20"
+                            height="20"
                             onClick={() => cancelLike(post.id)}
                             class="ms-3"
                             style={{ cursor: "pointer" }}
-                          >
-                            <img
-                              src="/assets/img/heart-fill.svg"
-                              title="Unlike"
-                              alt="Unlike"
-                              width="20"
-                              height="20"
-                            >
-                            </img>
-                          </a>
+                          />
                         )}
                       {!requesting && !liked &&
                         (
-                          <a
-                            href={void (0)}
+                          <img
+                            src="/assets/img/heart.svg"
+                            title="Like"
+                            alt="Like"
+                            width="20"
+                            height="20"
                             onClick={() => like(post.id)}
                             class="ms-3"
                             style={{ cursor: "pointer" }}
-                          >
-                            <img
-                              src="/assets/img/heart.svg"
-                              title="Like"
-                              alt="Like"
-                              width="20"
-                              height="20"
-                            >
-                            </img>
-                          </a>
+                          />
                         )}
                       {Number(likes) > 0 &&
                         (
@@ -313,7 +313,8 @@ export default function PostView(props: { post: PostViewType; postTitle: string;
                                 height="20"
                               >
                               </img>
-                            </a></>
+                            </a>
+                          </>
                         )}
                     </div>
                   </div>
@@ -385,7 +386,9 @@ export default function PostView(props: { post: PostViewType; postTitle: string;
                         <ul class="nav nav-tabs">
                           <li class="nav-item">
                             <a
-                              class={preview.value ? "nav-link" : "nav-link active"}
+                              class={preview.value
+                                ? "nav-link"
+                                : "nav-link active"}
                               style={{ cursor: "pointer" }}
                               onClick={displayEdit}
                             >
@@ -394,7 +397,9 @@ export default function PostView(props: { post: PostViewType; postTitle: string;
                           </li>
                           <li class="nav-item">
                             <a
-                              class={preview.value ? "nav-link active" : "nav-link"}
+                              class={preview.value
+                                ? "nav-link active"
+                                : "nav-link"}
                               style={{ cursor: "pointer" }}
                               onClick={displayPreview}
                             >

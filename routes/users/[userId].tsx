@@ -13,13 +13,16 @@ export default defineRoute(async (req, ctx) => {
     return ctx.renderNotFound();
   }
   const picture = pageUser.picture ?? undefined;
+  const title = `${pageUser.name} - Leaves`;
   return (
     <>
       <Head>
-        <title>{pageUser.name} - Leaves</title>
+        <title>{title}</title>
+        <meta name="description" content={title} />
         <meta property="og:url" content="https://leaves.deno.dev/"></meta>
-        <meta property="og:title" content={`${pageUser.name} - Leaves`}></meta>
-        <meta property="og:description" content={pageUser.name ?? undefined}></meta>
+        <meta property="og:title" content={title}></meta>
+        <meta property="og:description" content={title}>
+        </meta>
         <meta property="og:image" content={picture} />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
@@ -27,7 +30,15 @@ export default defineRoute(async (req, ctx) => {
       </Head>
       <Header user={session?.user} authUrl={authUrl} />
       <main class="container">
-        <h1><img src={picture} class="img-thumbnail" alt="" referrerpolicy="no-referrer" /> {pageUser.name}</h1>
+        <h1>
+          <img
+            src={picture}
+            class="img-thumbnail"
+            alt=""
+            referrerpolicy="no-referrer"
+          />{" "}
+          {pageUser.name}
+        </h1>
         <UserPosts pageUserId={pageUser.id} loginUserId={session?.user.id} />
       </main>
     </>
