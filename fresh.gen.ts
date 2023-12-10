@@ -22,6 +22,8 @@ import * as $posts_new from "./routes/posts/new.tsx";
 import * as $search from "./routes/search.tsx";
 import * as $settings from "./routes/settings.tsx";
 import * as $signout from "./routes/signout.ts";
+import * as $sitemap_userId_ from "./routes/sitemap/[userId].tsx";
+import * as $sitemap_index from "./routes/sitemap/index.tsx";
 import * as $users_userId_ from "./routes/users/[userId].tsx";
 import * as $AllPosts from "./islands/AllPosts.tsx";
 import * as $DeleteAccount from "./islands/DeleteAccount.tsx";
@@ -57,6 +59,8 @@ const manifest = {
     "./routes/search.tsx": $search,
     "./routes/settings.tsx": $settings,
     "./routes/signout.ts": $signout,
+    "./routes/sitemap/[userId].tsx": $sitemap_userId_,
+    "./routes/sitemap/index.tsx": $sitemap_index,
     "./routes/users/[userId].tsx": $users_userId_,
   },
   islands: {

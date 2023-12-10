@@ -200,6 +200,23 @@ export async function selectUserPost(
   return data ?? [];
 }
 
+export async function selectUserPostIds(userId: number) {
+  const { data, error } = await supabase.from("post").select("id").eq(
+    "user_id",
+    userId,
+  ).eq(
+    "draft",
+    false,
+  ).order(
+    "id",
+    { ascending: false },
+  ).limit(1000);
+  if (error) {
+    throw error;
+  }
+  return data.map((row) => row.id) ?? [];
+}
+
 export async function selectFollowingUsersPosts(
   params: { userId: number; ltId: number | null },
 ) {

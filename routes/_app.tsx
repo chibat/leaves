@@ -1,6 +1,6 @@
-import { AppProps } from "$fresh/server.ts";
+import { PageProps } from "$fresh/server.ts";
 
-export default function App({ Component }: AppProps) {
+export default function App({ Component }: PageProps) {
   return (
     <html>
       <head>
@@ -20,7 +20,7 @@ export default function App({ Component }: AppProps) {
         <link rel="stylesheet" href="/app.css" />
         <link rel="manifest" href="/manifest.json" />
         {
-          /* 
+          /*
         <script async src="/register_sw.js" />
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-SZVLRW13Y8"></script>
         <script>
@@ -50,6 +50,9 @@ export default function App({ Component }: AppProps) {
             </li>
             <li class="nav-item">
               <a href="/about" class="nav-link px-2 text-muted">About</a>
+            </li>
+            <li class="nav-item">
+              <a href="/sitemap" class="nav-link px-2 text-muted">Sitemap</a>
             </li>
           </ul>
         </footer>

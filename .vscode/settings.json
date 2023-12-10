@@ -1,9 +1,8 @@
 {
   "deno.enable": true,
-  "deno.inlayHints.variableTypes.enabled": false,
-  "deno.inlayHints.parameterNames.enabled": "none",
-  "deno.inlayHints.parameterTypes.enabled": false,
-  "deno.inlayHints.functionLikeReturnTypes.enabled": false,
   "editor.defaultFormatter": "denoland.vscode-deno",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  }
 }

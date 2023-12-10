@@ -1,9 +1,9 @@
-import { MiddlewareHandlerContext } from "$fresh/server.ts";
+import { FreshContext } from "$fresh/server.ts";
 import { selectPostIds, selectUsers } from "~/server/db.ts";
 
 export async function handler(
   _req: Request,
-  ctx: MiddlewareHandlerContext,
+  ctx: FreshContext,
 ) {
   const resp = await ctx.next();
   if (resp.status === 500) {
