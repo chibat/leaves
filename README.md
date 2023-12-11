@@ -1,4 +1,5 @@
 ![logo](static/assets/img/icon-192x192.png)
+
 # Leaves
 
 [![Made with Fresh](https://fresh.deno.dev/fresh-badge.svg)](https://fresh.deno.dev)
@@ -6,6 +7,14 @@
 Source code for https://leaves.deno.dev/ .
 
 [Zenn article](https://zenn.dev/chiba/articles/md-sns-deno-fresh)
+
+## Leaves CLI
+
+### Install
+
+```
+deno install -f -n s --allow-net=leaves.deno.dev https://raw.githubusercontent.com/chibat/leaves/main/cli.ts
+```
 
 ## References
 
