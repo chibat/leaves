@@ -2,7 +2,11 @@
 
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/input.ts";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/select.ts";
+import {
+  clearScreen,
+} from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/mod.ts";
 
+console.log(clearScreen);
 const word = await Input.prompt("Search");
 if (!word) {
   Deno.exit();
@@ -25,7 +29,7 @@ if (options.length === 0) {
 const postId = await Select.prompt({
   message: "Select",
   options,
-  keys: { next: ["j"], previous: ["k"] },
+  keys: { next: ["j", "down"], previous: ["k", "up"] },
 });
 
 {
