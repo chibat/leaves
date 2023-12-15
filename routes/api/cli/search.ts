@@ -13,7 +13,7 @@ export default defineRoute(async (req, _ctx) => {
     loginUserId: null,
   });
   const body = rows.map((row) => {
-    return { value: row.id, name: getTitle(row.source) };
+    return { value: row.id, name: "* " + getTitle(row.source) };
   });
   return Response.json(body);
 });
