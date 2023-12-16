@@ -58,6 +58,11 @@ class Renderer extends Marked.Renderer {
         return youtubeTag;
       }
     }
+    if (text === "_preview") {
+      return `<iframe src="https://ogp.deno.dev/?size=large&url=${
+        encodeURI(href)
+      }" height="350" width="500"></iframe>`;
+    }
     return `<a href="${href}" title="${title}" rel="noopener noreferrer" target="_blank">${text}</a>`;
   }
 }
