@@ -89,3 +89,7 @@ iframe {
 	margin-bottom: 0;
 }
 
+.post h1, h2 {
+	margin-bottom: 16px;
+}
+
