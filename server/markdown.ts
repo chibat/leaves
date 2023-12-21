@@ -60,11 +60,11 @@ class Renderer extends Marked.Renderer {
     }
     if (text === "_preview_large") {
       return `<iframe src="https://ogp.deno.dev/?size=large&url=${
-        encodeURI(href)
+        encodeURIComponent(href)
       }" height="350" width="500"></iframe>`;
     } else if (text === "_preview_small") {
       return `<iframe src="https://ogp.deno.dev/?size=small&url=${
-        encodeURI(href)
+        encodeURIComponent(href)
       }" height="150" style="width: 100%;"></iframe>`;
     }
     return `<a href="${href}" title="${title}" rel="noopener noreferrer" target="_blank">${text}</a>`;
