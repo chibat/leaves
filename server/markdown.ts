@@ -159,6 +159,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   }
 
   return sanitizeHtml(html, {
+    allowedIframeDomains: ["youtu.be", "www.youtube.com", "ogp.deno.dev"],
     transformTags: {
       img: transformMedia,
       video: transformMedia,
