@@ -58,6 +58,15 @@ class Renderer extends Marked.Renderer {
         return youtubeTag;
       }
     }
+    if (text === "_preview_large") {
+      return `<iframe src="https://ogp.deno.dev/?size=large&url=${
+        encodeURIComponent(href)
+      }" height="350" width="500"></iframe>`;
+    } else if (text === "_preview_small") {
+      return `<iframe src="https://ogp.deno.dev/?size=small&url=${
+        encodeURIComponent(href)
+      }" height="150" style="width: 100%;"></iframe>`;
+    }
     return `<a href="${href}" title="${title}" rel="noopener noreferrer" target="_blank">${text}</a>`;
   }
 }
@@ -150,6 +159,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   }
 
   return sanitizeHtml(html, {
+    allowedIframeDomains: ["youtu.be", "www.youtube.com", "ogp.deno.dev"],
     transformTags: {
       img: transformMedia,
       video: transformMedia,
