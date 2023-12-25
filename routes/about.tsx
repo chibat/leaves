@@ -54,7 +54,11 @@ export default defineRoute(async (req, _ctx) => {
                   Supabase
                 </a>(Postgres database)
               </li>
-              <li><a href="https://github.com/features/actions" target="_blank">GitHub Actions</a>(Deploy and DB Backup)</li>
+              <li>
+                <a href="https://github.com/features/actions" target="_blank">
+                  GitHub Actions
+                </a>(Deploy and DB Backup)
+              </li>
               <li>Google OAuth</li>
             </ul>
           </li>
@@ -89,7 +93,7 @@ export default defineRoute(async (req, _ctx) => {
             </a>
           </li>
           <li>
-            <a href="/help">Help</a>
+            <a href="/help">Keyboard Shortcuts</a>
           </li>
         </ul>
       </main>

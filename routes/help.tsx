@@ -9,7 +9,7 @@ export default defineRoute(async (req, _ctx) => {
   return (
     <>
       <Head>
-        <title>Help - Leaves</title>
+        <title>Keyboard Shortcuts - Leaves</title>
         <meta property="og:url" content="https://leaves.deno.dev/"></meta>
         <meta property="og:title" content="Leaves"></meta>
         <meta
@@ -35,9 +35,8 @@ export default defineRoute(async (req, _ctx) => {
             class="me-2"
           >
           </img>
-          Help
+          Keyboard Shortcuts
         </h1>
-        <h2>Keyboard Shortcut</h2>
         <div class="post">
           <table>
             <thead>
@@ -48,7 +47,7 @@ export default defineRoute(async (req, _ctx) => {
             </thead>
             <tbody>
               <tr>
-                <td>Help</td>
+                <td>Keyboard Shortcuts</td>
                 <td>?</td>
               </tr>
               <tr>
