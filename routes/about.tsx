@@ -93,7 +93,7 @@ export default defineRoute(async (req, _ctx) => {
             </a>
           </li>
           <li>
-            <a href="/help">Keyboard Shortcuts</a>
+            <a href="/shortcuts">Keyboard Shortcuts</a>
           </li>
         </ul>
       </main>

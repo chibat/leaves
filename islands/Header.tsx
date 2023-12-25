@@ -94,7 +94,8 @@ export default function Header(
             <li class="nav-item">
               <a
                 class="noDecoration nav-link"
-                href="/help"
+                href="/shortcuts"
+                title="Keyboard Shortcuts"
               >
                 <img
                   src="/assets/img/keyboard-fill.svg"

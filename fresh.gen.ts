@@ -14,7 +14,6 @@ import * as $auth from "./routes/auth.ts";
 import * as $callback from "./routes/callback.tsx";
 import * as $debug_auth from "./routes/debug_auth.tsx";
 import * as $following from "./routes/following.tsx";
-import * as $help from "./routes/help.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $likes from "./routes/likes.tsx";
 import * as $notification from "./routes/notification.tsx";
@@ -23,6 +22,7 @@ import * as $posts_postId_index from "./routes/posts/[postId]/index.tsx";
 import * as $posts_new from "./routes/posts/new.tsx";
 import * as $search from "./routes/search.tsx";
 import * as $settings from "./routes/settings.tsx";
+import * as $shortcuts from "./routes/shortcuts.tsx";
 import * as $signout from "./routes/signout.ts";
 import * as $sitemap_userId_ from "./routes/sitemap/[userId].tsx";
 import * as $sitemap_index from "./routes/sitemap/index.tsx";
@@ -53,7 +53,6 @@ const manifest = {
     "./routes/callback.tsx": $callback,
     "./routes/debug_auth.tsx": $debug_auth,
     "./routes/following.tsx": $following,
-    "./routes/help.tsx": $help,
     "./routes/index.tsx": $index,
     "./routes/likes.tsx": $likes,
     "./routes/notification.tsx": $notification,
@@ -62,6 +61,7 @@ const manifest = {
     "./routes/posts/new.tsx": $posts_new,
     "./routes/search.tsx": $search,
     "./routes/settings.tsx": $settings,
+    "./routes/shortcuts.tsx": $shortcuts,
     "./routes/signout.ts": $signout,
     "./routes/sitemap/[userId].tsx": $sitemap_userId_,
     "./routes/sitemap/index.tsx": $sitemap_index,

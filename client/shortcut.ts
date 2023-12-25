@@ -9,7 +9,7 @@ export function shortcut() {
     location.href = "/posts/new";
   });
   Mousetrap.bind("?", () => {
-    location.href = "/help";
+    location.href = "/shortcuts";
   });
   Mousetrap.bind(".", () => {
     window.scroll({ top: 0, behavior: "smooth" });
