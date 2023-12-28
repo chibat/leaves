@@ -40,7 +40,11 @@ export default defineRoute(async (req, _ctx) => {
           </li>
           <li>Markdown で投稿できるマイクロブログです。</li>
           <li>Google アカウントでログインできます。</li>
-          <li>投稿した本文の YouTube の URL は、プレビューされます。</li>
+          <li>
+            <a href="https://leaves.deno.dev/posts/177">
+              投稿した本文の YouTube の URL は、プレビューされます。
+            </a>
+          </li>
           <li>
             Production Runtime（次の無料枠を利用しています）
             <ul>
@@ -57,7 +61,19 @@ export default defineRoute(async (req, _ctx) => {
               <li>
                 <a href="https://github.com/features/actions" target="_blank">
                   GitHub Actions
-                </a>(Deploy and DB Backup)
+                </a>(<a
+                  href="https://fresh.deno.dev/docs/concepts/ahead-of-time-builds"
+                  target="_blank"
+                >
+                  Build, Deploy
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://supabase.com/docs/guides/cli/github-action/backups"
+                  target="_blank"
+                >
+                  DB Backup
+                </a>)
               </li>
               <li>Google OAuth</li>
             </ul>
