@@ -29,24 +29,29 @@ export default defineRoute(async (req, _ctx) => {
         <h1>About</h1>
         <ul>
           <li>
-            本サイトは、<a
+            This site is a portfolio by{" "}
+            <a
               href="https://chibat.github.io/"
               target="_blank"
               class="doc"
             >
               @chibat
-            </a>{" "}
-            によるポートフォリオです。
+            </a>.
           </li>
-          <li>Markdown で投稿できるマイクロブログです。</li>
-          <li>Google アカウントでログインできます。</li>
+          <li>
+            It is a microblog platform that allows you to post in Markdown.
+          </li>
+          <li>You can sign in using your Google account.</li>
+          <li>
+            <a href="https://leaves.deno.dev/posts/75">How to write Markdown</a>
+          </li>
           <li>
             <a href="https://leaves.deno.dev/posts/177">
-              投稿した本文の YouTube の URL は、プレビューされます。
+              The site previews YouTube URLs included in your posts.
             </a>
           </li>
           <li>
-            Production Runtime（次の無料枠を利用しています）
+            Production Runtime(built using the following free plan)
             <ul>
               <li>
                 <a href="https://deno.com/deploy" target="_blank">
@@ -79,10 +84,10 @@ export default defineRoute(async (req, _ctx) => {
             </ul>
           </li>
           <li>
-            利用モジュール
+            Modules used
             <ul>
               <li>
-                deno.json imports を参照
+                See deno.json imports
               </li>
               <li>
                 <a href="https://getbootstrap.com/" target="_blank">
@@ -97,7 +102,7 @@ export default defineRoute(async (req, _ctx) => {
               target="_blank"
               class="doc"
             >
-              ソースコード
+              Source Code
             </a>
           </li>
           <li>
@@ -105,11 +110,14 @@ export default defineRoute(async (req, _ctx) => {
               href="https://zenn.dev/chiba/articles/md-sns-deno-fresh"
               target="_blank"
             >
-              Zenn 記事
+              Zenn article
             </a>
           </li>
           <li>
             <a href="/shortcuts">Keyboard Shortcuts</a>
+          </li>
+          <li>
+            <a href="https://leaves.deno.dev/posts/227">Leaves CLI</a>
           </li>
         </ul>
       </main>
