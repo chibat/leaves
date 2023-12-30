@@ -107,7 +107,7 @@ export default function Post() {
                 value={text.value}
                 autofocus
                 onInput={(e) => text.value = (e.target as any).value}
-                placeholder="Write with markdown"
+                placeholder="Write with Markdown"
               >
               </textarea>
             )}

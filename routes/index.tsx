@@ -80,7 +80,7 @@ export default defineRoute(async (req, _ctx) => {
               <input
                 class="form-control"
                 type="text"
-                placeholder="Post"
+                placeholder="Write with Markdown"
                 aria-label="Post"
                 readOnly
                 style={{ cursor: "pointer", width: "90%", display: "inline" }}
