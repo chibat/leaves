@@ -19,10 +19,14 @@ export default function App({ Component }: PageProps) {
         />
         <link rel="stylesheet" href="/app.css" />
         <link rel="manifest" href="/manifest.json" />
+        <script async src="/register_sw.js" />
         {
           /*
-        <script async src="/register_sw.js" />
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-SZVLRW13Y8"></script>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-SZVLRW13Y8"
+        >
+        </script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
