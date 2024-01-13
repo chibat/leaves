@@ -10,18 +10,18 @@ export default defineRoute(async (req, _ctx) => {
     <>
       <Head>
         <title>About - Leaves</title>
-        <meta property="og:url" content="https://leaves.deno.dev/"></meta>
+        <meta property="og:url" content="https://leaves.chiba.dev/"></meta>
         <meta property="og:title" content="Leaves"></meta>
         <meta
           property="og:image"
-          content="https://leaves.deno.dev/assets/img/icon-192x192.png"
+          content="https://leaves.chiba.dev/assets/img/icon-192x192.png"
         />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:creator" content="@tomofummy" />
         <meta
           name="twitter:image"
-          content="https://leaves.deno.dev/assets/img/icon-192x192.png"
+          content="https://leaves.chiba.dev/assets/img/icon-192x192.png"
         />
       </Head>
       <Header user={session?.user} authUrl={authUrl} />
@@ -31,7 +31,7 @@ export default defineRoute(async (req, _ctx) => {
           <li>
             This site is a portfolio by{" "}
             <a
-              href="https://chibat.github.io/"
+              href="https://chiba.dev"
               target="_blank"
               class="doc"
             >
@@ -43,10 +43,12 @@ export default defineRoute(async (req, _ctx) => {
           </li>
           <li>You can sign in using your Google account.</li>
           <li>
-            <a href="https://leaves.deno.dev/posts/75">How to write Markdown</a>
+            <a href="https://leaves.chiba.dev/posts/75">
+              How to write Markdown
+            </a>
           </li>
           <li>
-            <a href="https://leaves.deno.dev/posts/177">
+            <a href="https://leaves.chiba.dev/posts/177">
               The site previews YouTube URLs included in your posts.
             </a>
           </li>
@@ -117,7 +119,7 @@ export default defineRoute(async (req, _ctx) => {
             <a href="/shortcuts">Keyboard Shortcuts</a>
           </li>
           <li>
-            <a href="https://leaves.deno.dev/posts/227">Leaves CLI</a>
+            <a href="https://leaves.chiba.dev/posts/227">Leaves CLI</a>
           </li>
         </ul>
       </main>

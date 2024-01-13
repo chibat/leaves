@@ -41,7 +41,7 @@ export default function App({ Component }: PageProps) {
         <footer class="container d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
           <p class="col-md-4 mb-0 text-muted">
             &copy;<a
-              href="https://chibat.github.io/"
+              href="https://chiba.dev"
               target="_blank"
               class="doc text-muted"
             >

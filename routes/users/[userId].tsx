@@ -19,7 +19,7 @@ export default defineRoute(async (req, ctx) => {
       <Head>
         <title>{title}</title>
         <meta name="description" content={title} />
-        <meta property="og:url" content="https://leaves.deno.dev/"></meta>
+        <meta property="og:url" content="https://leaves.chiba.dev/"></meta>
         <meta property="og:title" content={title}></meta>
         <meta property="og:description" content={title}>
         </meta>

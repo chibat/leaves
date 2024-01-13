@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net=localhost,leaves.deno.dev,leaves--develop.deno.dev
+#!/usr/bin/env -S deno run --allow-net=localhost,leaves.chiba.dev,leaves--develop.deno.dev
 
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/input.ts";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/select.ts";
@@ -14,7 +14,7 @@ const COMMAND_OPTIONS = [{ value: -1, name: ":Back" }, {
 const keys = { next: ["j", "down"], previous: ["k", "up"] };
 const API_PATH = Deno.args.at(0) === "dev"
   ? "http://localhost:8000/api/cli"
-  : "https://leaves.deno.dev/api/cli";
+  : "https://leaves.chiba.dev/api/cli";
 
 let list: Array<{ value: number; name: string }> = [];
 let searchSkip = false;
@@ -67,7 +67,7 @@ while (true) {
   console.log(
     "---------------------------------------------------------------------------------",
   );
-  console.log(`https://leaves.deno.dev/posts/${postId}`);
+  console.log(`https://leaves.chiba.dev/posts/${postId}`);
   const option: any = await Select.prompt({
     message: "Select",
     options: COMMAND_OPTIONS,
