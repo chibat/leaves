@@ -15,7 +15,8 @@ export async function handler(
   }
   const url = new URL(_req.url);
   if (url.hostname === "leaves.deno.dev") {
-    return Response.redirect("https://leaves.chiba.dev", 301); // Moved Permanently
+    url.hostname = "leaves.chiba.dev";
+    return Response.redirect(url, 301); // Moved Permanently
   }
   if (url.pathname === "/sitemap.xml") {
     const users = await selectUsers();
