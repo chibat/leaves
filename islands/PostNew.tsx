@@ -138,7 +138,7 @@ export default function Post() {
             for="flexCheckDefault"
             style={{ marginRight: "10px" }}
           >
-            Draft
+            Private
           </label>
           <button
             class="btn btn-primary"

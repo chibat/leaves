@@ -139,9 +139,12 @@ export default function Edit(props: { post: PostViewType }) {
             for="flexCheckDefault"
             style={{ marginRight: "10px" }}
           >
-            Draft
+            Private
           </label>
-          <button class="btn btn-light me-2" onClick={() => location.href = `/posts/${postId}`}>
+          <button
+            class="btn btn-light me-2"
+            onClick={() => location.href = `/posts/${postId}`}
+          >
             Cancel
           </button>
           <button

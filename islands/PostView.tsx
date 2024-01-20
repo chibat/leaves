@@ -219,7 +219,7 @@ export default function PostView(
                         class="badge bg-danger"
                         style={{ marginRight: "5px" }}
                       >
-                        DRAFT
+                        PRIVATE
                       </span>
                       <div>This post is visible only to you.</div>
                     </div>
