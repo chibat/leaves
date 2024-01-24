@@ -211,18 +211,9 @@ export default function PostView(
               <article class="card-body">
                 {post.draft &&
                   (
-                    <div
-                      class="alert alert-danger d-flex align-items-center"
-                      role="alert"
-                    >
-                      <span
-                        class="badge bg-danger"
-                        style={{ marginRight: "5px" }}
-                      >
-                        PRIVATE
-                      </span>
-                      <div>This post is visible only to you.</div>
-                    </div>
+                    <span class="badge bg-danger mb-2">
+                      🔒 PRIVATE
+                    </span>
                   )}
                 <section>
                   <span

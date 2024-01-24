@@ -69,18 +69,9 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
         <div class="card-body">
           {post.value.draft &&
             (
-              <div
-                class="alert alert-danger d-flex align-items-center"
-                role="alert"
-              >
-                <span
-                  class="badge bg-danger"
-                  style={{ marginRight: "5px" }}
-                >
-                  PRIVATE
-                </span>
-                <div>This post is visible only to you.</div>
-              </div>
+              <span class="badge bg-danger mb-2">
+                🔒 PRIVATE
+              </span>
             )}
           <span
             class="post"

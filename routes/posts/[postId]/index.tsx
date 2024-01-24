@@ -8,6 +8,9 @@ import { getTitle } from "~/server/getTitle.ts";
 
 export default defineRoute(async (req, ctx) => {
   const postId = Number(ctx.params.postId);
+  if (Number.isNaN(postId)) {
+    return ctx.renderNotFound();
+  }
   const post = await selectPost(postId);
   if (!post) {
     return ctx.renderNotFound();
