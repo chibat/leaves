@@ -23,7 +23,6 @@ export default defineRoute(async (req, ctx) => {
         <meta property="og:title" content={title}></meta>
         <meta property="og:description" content={title}>
         </meta>
-        <meta property="og:image" content={picture} />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:image" content={picture} />

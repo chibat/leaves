@@ -12,10 +12,6 @@ export default defineRoute(async (req, _ctx) => {
         <title>Keyboard Shortcuts - Leaves</title>
         <meta property="og:url" content="https://leaves.chiba.dev/"></meta>
         <meta property="og:title" content="Leaves"></meta>
-        <meta
-          property="og:image"
-          content="https://leaves.chiba.dev/assets/img/icon-192x192.png"
-        />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:creator" content="@tomofummy" />
