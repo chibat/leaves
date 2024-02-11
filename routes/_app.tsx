@@ -9,7 +9,7 @@ export default function App({ Component }: PageProps) {
         <meta name="theme-color" content="#1fbc92" />
         <meta
           property="og:image"
-          content="https://raw.githubusercontent.com/chibat/assets/main/leaves-og.png"
+          content="https://leaves.chiba.dev/assets/img/og.png"
         />
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
