@@ -71,14 +71,14 @@ export async function deleteUser(
   }
 }
 
-export async function selectUser(userId: number) {
-  const { data, error } = await supabase.from("app_user").select(
+export async function selectUser(userKey: string) {
+  const id = Number(userKey);
+  const select = supabase.from("app_user").select(
     "id,name,picture,notification",
-  ).eq(
-    "id",
-    userId,
-  )
-    .maybeSingle();
+  );
+  const { data, error } =
+    await (isNaN(id) ? select.eq("account", userKey) : select.eq("id", id))
+      .maybeSingle();
   if (error) {
     throw error;
   }

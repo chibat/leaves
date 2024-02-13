@@ -8,7 +8,7 @@ import UserPosts from "~/islands/UserPosts.tsx";
 export default defineRoute(async (req, ctx) => {
   const session = await getSession(req);
   const authUrl = session ? undefined : getAuthUrl(req.url);
-  const pageUser = await selectUser(Number(ctx.params.userId));
+  const pageUser = await selectUser(ctx.params.userId);
   if (!pageUser) {
     return ctx.renderNotFound();
   }
