@@ -1,6 +1,6 @@
 import * as auth from "~/server/auth.ts";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { publicProcedure } from "~/plugins/trpc/context.ts";
 
-export const getSession = publicProcedure.query(({ ctx }) => {
+export default publicProcedure.query(({ ctx }) => {
   return auth.getSession(ctx.req);
 });

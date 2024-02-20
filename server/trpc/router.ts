@@ -1,27 +1,24 @@
-import { z } from "zod";
-import { publicProcedure, router } from "./context.ts";
-import { getComments } from "~/server/trpc/procedures/getComments.ts";
-import { createComment } from "~/server/trpc/procedures/createComment.ts";
-import { getPosts } from "~/server/trpc/procedures/getPosts.ts";
-import { getFollowInfo } from "~/server/trpc/procedures/getFollowInfo.ts";
-import { getFollowerUsers } from "~/server/trpc/procedures/getFollowerUsers.ts";
-import { getLikeUsers } from "~/server/trpc/procedures/getLikeUsers.ts";
-import { isLiked } from "~/server/trpc/procedures/isLiked.ts";
-import { getLikedPosts } from "~/server/trpc/procedures/getLikedPosts.ts";
-import { getSession } from "~/server/trpc/procedures/getSession.ts";
-import { createLike } from "~/server/trpc/procedures/createLike.ts";
-import { createFollow } from "~/server/trpc/procedures/createFollow.ts";
-import { createPost } from "~/server/trpc/procedures/createPost.ts";
-import { cancelLike } from "~/server/trpc/procedures/cancelLike.ts";
-import { deleteComment } from "~/server/trpc/procedures/deleteComment.ts";
-import { deletePost } from "~/server/trpc/procedures/deletePost.ts";
-import { deleteFollow } from "~/server/trpc/procedures/deleteFollow.ts";
-import { updatePost } from "~/server/trpc/procedures/updatePost.ts";
-import { md2html } from "~/server/trpc/procedures/md2html.ts";
-import { getFollowingUsers } from "~/server/trpc/procedures/getFollowingUsers.ts";
-import { deleteUser } from "~/server/trpc/procedures/deleteUser.ts";
-
-const posts = [{ name: "first post" }];
+import { router } from "~/plugins/trpc/context.ts";
+import getComments from "./procedures/getComments.ts";
+import createComment from "./procedures/createComment.ts";
+import getPosts from "./procedures/getPosts.ts";
+import getFollowInfo from "./procedures/getFollowInfo.ts";
+import getFollowerUsers from "./procedures/getFollowerUsers.ts";
+import getLikeUsers from "./procedures/getLikeUsers.ts";
+import isLiked from "./procedures/isLiked.ts";
+import getLikedPosts from "./procedures/getLikedPosts.ts";
+import getSession from "./procedures/getSession.ts";
+import createLike from "./procedures/createLike.ts";
+import createFollow from "./procedures/createFollow.ts";
+import createPost from "./procedures/createPost.ts";
+import cancelLike from "./procedures/cancelLike.ts";
+import deleteComment from "./procedures/deleteComment.ts";
+import deletePost from "./procedures/deletePost.ts";
+import deleteFollow from "./procedures/deleteFollow.ts";
+import updatePost from "./procedures/updatePost.ts";
+import md2html from "./procedures/md2html.ts";
+import getFollowingUsers from "./procedures/getFollowingUsers.ts";
+import deleteUser from "./procedures/deleteUser.ts";
 
 export const appRouter = router({
   createComment,
@@ -44,13 +41,6 @@ export const appRouter = router({
   getLikedPosts,
   updatePost,
   md2html,
-  postGet: publicProcedure.query(() => posts),
-  postCreate: publicProcedure.input(z.object({
-    name: z.string(),
-  })).mutation((req) => {
-    posts.push(req.input);
-    return req.input;
-  }),
 });
 
 export type AppRouter = typeof appRouter;

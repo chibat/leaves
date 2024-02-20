@@ -1,9 +1,9 @@
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { publicProcedure } from "../../../plugins/trpc/context.ts";
 import * as db from "~/server/db.ts";
 
 import { getSession } from "~/server/auth.ts";
 
-export const deleteUser = publicProcedure.mutation(async ({ ctx }) => {
+export default publicProcedure.mutation(async ({ ctx }) => {
   const session = await getSession(ctx.req);
   if (!session) {
     return null;

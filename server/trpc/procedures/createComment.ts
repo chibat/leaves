@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { insertComment } from "~/server/db.ts";
 import { getSession } from "~/server/auth.ts";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { publicProcedure } from "../../../plugins/trpc/context.ts";
 
 export type RequestType = { postId: number; source: string };
 
-export const createComment = publicProcedure.input(
+export default publicProcedure.input(
   z.object({ postId: z.number(), source: z.string() }),
 ).mutation(async ({ input, ctx }) => {
   const session = await getSession(ctx.req);

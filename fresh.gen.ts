@@ -9,7 +9,6 @@ import * as $_middleware from "./routes/_middleware.ts";
 import * as $about from "./routes/about.tsx";
 import * as $api_cli_posts_postId_ from "./routes/api/cli/posts/[postId].ts";
 import * as $api_cli_search from "./routes/api/cli/search.ts";
-import * as $api_trpc_path_ from "./routes/api/trpc/[path].ts";
 import * as $auth from "./routes/auth.ts";
 import * as $callback from "./routes/callback.tsx";
 import * as $debug_auth from "./routes/debug_auth.tsx";
@@ -48,7 +47,6 @@ const manifest = {
     "./routes/about.tsx": $about,
     "./routes/api/cli/posts/[postId].ts": $api_cli_posts_postId_,
     "./routes/api/cli/search.ts": $api_cli_search,
-    "./routes/api/trpc/[path].ts": $api_trpc_path_,
     "./routes/auth.ts": $auth,
     "./routes/callback.tsx": $callback,
     "./routes/debug_auth.tsx": $debug_auth,

@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { publicProcedure } from "../../../plugins/trpc/context.ts";
 import { insertLike } from "~/server/db.ts";
 import { getSession } from "~/server/auth.ts";
 
-export const createLike = publicProcedure.input(
+export default publicProcedure.input(
   z.object({ postId: z.number() }),
 ).mutation(async ({ input, ctx }) => {
   const session = await getSession(ctx.req);

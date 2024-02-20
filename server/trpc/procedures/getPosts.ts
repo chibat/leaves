@@ -8,11 +8,11 @@ import {
   selectPostsBySearchWord,
   selectUserPost,
 } from "~/server/db.ts";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { publicProcedure } from "../../../plugins/trpc/context.ts";
 import { getSession } from "~/server/auth.ts";
 import { render } from "~/server/markdown.ts";
 
-export const getPosts = publicProcedure.input(
+const getPosts = publicProcedure.input(
   z.object({
     postId: z.number().nullable(),
     userId: z.number().optional(),
@@ -68,5 +68,7 @@ export const getPosts = publicProcedure.input(
     };
   });
 });
+
+export default getPosts;
 
 export type GetPostsOutput = (inferProcedureOutput<typeof getPosts>)[number];

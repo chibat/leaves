@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { publicProcedure } from "~/plugins/trpc/context.ts";
 import * as db from "~/server/db.ts";
 import { getSession } from "~/server/auth.ts";
 
-export const updatePost = publicProcedure.input(
+export default publicProcedure.input(
   z.object({
     postId: z.number(),
     source: z.string().max(10000),

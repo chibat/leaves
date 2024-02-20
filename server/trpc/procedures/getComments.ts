@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { selectComments } from "~/server/db.ts";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { publicProcedure } from "../../../plugins/trpc/context.ts";
 import { render } from "~/server/markdown.ts";
 
-export const getComments = publicProcedure.input(
+export default publicProcedure.input(
   z.object({ postId: z.number() }),
 ).query(async ({ input }) => {
   const postId = input.postId;
