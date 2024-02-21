@@ -65,6 +65,7 @@ export const getPosts = publicProcedure.input(
       likes: p.likes,
       liked: likedPostIds.includes(p.id),
       draft: p.draft,
+      account: p.account,
     };
   });
 });

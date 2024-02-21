@@ -19,13 +19,13 @@ export type PostViewType = {
   source: string;
   updated_at: string;
   user_id: number;
-  account?: string | null;
+  account: string | null;
 };
 
 export type UserViewType = {
   user_id: number;
   updated_at: string;
-  account?: string | null;
+  account: string | null;
 };
 
 let supabase: SupabaseClient<Database>;
@@ -229,7 +229,9 @@ export async function selectFollowingUsersPosts(
   if (error) {
     throw error;
   }
-  return data ?? [];
+  return data.map((row) => {
+    return { ...row, account: null };
+  }) ?? [];
 }
 
 export async function selectLikedPosts(
@@ -242,7 +244,9 @@ export async function selectLikedPosts(
   if (error) {
     throw error;
   }
-  return data ?? [];
+  return data.map((row) => {
+    return { ...row, account: null };
+  }) ?? [];
 }
 
 export async function selectPostsBySearchWord(
@@ -264,7 +268,9 @@ export async function selectPostsBySearchWord(
   if (error) {
     throw error;
   }
-  return data ?? [];
+  return data.map((row) => {
+    return { ...row, account: null };
+  }) ?? [];
 }
 
 export async function insertComment(

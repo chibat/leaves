@@ -52,7 +52,10 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
               class="rounded-circle"
               referrerpolicy="no-referrer"
             />
-            <a href={`/users/${post.value.user_id}`} class="ms-2 noDecoration">
+            <a
+              href={`/users/${post.value.account ?? post.value.user_id}`}
+              class="ms-2 noDecoration"
+            >
               {post.value.name}
             </a>
           </div>
