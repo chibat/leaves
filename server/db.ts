@@ -19,11 +19,13 @@ export type PostViewType = {
   source: string;
   updated_at: string;
   user_id: number;
+  account?: string | null;
 };
 
 export type UserViewType = {
   user_id: number;
   updated_at: string;
+  account?: string | null;
 };
 
 let supabase: SupabaseClient<Database>;
@@ -87,7 +89,7 @@ export async function selectUser(userKey: string) {
 
 export async function selectUsers() {
   const { data, error } = await supabase.from("user_view").select(
-    "user_id,updated_at",
+    "user_id,updated_at,account",
   ).returns<UserViewType[]>();
   if (error) {
     throw error;

@@ -28,7 +28,9 @@ export async function handler(
     return new Response(
       `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${
         users.map((user) =>
-          `<url><loc>${baseUrl}/users/${user.user_id}</loc><lastmod>${
+          `<url><loc>${baseUrl}/users/${
+            user.account ?? user.user_id
+          }</loc><lastmod>${
             new Date(user.updated_at).toISOString()
           }</lastmod></url>`
         ).join("") + posts.map((post) =>

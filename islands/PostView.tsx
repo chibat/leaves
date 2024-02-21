@@ -196,7 +196,7 @@ export default function PostView(
                     referrerpolicy="no-referrer"
                   />
                   <a
-                    href={`/users/${post.user_id}`}
+                    href={`/users/${post.account ?? post.user_id}`}
                     class="ms-2 me-2 noDecoration"
                   >
                     {post.name}

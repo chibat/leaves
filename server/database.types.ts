@@ -360,6 +360,7 @@ export type Database = {
       }
       user_view: {
         Row: {
+          account: string | null
           updated_at: string | null
           user_id: number | null
         }
