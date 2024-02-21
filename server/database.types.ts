@@ -418,6 +418,7 @@ export type Database = {
           picture: string
           comments: number
           likes: number
+          account: string
         }[]
       }
       select_liked_posts: {
@@ -436,6 +437,7 @@ export type Database = {
           picture: string
           comments: number
           likes: number
+          account: string
         }[]
       }
       select_posts_by_word: {
@@ -455,6 +457,7 @@ export type Database = {
           picture: string
           comments: number
           likes: number
+          account: string
         }[]
       }
     }

@@ -229,9 +229,7 @@ export async function selectFollowingUsersPosts(
   if (error) {
     throw error;
   }
-  return data.map((row) => {
-    return { ...row, account: null };
-  }) ?? [];
+  return data ?? [];
 }
 
 export async function selectLikedPosts(
@@ -244,9 +242,7 @@ export async function selectLikedPosts(
   if (error) {
     throw error;
   }
-  return data.map((row) => {
-    return { ...row, account: null };
-  }) ?? [];
+  return data ?? [];
 }
 
 export async function selectPostsBySearchWord(
@@ -268,9 +264,7 @@ export async function selectPostsBySearchWord(
   if (error) {
     throw error;
   }
-  return data.map((row) => {
-    return { ...row, account: null };
-  }) ?? [];
+  return data ?? [];
 }
 
 export async function insertComment(
