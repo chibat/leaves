@@ -517,7 +517,7 @@ export async function selectSession(sessionId: string) {
     return undefined;
   }
   const { data, error } = await supabase.from("app_session").select(
-    "app_user(id,name,picture,notification)",
+    "app_user(id,name,picture,notification,account)",
   ).eq(
     "id",
     sessionId,

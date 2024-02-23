@@ -4,7 +4,12 @@ import { DEFAULT_AVATOR } from "~/common/constants.ts";
 
 export default function Header(
   props: {
-    user?: { id: number; picture: string | null; notification: boolean };
+    user?: {
+      id: number;
+      picture: string | null;
+      notification: boolean;
+      account: string | null;
+    };
     authUrl?: string;
   },
 ) {
@@ -160,7 +165,7 @@ export default function Header(
                       <li>
                         <a
                           class="dropdown-item"
-                          href={`/users/${props.user.id}`}
+                          href={`/users/${props.user.account ?? props.user.id}`}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
