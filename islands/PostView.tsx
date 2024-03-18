@@ -311,14 +311,16 @@ export default function PostView(
                 </section>
               </article>
               <div class="card-footer bg-transparent">
-                {commentLoading &&
+                {
+                  /* {commentLoading &&
                   (
                     <div class="d-flex justify-content-center">
                       <div class="spinner-border" role="status">
                         <span class="visually-hidden">Loading...</span>
                       </div>
                     </div>
-                  )}
+                  )} */
+                }
                 {comments &&
                   comments.map((comment) => (
                     <div class="border-bottom ms-4">
