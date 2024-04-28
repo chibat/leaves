@@ -77,7 +77,7 @@ export default function Post() {
     <>
       <div class="card mb-3">
         <div class="card-body">
-          <ul class="nav nav-tabs">
+          <ul class="nav nav-tabs" style={{ marginBottom: "20px" }}>
             <li class="nav-item">
               <a
                 class={!preview.value ? "nav-link active" : "nav-link"}
