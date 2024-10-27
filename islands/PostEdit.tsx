@@ -48,9 +48,10 @@ export default function Edit(props: { post: PostViewType }) {
       );
     } else {
       Mousetrap(textarea.current).bind(
-        "mod+enter",
+        ["mod+enter", "mod+s"],
         () => {
           save();
+          return false;
         },
       );
       Mousetrap(textarea.current).bind(

@@ -45,9 +45,10 @@ export default function Post() {
       );
     } else {
       Mousetrap(textarea.current).bind(
-        "mod+enter",
+        ["mod+enter", "mod+s"],
         () => {
           post();
+          return false;
         },
       );
       Mousetrap(textarea.current).bind(
