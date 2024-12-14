@@ -35,7 +35,8 @@ export default defineRoute(async (req, ctx) => {
         <meta property="og:title" content={title}></meta>
         <meta
           property="og:description"
-          content={post.source.substring(0, 1000)?.replaceAll("\n", " ")}
+          content={post.source.replace(/^#+/, "").replaceAll("```", "").trim()
+            .substring(0, 1000).replaceAll("\n", " ")}
         >
         </meta>
         <meta name="twitter:card" content="summary"></meta>
