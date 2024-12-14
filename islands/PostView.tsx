@@ -159,8 +159,13 @@ export default function PostView(
   function tweet() {
     const url = "https://twitter.com/intent/tweet?text=" +
       encodeURIComponent(props.postTitle + "\n" + location.href);
-    window.open(url);
-    // location.href = url;
+    globalThis.open(url);
+  }
+
+  function bluesky() {
+    const url = "https://bsky.app/intent/compose?text=" +
+      encodeURIComponent(props.postTitle + "\n" + location.href);
+    globalThis.open(url);
   }
 
   return (
@@ -229,6 +234,15 @@ export default function PostView(
                         alt="Tweet"
                         width={20}
                         onClick={tweet}
+                        style={{ cursor: "pointer" }}
+                      />
+                      <img
+                        class="ms-3"
+                        src="/assets/img/bluesky.svg"
+                        title="Bluesky"
+                        alt="Bluesky"
+                        width={20}
+                        onClick={bluesky}
                         style={{ cursor: "pointer" }}
                       />
                       {requesting &&
