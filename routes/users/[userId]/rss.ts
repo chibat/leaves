@@ -1,5 +1,6 @@
 import { defineRoute } from "$fresh/server.ts";
 import { selectUser, selectUserPost } from "~/server/db.ts";
+import { getTitle } from "~/server/getTitle.ts";
 
 // RSS をレスポンスする
 export default defineRoute(async (req, ctx) => {
@@ -21,7 +22,7 @@ export default defineRoute(async (req, ctx) => {
     <description>${title}</description>
     ${posts.map((post) => `
     <item>
-      <title>${post.id + ' - ' + title}</title>
+      <title>${getTitle(post.source) + ' | ' + title}</title>
       <link>https://leaves.chiba.dev/posts/${post.id}</link>
       <pubDate>${new Date(post.created_at).toUTCString()}</pubDate>
       <guid>${post.id}</guid>
