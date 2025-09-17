@@ -26,6 +26,7 @@ export default defineRoute(async (req, ctx) => {
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@tomofummy" />
         <meta name="twitter:image" content={picture} />
+        <link rel="alternate" type="application/rss+xml" href={`https://leaves.chiba.dev/users/${ctx.params.userId}/rss`}></link>
       </Head>
       <Header user={session?.user} authUrl={authUrl} />
       <main class="container">

@@ -26,7 +26,8 @@ import * as $shortcuts from "./routes/shortcuts.tsx";
 import * as $signout from "./routes/signout.ts";
 import * as $sitemap_userId_ from "./routes/sitemap/[userId].tsx";
 import * as $sitemap_index from "./routes/sitemap/index.tsx";
-import * as $users_userId_ from "./routes/users/[userId].tsx";
+import * as $users_userId_index from "./routes/users/[userId]/index.tsx";
+import * as $users_userId_rss from "./routes/users/[userId]/rss.ts";
 import * as $AllPosts from "./islands/AllPosts.tsx";
 import * as $DeleteAccount from "./islands/DeleteAccount.tsx";
 import * as $FollowingPosts from "./islands/FollowingPosts.tsx";
@@ -65,7 +66,8 @@ const manifest = {
     "./routes/signout.ts": $signout,
     "./routes/sitemap/[userId].tsx": $sitemap_userId_,
     "./routes/sitemap/index.tsx": $sitemap_index,
-    "./routes/users/[userId].tsx": $users_userId_,
+    "./routes/users/[userId]/index.tsx": $users_userId_index,
+    "./routes/users/[userId]/rss.ts": $users_userId_rss,
   },
   islands: {
     "./islands/AllPosts.tsx": $AllPosts,
