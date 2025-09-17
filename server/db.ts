@@ -139,6 +139,7 @@ export async function deletePost(
 }
 
 export async function selectPost(id: number) {
+  console.log("selectPost", id);
   const { data, error } = await supabase.from("post_view").select("*").eq(
     "id",
     id,

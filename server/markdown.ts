@@ -1,5 +1,4 @@
 // Original: https://github.com/denoland/deno-gfm/blob/6f4b8ae149b1f044037986929f096434b06bd726/mod.ts
-import { emojify } from "emoji";
 import * as Marked from "marked";
 //import { default as Prism } from "prismjs";
 import { default as sanitizeHtml } from "sanitize-html";
@@ -45,7 +44,7 @@ class Renderer extends Marked.Renderer {
   //   return `<div class="highlight highlight-source-${language} notranslate"><pre>${html}</pre></div>`;
   // }
 
-  link(href: string, title: string, text: string) {
+  override link(href: string, title: string, text: string) {
     if (href.startsWith("#")) {
       return `<a href="${href}" title="${title}">${text}</a>`;
     }
@@ -59,13 +58,11 @@ class Renderer extends Marked.Renderer {
       }
     }
     if (text === "_preview_large") {
-      return `<iframe src="https://ogp.deno.dev/?size=large&url=${
-        encodeURIComponent(href)
-      }" height="350" width="500"></iframe>`;
+      return `<iframe src="https://ogp.deno.dev/?size=large&url=${encodeURIComponent(href)
+        }" height="350" width="500"></iframe>`;
     } else if (text === "_preview_small") {
-      return `<iframe src="https://ogp.deno.dev/?size=small&url=${
-        encodeURIComponent(href)
-      }" height="150" style="width: 100%;"></iframe>`;
+      return `<iframe src="https://ogp.deno.dev/?size=small&url=${encodeURIComponent(href)
+        }" height="150" style="width: 100%;"></iframe>`;
     }
     return `<a href="${href}" title="${title}" rel="noopener noreferrer" target="_blank">${text}</a>`;
   }
@@ -81,7 +78,6 @@ export interface RenderOptions {
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
-  markdown = emojify(markdown);
 
   const marked_opts = {
     baseUrl: opts.baseUrl,
