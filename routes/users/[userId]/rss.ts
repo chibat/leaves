@@ -20,6 +20,9 @@ export default defineRoute(async (req, ctx) => {
     <title>${title}</title>
     <link>https://leaves.chiba.dev/users/${ctx.params.userId}</link>
     <description>${title}</description>
+    <image>
+      <url>https://leaves.chiba.dev/favicon.ico</url>
+    </image>
     ${posts.map((post) => `
     <item>
       <title>${getTitle(post.source) + ' | ' + title}</title>
