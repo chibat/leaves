@@ -3,9 +3,9 @@
   "tasks": {
     "win": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,$LOCALAPPDATA/Temp --allow-run=$(where deno),$LOCALAPPDATA/Cache/esbuild/bin/esbuild-windows-64@0.19.4 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$SUPABASE_HOST dev.ts",
     "arm": "deno run --watch=static/,routes/ --allow-env --allow-read --allow-write=.,/tmp --allow-run=deno,$HOME/.cache/esbuild/bin/esbuild-linux-arm64@0.19.4 --allow-net=:8000,deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$SUPABASE_HOST dev.ts",
-    "linux": "export $(grep -v ^# .env) && deno run --watch=static/,routes/ --allow-env -R -W=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=$HOME/.proto/tools/deno/1.46.3/deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 -N=:8000,deno.land,dl.deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$SUPABASE_HOST,registry.npmjs.org dev.ts",
+    "linux": "export $(grep -v ^# .env) && deno run --watch=static/,routes/ --allow-env -R -W=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=$HOME/.deno/bin/deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.20.2 -N=:8000,deno.land,dl.deno.land,esm.sh,accounts.google.com,www.googleapis.com,cdn.jsdelivr.net,$SUPABASE_HOST,registry.npmjs.org dev.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update .",
-    "build": "git show --format='%H' --no-patch > static/build.txt && date --iso-8601='seconds' >> static/build.txt && deno run --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.19.4 --allow-net=deno.land,dl.deno.land,esm.sh,cdn.jsdelivr.net,registry.npmjs.org dev.ts build",
+    "build": "git show --format='%H' --no-patch > static/build.txt && date --iso-8601='seconds' >> static/build.txt && deno run --allow-env --allow-read --allow-write=.,$HOME/.cache/fresh,$HOME/.cache/esbuild --allow-run=deno,$HOME/.cache/esbuild/bin/@esbuild-linux-x64@0.20.2 --allow-net=deno.land,dl.deno.land,esm.sh,cdn.jsdelivr.net,registry.npmjs.org dev.ts build",
     "env": "env",
     "preview": "export $(grep -v ^# .env) && deno run -A main.ts",
     "sb-gen": "export $(grep -v ^# .env) && supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > server/database.types.ts"
@@ -19,14 +19,14 @@
     }
   },
   "imports": {
-    "$std/": "https://deno.land/std@0.193.0/",
+    "$std/": "https://deno.land/std@0.216.0/",
     "supabase-js": "https://esm.sh/v133/@supabase/supabase-js@2.38.4",
-    "$fresh/": "https://deno.land/x/fresh@1.6.0/",
-    "preact": "https://esm.sh/preact@10.19.2",
-    "preact/": "https://esm.sh/preact@10.19.2/",
-    "preact-render-to-string": "https://esm.sh/*preact-render-to-string@6.2.2",
-    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.1",
-    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.0",
+    "$fresh/": "https://deno.land/x/fresh@1.7.3/",
+    "preact": "https://esm.sh/preact@10.22.0",
+    "preact/": "https://esm.sh/preact@10.22.0/",
+    "preact/jsx-runtime": "https://esm.sh/preact@10.22.0/jsx-runtime",
+    "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",
+    "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.8.0",
     "@trpc/server": "https://esm.sh/v114/@trpc/server@10.18.0",
     "@trpc/server/": "https://esm.sh/v114/@trpc/server@10.18.0/",
     "@trpc/client": "https://esm.sh/v114/@trpc/client@10.18.0",
