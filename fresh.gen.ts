@@ -38,7 +38,7 @@ import * as $PostNew from "./islands/PostNew.tsx";
 import * as $PostView from "./islands/PostView.tsx";
 import * as $SearchedPosts from "./islands/SearchedPosts.tsx";
 import * as $UserPosts from "./islands/UserPosts.tsx";
-import { type Manifest } from "$fresh/server.ts";
+import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
