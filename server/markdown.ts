@@ -58,11 +58,11 @@ class Renderer extends Marked.Renderer {
       }
     }
     if (text === "_preview_large") {
-      return `<iframe src="https://ogp.deno.dev/?size=large&url=${
+      return `<iframe src="https://ogp.ct.deno.net/?size=large&url=${
         encodeURIComponent(href)
       }" height="350" width="500"></iframe>`;
     } else if (text === "_preview_small") {
-      return `<iframe src="https://ogp.deno.dev/?size=small&url=${
+      return `<iframe src="https://ogp.ct.deno.net/?size=small&url=${
         encodeURIComponent(href)
       }" height="150" style="width: 100%;"></iframe>`;
     }
@@ -157,7 +157,12 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   }
 
   return sanitizeHtml(html, {
-    allowedIframeDomains: ["youtu.be", "www.youtube.com", "ogp.deno.dev"],
+    allowedIframeDomains: [
+      "youtu.be",
+      "www.youtube.com",
+      "ogp.deno.dev",
+      "ogp.ct.deno.net",
+    ],
     transformTags: {
       img: transformMedia,
       video: transformMedia,
@@ -187,7 +192,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       h4: ["id"],
       h5: ["id"],
       h6: ["id"],
-      //<iframe src="https://ogp.deno.dev/?size=large&url=https://github.com" height="500" style="width: 500px; max-width: 100%;"></iframe>
+      //<iframe src="https://ogp.ct.deno.net/?size=large&url=https://github.com" height="500" style="width: 500px; max-width: 100%;"></iframe>
       iframe: ["src", "width", "height", "style"], // Only used when iframe tags are allowed in the first place.
       math: ["xmlns"], // Only enabled when math is enabled
       annotation: ["encoding"], // Only enabled when math is enabled

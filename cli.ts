@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net=localhost,leaves.chiba.dev,leaves--develop.deno.dev
+#!/usr/bin/env -S deno run --allow-net=localhost,leaves.chiba.dev
 
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/input.ts";
 import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/select.ts";

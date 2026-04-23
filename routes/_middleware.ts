@@ -14,7 +14,9 @@ export async function handler(
     });
   }
   const url = new URL(_req.url);
-  if (url.hostname === "leaves.deno.dev") {
+  if (
+    url.hostname === "leaves.deno.dev" || url.hostname === "leaves.ct.deno.net"
+  ) {
     url.hostname = "leaves.chiba.dev";
     return Response.redirect(url, 301); // Moved Permanently
   }
