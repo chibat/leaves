@@ -1,5 +1,4 @@
 // Original: https://github.com/denoland/deno-gfm/blob/6f4b8ae149b1f044037986929f096434b06bd726/mod.ts
-import { emojify } from "emoji";
 import * as Marked from "marked";
 //import { default as Prism } from "prismjs";
 import { default as sanitizeHtml } from "sanitize-html";
@@ -81,7 +80,6 @@ export interface RenderOptions {
 
 export function render(markdown: string, opts: RenderOptions = {}): string {
   opts.mediaBaseUrl ??= opts.baseUrl;
-  markdown = emojify(markdown);
 
   const marked_opts = {
     baseUrl: opts.baseUrl,
