@@ -1,38 +1,39 @@
 import { trpc } from "./trpc.ts";
 import Mousetrap from "mousetrap";
+import { navigate } from "astro:transitions/client";
 
 export function shortcut() {
   Mousetrap.bind("/", () => {
-    location.href = "/search";
+    void navigate("/search");
   });
   Mousetrap.bind("n", () => {
-    location.href = "/posts/new";
+    void navigate("/posts/new");
   });
   Mousetrap.bind("?", () => {
-    location.href = "/shortcuts";
+    void navigate("/shortcuts");
   });
   Mousetrap.bind(".", () => {
     window.scroll({ top: 0, behavior: "smooth" });
   });
   Mousetrap.bind("g a", () => {
-    location.href = "/about";
+    void navigate("/about");
   });
   Mousetrap.bind("g h", () => {
-    location.href = "/";
+    void navigate("/");
   });
   Mousetrap.bind("g n", () => {
-    location.href = "/notification";
+    void navigate("/notification");
   });
   Mousetrap.bind("g l", () => {
-    location.href = "/likes";
+    void navigate("/likes");
   });
   Mousetrap.bind("g f", () => {
-    location.href = "/following";
+    void navigate("/following");
   });
   Mousetrap.bind("g p", () => {
     trpc.getSession.query().then((session) => {
       if (session?.user.id) {
-        location.href = `/users/${session.user.account ?? session.user.id}`;
+        void navigate(`/users/${session.user.account ?? session.user.id}`);
       }
     });
   });

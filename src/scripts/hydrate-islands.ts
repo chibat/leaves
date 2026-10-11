@@ -11,44 +11,49 @@ import SearchedPosts from "../../islands/SearchedPosts.tsx";
 import UserPosts from "../../islands/UserPosts.tsx";
 
 function hydrateIsland<P extends object>(
-  name: string,
   Component: ComponentType<P>,
   element: HTMLElement,
 ) {
   const props = JSON.parse(element.dataset.props ?? "{}") as P;
-  render(
-    h(
-      "div",
-      {
-        "data-preact-island": name,
-        "data-props": JSON.stringify(props),
-      },
-      h(Component, props as P & { key?: string | number }),
-    ),
-    element,
-  );
+  render(h(Component, props), element);
 }
 
 const islands: Record<string, (element: HTMLElement) => void> = {
-  AllPosts: (element) => hydrateIsland("AllPosts", AllPosts, element),
-  DeleteAccount: (element) => hydrateIsland("DeleteAccount", DeleteAccount, element),
-  FollowingPosts: (element) => hydrateIsland("FollowingPosts", FollowingPosts, element),
-  Header: (element) => hydrateIsland("Header", Header, element),
-  LikePosts: (element) => hydrateIsland("LikePosts", LikePosts, element),
-  PostEdit: (element) => hydrateIsland("PostEdit", PostEdit, element),
-  PostNew: (element) => hydrateIsland("PostNew", PostNew, element),
-  PostView: (element) => hydrateIsland("PostView", PostView, element),
-  SearchedPosts: (element) => hydrateIsland("SearchedPosts", SearchedPosts, element),
-  UserPosts: (element) => hydrateIsland("UserPosts", UserPosts, element),
+  AllPosts: (element) => hydrateIsland(AllPosts, element),
+  DeleteAccount: (element) => hydrateIsland(DeleteAccount, element),
+  FollowingPosts: (element) => hydrateIsland(FollowingPosts, element),
+  Header: (element) => hydrateIsland(Header, element),
+  LikePosts: (element) => hydrateIsland(LikePosts, element),
+  PostEdit: (element) => hydrateIsland(PostEdit, element),
+  PostNew: (element) => hydrateIsland(PostNew, element),
+  PostView: (element) => hydrateIsland(PostView, element),
+  SearchedPosts: (element) => hydrateIsland(SearchedPosts, element),
+  UserPosts: (element) => hydrateIsland(UserPosts, element),
 };
 
-document.querySelectorAll<HTMLElement>("[data-preact-island]").forEach(
-  (element) => {
-    const name = element.dataset.preactIsland as keyof typeof islands;
-    const Component = islands[name];
-    if (!Component) {
-      throw new Error(`Unknown Preact island: ${name}`);
+function hydrateIslands() {
+  document.querySelectorAll<HTMLElement>(
+    "[data-preact-island]:not([data-preact-hydrated])",
+  ).forEach((element) => {
+    const name = element.dataset.preactIsland;
+    const hydrate = name ? islands[name] : undefined;
+    if (!hydrate) {
+      throw new Error(`Unknown Preact island: ${name ?? "(missing name)"}`);
     }
-    islands[name](element);
-  },
-);
+    element.dataset.preactHydrated = "true";
+    hydrate(element);
+  });
+}
+
+function unmountIslands() {
+  document.querySelectorAll<HTMLElement>("[data-preact-hydrated]").forEach(
+    (element) => {
+      render(null, element);
+      delete element.dataset.preactHydrated;
+    },
+  );
+}
+
+document.addEventListener("astro:page-load", hydrateIslands);
+document.addEventListener("astro:before-swap", unmountIslands);
+hydrateIslands();

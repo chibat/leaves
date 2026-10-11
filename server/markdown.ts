@@ -16,6 +16,22 @@ class Renderer extends Marked.Renderer {
     super();
   }
 
+  code(code: string, infostring: string | undefined, escaped: boolean): string {
+    const language = infostring?.match(/\S*/)?.[0];
+    const safeCode = escaped ? code : escapeHtml(code);
+    const languageClass = language
+      ? ` class="language-${escapeHtml(language)}"`
+      : "";
+    return `<div class="code-block">
+  <button class="copy-code-button" type="button" aria-label="Copy code" title="Copy code">
+    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <path d="M4 2.75A1.75 1.75 0 0 1 5.75 1h7.5A1.75 1.75 0 0 1 15 2.75v7.5A1.75 1.75 0 0 1 13.25 12h-7.5A1.75 1.75 0 0 1 4 10.25zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25zM1 5.75C1 4.784 1.784 4 2.75 4H3v1.5h-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25V13h1.5v.25A1.75 1.75 0 0 1 10.25 15h-7.5A1.75 1.75 0 0 1 1 13.25z"/>
+    </svg>
+  </button>
+  <pre><code${languageClass}>${safeCode.replace(/\n?$/, "\n")}</code></pre>
+</div>\n`;
+  }
+
   // heading(
   //   text: string,
   //   level: 1 | 2 | 3 | 4 | 5 | 6,
@@ -113,6 +129,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
     "summary",
     "iframe",
     "input",
+    "button",
   ]);
   if (opts.allowMath) {
     allowedTags = allowedTags.concat([
@@ -187,6 +204,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       a: ["id", "aria-hidden", "href", "tabindex", "rel", "target"],
       svg: ["viewbox", "width", "height", "aria-hidden", "background"],
       path: ["fill-rule", "d"],
+      button: ["type", "class", "aria-label", "title"],
       circle: ["cx", "cy", "r", "stroke", "stroke-width", "fill", "alpha"],
       span: opts.allowMath ? ["aria-hidden", "style"] : [],
       h1: ["id"],
@@ -203,7 +221,9 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
       code: ["class"],
     },
     allowedClasses: {
-      div: ["highlight", "highlight-source-*", "notranslate"],
+      div: ["highlight", "highlight-source-*", "notranslate", "code-block"],
+      code: ["language-*"],
+      button: ["copy-code-button"],
       span: [
         "token",
         "keyword",
@@ -249,4 +269,23 @@ function youtube(url: string) {
     return `<iframe width="560" height="315" src="${src}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
   }
   return null;
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (character) => {
+    switch (character) {
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&#39;";
+      default:
+        return character;
+    }
+  });
 }

@@ -38,3 +38,8 @@ deno install -f -n s --allow-net=leaves.chiba.dev https://raw.githubusercontent.
 - <https://getbootstrap.com/docs/5.2/getting-started/introduction/>
 - <https://astro.build/>
 - <https://preactjs.com/>
+
+-------
+```
+npx wrangler login --device # for Dev Containers
+```

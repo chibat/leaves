@@ -10,7 +10,7 @@
     "cli": "node --experimental-strip-types cli.ts",
     "test": "node --experimental-strip-types --test server/query_builder_test.ts",
     "sb-gen": "set -a && . ./.env && set +a && : \"${SUPABASE_PROJECT_ID:?SUPABASE_PROJECT_ID must be set in .env}\" && supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > server/database.types.ts",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy --keep-vars"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.4",

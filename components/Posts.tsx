@@ -4,6 +4,7 @@ import { useEffect } from "preact/hooks";
 import { Signal } from "@preact/signals-core";
 import Mousetrap from "mousetrap";
 import { useSignal } from "@preact/signals";
+import { navigate } from "astro:transitions/client";
 import Post from "~/components/Post.tsx";
 import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
@@ -18,12 +19,12 @@ export default function Posts(props: Props) {
   useEffect(() => {
     registerJumpElements(document.getElementsByClassName("postCard"));
     Mousetrap.bind("o", () => {
-      location.href = `/posts/${props.posts.value[selectedIndex.value].id}`;
+      void navigate(`/posts/${props.posts.value[selectedIndex.value].id}`);
     });
     Mousetrap.bind("e", () => {
       const post = props.posts.value[selectedIndex.value];
       if (props.userId === post.user_id) {
-        location.href = `/posts/${post.id}/edit`;
+        void navigate(`/posts/${post.id}/edit`);
       }
     });
   }, []);

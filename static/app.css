@@ -14,6 +14,55 @@ pre code {
   padding: 1em;
 }
 
+.code-block {
+  position: relative;
+}
+
+.code-block pre {
+  margin: 1em 0;
+}
+
+.copy-code-button {
+  position: absolute;
+  z-index: 1;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #777;
+  border-radius: 0.375rem;
+  color: #fff;
+  background: #3b3b3b;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease-in-out;
+}
+
+.copy-code-button svg {
+  fill: currentColor;
+}
+
+.code-block:hover .copy-code-button,
+.code-block:focus-within .copy-code-button {
+  opacity: 1;
+}
+
+.copy-code-button[data-copy-state="copied"] {
+  color: #b9f6ca;
+}
+
+.copy-code-button[data-copy-state="failed"] {
+  color: #ffb4ab;
+}
+
+@media (hover: none) {
+  .copy-code-button {
+    opacity: 1;
+  }
+}
+
 code {
   color: black;
   background-color: rgba(0,0,0,.08);
@@ -99,4 +148,3 @@ iframe {
 .post h1, h2 {
 	margin-bottom: 16px;
 }
-
