@@ -1,0 +1,32 @@
+{
+  "name": "@chibat/leaves",
+  "version": "0.1.0",
+  "description": "Search and read Leaves posts from the command line",
+  "type": "module",
+  "bin": {
+    "leaves": "./cli.js"
+  },
+  "files": [
+    "cli.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepack": "npm --prefix .. run build:cli"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chibat/leaves.git",
+    "directory": "cli-package"
+  },
+  "homepage": "https://github.com/chibat/leaves#readme",
+  "keywords": [
+    "leaves",
+    "cli",
+    "microblog"
+  ]
+}

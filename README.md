@@ -28,10 +28,24 @@ with `npm run deploy`; `npm run preview` runs the built Worker locally.
 
 ## Leaves CLI
 
-The standalone CLI remains a Deno program:
+After the CLI package is published, run it with Node.js:
 
 ```sh
-deno install -f -n s --allow-net=leaves.chiba.dev https://raw.githubusercontent.com/chibat/leaves/main/cli.ts
+npx @chibat/leaves
+```
+
+Pass `dev` to connect to a local server at `http://localhost:8000`:
+
+```sh
+npx @chibat/leaves dev
+```
+
+The package can be built and published from `cli-package/`:
+
+```sh
+npm run build:cli
+cd cli-package
+npm publish --access public
 ```
 
 ## References
