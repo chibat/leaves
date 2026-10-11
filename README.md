@@ -18,6 +18,8 @@ Source code for <https://leaves.chiba.dev/>.
    development server at <http://localhost:8000>.
 4. Run `npm test`, `npm run check`, and `npm run build` before deploying.
 
+For browser-based regression checks, follow [MANUAL_TESTS.md](./MANUAL_TESTS.md).
+
 ## Cloudflare Workers
 
 Set `LEAVES_AUTH_CLIENT_ID`, `LEAVES_AUTH_CLIENT_SECRET`, `SUPABASE_HOST`, and
