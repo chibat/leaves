@@ -1,0 +1,30 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "verbatimModuleSyntax": false,
+    "allowImportingTsExtensions": true,
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    ".astro/types.d.ts",
+    "src/**/*",
+    "server/**/*",
+    "routes/**/*",
+    "islands/**/*",
+    "components/**/*",
+    "common/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "_fresh"
+  ]
+}

@@ -1,4 +1,4 @@
-import { Handlers } from "$fresh/server.ts";
+import type { Handlers } from "~/server/route.ts";
 import { env } from "~/server/env.ts";
 import { createSession, getCallbackUrl } from "~/server/auth.ts";
 import { selectUserByGoogleId, upsertUser } from "~/server/db.ts";
@@ -15,10 +15,13 @@ export type GoogleUser = {
 };
 
 export const handler: Handlers = {
-  async GET(req, ctx) {
+  async GET(req) {
     const searchParams = new URL(req.url).searchParams;
     const code = searchParams.get("code");
-    const res = await ctx.render();
+    const res = new Response(
+      "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><script>location.href = '/';</script></body></html>",
+      { headers: { "content-type": "text/html; charset=utf-8" } },
+    );
 
     if (code) {
       const redirectUri = getCallbackUrl(req.url);
@@ -73,13 +76,4 @@ export const handler: Handlers = {
     }
     return res;
   }
-}
-
-export default function Callback() {
-  // response header での redirect だと cookie が送信されない
-  return (
-    <script>
-      location.href = '/';
-    </script>
-  );
 }

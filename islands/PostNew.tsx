@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import * as hljs from "highlightjs";
+import hljs from "highlight.js";
 import { createRef } from "preact";
 import Mousetrap from "mousetrap";
 import { useEffect } from "preact/hooks";

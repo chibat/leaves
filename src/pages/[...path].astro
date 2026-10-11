@@ -1,0 +1,27 @@
+---
+import { renderLegacyPage } from "../legacy.tsx";
+import Layout from "../layouts/Layout.astro";
+
+const result = await renderLegacyPage(Astro.request);
+let responseBody = "";
+if (result.kind === "page" && result.notFound) {
+  Astro.response.status = 404;
+}
+if (result.kind === "response") {
+  const response = result.response;
+  const location = response.headers.get("location");
+  if (location && response.status >= 300 && response.status < 400) {
+    return Astro.redirect(location, response.status as 301 | 302 | 303 | 307 | 308);
+  }
+  Astro.response.status = response.status;
+  response.headers.forEach((value, key) => Astro.response.headers.set(key, value));
+  responseBody = await response.text();
+  if (response.headers.get("content-type")?.includes("text/html")) {
+    Astro.response.headers.set("content-type", "text/html; charset=utf-8");
+  }
+}
+---
+
+{ result.kind === "response"
+  ? <Fragment set:html={responseBody} />
+  : <Layout title={result.title} head={result.headHtml} content={result.bodyHtml} /> }

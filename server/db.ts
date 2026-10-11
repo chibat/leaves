@@ -1,5 +1,4 @@
-import { createClient, SupabaseClient } from "supabase-js";
-import * as uuid from "$std/uuid/mod.ts";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { PAGE_ROWS } from "~/common/constants.ts";
 import * as env from "~/server/env.ts";
 import { Database } from "~/server/database.types.ts";
@@ -28,13 +27,19 @@ export type UserViewType = {
   account: string | null;
 };
 
-let supabase: SupabaseClient<Database>;
-
-export function initSupabase() {
-  const url = "https://" + env.get("SUPABASE_HOST");
-  const serviceRoleKey = env.get("SUPABASE_SERVICE_ROLE_KEY");
-  supabase = createClient<Database>(url, serviceRoleKey);
-}
+const supabaseClientKey = Symbol("supabase-client");
+const supabase = new Proxy({} as SupabaseClient<Database>, {
+  get(_target, property) {
+    const client = env.getRequestValue(supabaseClientKey, () =>
+      createClient<Database>(
+        "https://" + env.get("SUPABASE_HOST"),
+        env.get("SUPABASE_SERVICE_ROLE_KEY"),
+      )
+    );
+    const value = Reflect.get(client, property, client);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});
 
 export async function selectUserByGoogleId(googleId: string) {
   const { data, error } = await supabase.from("app_user").select(
@@ -513,7 +518,10 @@ export async function selectLikeUsers(postId: number) {
 }
 
 export async function selectSession(sessionId: string) {
-  if (!uuid.validate(sessionId)) {
+  if (
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      .test(sessionId)
+  ) {
     return undefined;
   }
   const { data, error } = await supabase.from("app_session").select(

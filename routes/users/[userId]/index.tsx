@@ -1,5 +1,5 @@
-import { Head } from "$fresh/runtime.ts";
-import { defineRoute } from "$fresh/server.ts";
+import { Head } from "~/server/head.tsx";
+import { defineRoute } from "~/server/route.ts";
 import { getAuthUrl, getSession } from "~/server/auth.ts";
 import Header from "~/islands/Header.tsx";
 import { selectUser } from "~/server/db.ts";

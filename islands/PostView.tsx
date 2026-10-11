@@ -1,12 +1,13 @@
 import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
-import * as hljs from "highlightjs";
+import hljs from "highlight.js";
 import Mousetrap from "mousetrap";
 import { PostViewType } from "~/server/db.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { trpc } from "~/client/trpc.ts";
 import { createRef } from "preact";
+import { navigate } from "astro:transitions/client";
 
 type Comments = ReturnType<typeof trpc.getComments.query> extends
   Promise<infer T> ? T : never;
@@ -122,7 +123,7 @@ export default function PostView(
     }
     Mousetrap.bind("e", () => {
       if (userId === post.user_id) {
-        location.href = `/posts/${post.id}/edit`;
+        void navigate(`/posts/${post.id}/edit`);
       }
     });
   }, []);

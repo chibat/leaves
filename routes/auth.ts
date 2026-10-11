@@ -1,4 +1,4 @@
-import { Handlers } from "$fresh/server.ts";
+import type { Handlers } from "~/server/route.ts";
 import { getAuthUrl, getSession } from "~/server/auth.ts";
 
 export const handler: Handlers = {
@@ -16,4 +16,3 @@ export const handler: Handlers = {
     return Response.redirect(authUrl);
   },
 }
-

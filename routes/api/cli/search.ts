@@ -1,4 +1,4 @@
-import { defineRoute } from "$fresh/server.ts";
+import { defineRoute } from "~/server/route.ts";
 import { selectPostsBySearchWord } from "~/server/db.ts";
 import { getTitle } from "~/server/getTitle.ts";
 

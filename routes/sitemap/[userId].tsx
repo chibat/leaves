@@ -1,9 +1,12 @@
-import { defineRoute } from "$fresh/server.ts";
-import { Head } from "$fresh/runtime.ts";
+import { defineRoute } from "~/server/route.ts";
+import { Head } from "~/server/head.tsx";
 import { selectUserPostIds } from "~/server/db.ts";
 
 export default defineRoute(async (_req, ctx) => {
   const userId = Number(ctx.params.userId);
+  if (Number.isNaN(userId)) {
+    return ctx.renderNotFound();
+  }
   const postIds = await selectUserPostIds(userId);
   return (
     <>

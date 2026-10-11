@@ -1,8 +1,8 @@
-import { defineRoute } from "$fresh/server.ts";
+import { defineRoute } from "~/server/route.ts";
 import { getAuthUrl, getSession } from "~/server/auth.ts";
 import Header from "~/islands/Header.tsx";
 import DeleteAccount from "~/islands/DeleteAccount.tsx";
-import { Head } from "$fresh/runtime.ts";
+import { Head } from "~/server/head.tsx";
 
 export default defineRoute(async (req, _ctx) => {
   const session = await getSession(req);
