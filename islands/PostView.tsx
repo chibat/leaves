@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import { useSignal } from "@preact/signals";
-import * as hljs from "highlightjs";
+import hljs from "highlight.js";
 import Mousetrap from "mousetrap";
 import { PostViewType } from "~/server/db.ts";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";

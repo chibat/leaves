@@ -1,8 +1,6 @@
 {
-  "deno.enable": true,
-  "editor.defaultFormatter": "denoland.vscode-deno",
   "editor.formatOnSave": true,
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
   }
 }

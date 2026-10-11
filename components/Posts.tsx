@@ -1,4 +1,4 @@
-import * as hljs from "highlightjs";
+import hljs from "highlight.js";
 
 import { useEffect } from "preact/hooks";
 import { Signal } from "@preact/signals-core";
@@ -76,4 +76,3 @@ export default function Posts(props: Props) {
     </>
   );
 }
-

@@ -1,5 +1,4 @@
-import { Handlers } from "$fresh/server.ts";
-import { deleteCookie } from "$std/http/cookie.ts";
+import type { Handlers } from "~/server/route.ts";
 import { getSession } from "~/server/auth.ts";
 import { deleteSession } from "~/server/db.ts";
 
@@ -13,7 +12,10 @@ export const handler: Handlers = {
       status: 307,
       headers: { Location: "/" },
     });
-    deleteCookie(response.headers, "session");
+    response.headers.append(
+      "Set-Cookie",
+      "session=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax",
+    );
     return response;
   },
 };

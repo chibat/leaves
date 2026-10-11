@@ -1,5 +1,5 @@
-import { Head } from "$fresh/runtime.ts";
-import { defineRoute } from "$fresh/server.ts";
+import { Head } from "~/server/head.tsx";
+import { defineRoute } from "~/server/route.ts";
 import Header from "~/islands/Header.tsx";
 import { getAuthUrl, getSession } from "~/server/auth.ts";
 
@@ -52,29 +52,22 @@ export default defineRoute(async (req, _ctx) => {
             Production Runtime(built using the following free plan)
             <ul>
               <li>
-                <a href="https://deno.com/deploy" target="_blank">
-                  Deno Deploy
-                </a>(TypeScript at the Edge)
+                <a href="https://workers.cloudflare.com/" target="_blank">
+                  Cloudflare Workers
+                </a>{" "}(TypeScript at the Edge)
               </li>
               <li>
                 <a href="https://supabase.com/" target="_blank">
                   Supabase
-                </a>(Postgres database)
+                </a>{" "}(Postgres database)
               </li>
               <li>
                 <a href="https://github.com/features/actions" target="_blank">
                   GitHub Actions
-                </a>(<a
-                  href="https://fresh.deno.dev/docs/concepts/ahead-of-time-builds"
-                  target="_blank"
-                >
+                </a>{" "}(<a href="https://docs.astro.build/" target="_blank">
                   Build, Deploy
-                </a>{" "}
-                and{" "}
-                <a
-                  href="https://supabase.com/docs/guides/cli/github-action/backups"
-                  target="_blank"
-                >
+                </a>{" "}and{" "}
+                <a href="https://supabase.com/docs/guides/cli/github-action/backups" target="_blank">
                   DB Backup
                 </a>)
               </li>
@@ -85,7 +78,7 @@ export default defineRoute(async (req, _ctx) => {
             Modules used
             <ul>
               <li>
-                See deno.json imports
+                See package.json dependencies
               </li>
               <li>
                 <a href="https://getbootstrap.com/" target="_blank">

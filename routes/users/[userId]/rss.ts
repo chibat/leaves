@@ -1,4 +1,4 @@
-import { defineRoute } from "$fresh/server.ts";
+import { defineRoute } from "~/server/route.ts";
 import { selectUser, selectUserPost } from "~/server/db.ts";
 import { getTitle } from "~/server/getTitle.ts";
 
@@ -12,6 +12,8 @@ export default defineRoute(async (req, ctx) => {
   const title = `${pageUser.name} - Leaves`;
   const posts = await selectUserPost({
     userId: pageUser.id,
+    self: false,
+    ltId: null,
   });
   return new Response(
     `<?xml version="1.0" encoding="UTF-8" ?>

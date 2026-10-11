@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import * as hljs from "highlightjs";
+import hljs from "highlight.js";
 import { useEffect, useState } from "preact/hooks";
 import { PostViewType } from "~/server/db.ts";
 import { trpc } from "~/client/trpc.ts";

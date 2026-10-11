@@ -1,5 +1,5 @@
-import { Head } from "$fresh/runtime.ts";
-import { defineRoute } from "$fresh/server.ts";
+import { Head } from "~/server/head.tsx";
+import { defineRoute } from "~/server/route.ts";
 import Header from "~/islands/Header.tsx";
 import { getSession } from "~/server/auth.ts";
 import LikePosts from "~/islands/LikePosts.tsx";
@@ -24,4 +24,3 @@ export default defineRoute(async (req, _ctx) => {
     </>
   );
 });
-

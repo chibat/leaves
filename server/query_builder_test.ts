@@ -1,5 +1,6 @@
-import { assertEquals } from "$std/testing/asserts.ts";
-import { QueryBuilder } from "~/server/query_builder.ts";
+import assert from "node:assert/strict";
+import test from "node:test";
+import { QueryBuilder } from "./query_builder.ts";
 
 const LIMIT = 10;
 
@@ -13,20 +14,20 @@ function build({ deptId, age }: { deptId: number; age?: number }) {
   return builder;
 }
 
-Deno.test("with age", () => {
+test("with age", () => {
   const builder = build({ deptId: 1, age: 50 });
-  assertEquals(
+  assert.equal(
     builder.query,
     "SELECT * FROM emp WHERE dept_id = $1 AND age > $2 ORDER BY DESC salary LIMIT 10",
   );
-  assertEquals(builder.args, [1, 50]);
+  assert.deepEqual(builder.args, [1, 50]);
 });
 
-Deno.test("without age", () => {
+test("without age", () => {
   const builder = build({ deptId: 1 });
-  assertEquals(
+  assert.equal(
     builder.query,
     "SELECT * FROM emp WHERE dept_id = $1 ORDER BY DESC salary LIMIT 10",
   );
-  assertEquals(builder.args, [1]);
+  assert.deepEqual(builder.args, [1]);
 });

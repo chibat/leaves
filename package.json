@@ -1,0 +1,39 @@
+{
+  "name": "leaves",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0 --port 8000",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0 --port 8000",
+    "check": "astro check",
+    "cli": "node --experimental-strip-types cli.ts",
+    "test": "node --experimental-strip-types --test server/query_builder_test.ts",
+    "sb-gen": "set -a && . ./.env && set +a && : \"${SUPABASE_PROJECT_ID:?SUPABASE_PROJECT_ID must be set in .env}\" && supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > server/database.types.ts",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.3.4",
+    "@astrojs/preact": "^6.0.6",
+    "@supabase/supabase-js": "^2.38.4",
+    "@trpc/client": "^10.18.0",
+    "@trpc/server": "^10.18.0",
+    "astro": "^7.3.8",
+    "highlight.js": "^11.11.1",
+    "marked": "^4.2.12",
+    "mousetrap": "^1.6.5",
+    "preact": "^10.27.2",
+    "preact-render-to-string": "^6.5.13",
+    "sanitize-html": "^2.8.1",
+    "zod": "^3.20.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/marked": "^4.3.2",
+    "@types/mousetrap": "^1.6.15",
+    "@types/node": "^22.15.30",
+    "@types/sanitize-html": "^2.16.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.20.0"
+  }
+}

@@ -1,11 +1,13 @@
-import { getCookies, setCookie } from "$std/http/cookie.ts";
 import { AppUser, insertSession, selectSession } from "~/server/db.ts";
 import { env } from "~/server/env.ts";
 
 export type SessionType = { id: string; user: AppUser };
 export async function getSession(req: Request) {
-  const cookies = getCookies(req.headers);
-  const sessionId = cookies["session"];
+  const sessionId = req.headers.get("cookie")
+    ?.split(";")
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith("session="))
+    ?.slice("session=".length);
   if (!sessionId) {
     return undefined;
   }
@@ -20,21 +22,18 @@ export async function createSession(response: Response, userId: number) {
   const sessionId = await insertSession(userId);
   const expires = new Date();
   expires.setMonth(expires.getMonth() + 1);
-  setCookie(response.headers, {
-    name: "session",
-    value: sessionId,
-    expires,
-    sameSite: "Lax",
-    httpOnly: true,
-    secure: true,
-    path: "/",
-  });
+  response.headers.append(
+    "Set-Cookie",
+    `session=${encodeURIComponent(sessionId)}; Expires=${expires.toUTCString()}; Path=/; HttpOnly; Secure; SameSite=Lax`,
+  );
 }
 
 export function getCallbackUrl(requestUrl: string) {
   const url = new URL(requestUrl);
-  return (url.hostname === "localhost" ? "http" : "https") + "://" + url.host +
-    "/callback";
+  const protocol = url.hostname === "localhost" || url.hostname === "127.0.0.1"
+    ? "http"
+    : "https";
+  return `${protocol}://${url.host}/callback`;
 }
 
 export function getAuthUrl(requestUrl: string): string {

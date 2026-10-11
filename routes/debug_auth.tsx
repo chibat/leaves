@@ -1,11 +1,9 @@
-import { Handlers } from "$fresh/server.ts";
+import type { Handlers } from "~/server/route.ts";
 import { createSession } from "~/server/auth.ts";
-
-const debug = Deno.env.get("HOSTNAME")?.startsWith("codespaces-");
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
-    if (!debug) {
+    if (import.meta.env.MODE !== "development") {
       return ctx.renderNotFound();
     }
     const res = await ctx.render();

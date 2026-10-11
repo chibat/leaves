@@ -1,4 +1,4 @@
-import { defineRoute } from "$fresh/server.ts";
+import { defineRoute } from "~/server/route.ts";
 import { selectPost } from "~/server/db.ts";
 
 export default defineRoute(async (_req, ctx) => {

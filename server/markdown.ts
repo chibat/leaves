@@ -12,6 +12,10 @@ import { default as sanitizeHtml } from "sanitize-html";
 // import "https://esm.sh/prismjs@1.29.0/components/prism-diff?no-check&pin=v57";
 
 class Renderer extends Marked.Renderer {
+  constructor(private readonly baseUrl?: string) {
+    super();
+  }
+
   // heading(
   //   text: string,
   //   level: 1 | 2 | 3 | 4 | 5 | 6,
@@ -48,8 +52,8 @@ class Renderer extends Marked.Renderer {
     if (href.startsWith("#")) {
       return `<a href="${href}" title="${title}">${text}</a>`;
     }
-    if (this.options.baseUrl) {
-      href = new URL(href, this.options.baseUrl).href;
+    if (this.baseUrl) {
+      href = new URL(href, this.baseUrl).href;
     }
     if (title === undefined && href === text) {
       const youtubeTag = youtube(href);
@@ -84,7 +88,7 @@ export function render(markdown: string, opts: RenderOptions = {}): string {
   const marked_opts = {
     baseUrl: opts.baseUrl,
     gfm: true,
-    renderer: new Renderer(),
+    renderer: new Renderer(opts.baseUrl),
     breaks: true,
   };
 

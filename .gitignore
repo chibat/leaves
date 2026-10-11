@@ -1,4 +1,9 @@
 /.env
+/node_modules/
+/dist/
+/.astro/
+/.wrangler/
+/.dev.vars
 /static/build.txt
 *.gz
 _fresh/
