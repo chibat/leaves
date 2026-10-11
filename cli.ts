@@ -31,6 +31,7 @@ function clearScreen() {
 function selectOption(
   message: string,
   options: Option[],
+  clearBeforeRender = true,
 ): Promise<number | null> {
   if (!process.stdin.isTTY || !process.stdin.setRawMode) {
     console.log(message);
@@ -49,19 +50,26 @@ function selectOption(
   process.stdin.setRawMode(true);
   process.stdin.resume();
   let selected = 0;
+  let rendered = false;
   const render = () => {
-    clearScreen();
+    if (clearBeforeRender) {
+      clearScreen();
+    } else if (rendered) {
+      process.stdout.write(`\x1b[${options.length + 1}A\x1b[J`);
+    }
     console.log(`${message} (↑/↓ or j/k, Enter to select, Ctrl+C to exit)`);
     options.forEach((option, index) => {
       const marker = index === selected ? "›" : " ";
       console.log(`${marker} ${option.name}`);
     });
+    rendered = true;
   };
 
   return new Promise((resolve) => {
     const finish = (value: number | null) => {
       process.stdin.off("keypress", onKeypress);
       process.stdin.setRawMode(false);
+      process.stdin.pause();
       process.stdout.write("\n");
       resolve(value);
     };
@@ -139,7 +147,7 @@ async function main() {
     console.log("-".repeat(81));
     console.log(`https://leaves.chiba.dev/posts/${postId}`);
 
-    const command = await selectOption("Select", COMMAND_OPTIONS);
+    const command = await selectOption("Select", COMMAND_OPTIONS, false);
     if (command === null || command === -2) return;
     searchSkip = command === -1;
   }
