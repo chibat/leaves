@@ -1,0 +1,47 @@
+---
+import AllPosts from "../../islands/AllPosts.tsx";
+import DeleteAccount from "../../islands/DeleteAccount.tsx";
+import FollowingPosts from "../../islands/FollowingPosts.tsx";
+import Header from "../../islands/Header.tsx";
+import LikePosts from "../../islands/LikePosts.tsx";
+import PostEdit from "../../islands/PostEdit.tsx";
+import PostNew from "../../islands/PostNew.tsx";
+import PostView from "../../islands/PostView.tsx";
+import SearchedPosts from "../../islands/SearchedPosts.tsx";
+import UserPosts from "../../islands/UserPosts.tsx";
+import type { LegacyPageSegment } from "../legacy.tsx";
+
+interface Props {
+  segments: LegacyPageSegment[];
+}
+
+const { segments } = Astro.props;
+---
+
+{segments.map((segment) => {
+  if (segment.kind === "html") {
+    return <Fragment set:html={segment.html} />;
+  }
+  switch (segment.name) {
+    case "AllPosts":
+      return <AllPosts {...segment.props} client:load />;
+    case "DeleteAccount":
+      return <DeleteAccount {...segment.props} client:load />;
+    case "FollowingPosts":
+      return <FollowingPosts {...segment.props} client:load />;
+    case "Header":
+      return <Header {...segment.props} client:load />;
+    case "LikePosts":
+      return <LikePosts {...segment.props} client:load />;
+    case "PostEdit":
+      return <PostEdit {...segment.props} client:load />;
+    case "PostNew":
+      return <PostNew client:load />;
+    case "PostView":
+      return <PostView {...segment.props} client:load />;
+    case "SearchedPosts":
+      return <SearchedPosts {...segment.props} client:load />;
+    case "UserPosts":
+      return <UserPosts {...segment.props} client:load />;
+  }
+})}

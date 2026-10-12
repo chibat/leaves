@@ -1,4 +1,10 @@
-import { cloneElement, h, isValidElement, type ComponentChildren } from "preact";
+import {
+  cloneElement,
+  h,
+  isValidElement,
+  type ComponentChildren,
+  type ComponentProps,
+} from "preact";
 import renderToString from "preact-render-to-string";
 import AboutPage from "../routes/about.tsx";
 import FollowingPage from "../routes/following.tsx";
@@ -28,6 +34,32 @@ import UserPosts from "../islands/UserPosts.tsx";
 import { Head } from "../server/head.tsx";
 import type { RouteContext } from "../server/route.ts";
 
+const islandComponents = {
+  AllPosts,
+  DeleteAccount,
+  FollowingPosts,
+  Header,
+  LikePosts,
+  PostEdit,
+  PostNew,
+  PostView,
+  SearchedPosts,
+  UserPosts,
+};
+
+type IslandName = keyof typeof islandComponents;
+type IslandSegment = {
+  [Name in IslandName]: {
+    kind: "island";
+    name: Name;
+    props: ComponentProps<typeof islandComponents[Name]>;
+  };
+}[IslandName];
+
+export type LegacyPageSegment =
+  | { kind: "html"; html: string }
+  | IslandSegment;
+
 type PageRoute = (request: Request, context: RouteContext) => unknown;
 
 type RouteMatch = {
@@ -36,18 +68,16 @@ type RouteMatch = {
   notFound?: boolean;
 };
 
-const islandNames = new Map<unknown, string>([
-  [AllPosts, "AllPosts"],
-  [DeleteAccount, "DeleteAccount"],
-  [FollowingPosts, "FollowingPosts"],
-  [Header, "Header"],
-  [LikePosts, "LikePosts"],
-  [PostEdit, "PostEdit"],
-  [PostNew, "PostNew"],
-  [PostView, "PostView"],
-  [SearchedPosts, "SearchedPosts"],
-  [UserPosts, "UserPosts"],
-]);
+const islandNames = new Map<unknown, IslandName>(
+  Object.entries(islandComponents).map(([name, component]) => [
+    component,
+    name as IslandName,
+  ]),
+);
+
+function islandPlaceholder(index: number) {
+  return `<astro-island-slot data-index="${index}"></astro-island-slot>`;
+}
 
 function decodeRouteParam(value: string): string {
   try {
@@ -101,9 +131,10 @@ function matchRoute(pathname: string): RouteMatch {
 function transformChild(
   child: ComponentChildren,
   head: ComponentChildren[],
+  islands: IslandSegment[],
 ): ComponentChildren {
   if (Array.isArray(child)) {
-    return child.map((item) => transformChild(item, head));
+    return child.map((item) => transformChild(item, head, islands));
   }
   if (!isValidElement(child)) {
     return child;
@@ -116,15 +147,18 @@ function transformChild(
   if (islandName) {
     const props = { ...child.props };
     delete props.children;
-    return h(
-      "div",
-      {
-        "data-preact-island": islandName,
-        "data-props": JSON.stringify(props),
-      },
-    );
+    islands.push({
+      kind: "island",
+      name: islandName,
+      props,
+    } as IslandSegment);
+    return h("astro-island-slot", { "data-index": islands.length - 1 });
   }
-  return cloneElement(child, {}, transformChild(child.props.children, head));
+  return cloneElement(
+    child,
+    {},
+    transformChild(child.props.children, head, islands),
+  );
 }
 
 export type LegacyPageResult =
@@ -132,7 +166,7 @@ export type LegacyPageResult =
   | {
     kind: "page";
     headHtml: string;
-    bodyHtml: string;
+    segments: LegacyPageSegment[];
     title: string;
     notFound: boolean;
   };
@@ -152,13 +186,34 @@ function renderPage(
     throw new TypeError("The page route must return a Preact element or Response.");
   }
   const head: ComponentChildren[] = [];
-  const page = transformChild(result, head);
+  const islands: IslandSegment[] = [];
+  const page = transformChild(result, head, islands);
   const headHtml = renderToString(h("div", null, head));
-  const bodyHtml = renderToString(h("div", null, page));
+  const bodyHtml = renderToString(h("div", null, page)).slice(
+    "<div>".length,
+    -"</div>".length,
+  );
+  const segments: LegacyPageSegment[] = [];
+  let cursor = 0;
+  islands.forEach((island, index) => {
+    const marker = islandPlaceholder(index);
+    const markerIndex = bodyHtml.indexOf(marker, cursor);
+    if (markerIndex < 0) {
+      throw new Error(`Missing Astro island placeholder: ${index}`);
+    }
+    if (markerIndex > cursor) {
+      segments.push({ kind: "html", html: bodyHtml.slice(cursor, markerIndex) });
+    }
+    segments.push(island);
+    cursor = markerIndex + marker.length;
+  });
+  if (cursor < bodyHtml.length) {
+    segments.push({ kind: "html", html: bodyHtml.slice(cursor) });
+  }
   return {
     kind: "page",
     headHtml: headHtml.slice("<div>".length, -"</div>".length),
-    bodyHtml: bodyHtml.slice("<div>".length, -"</div>".length),
+    segments,
     title: new URL(request.url).pathname === "/"
       ? "Leaves - Microblog with Markdown"
       : "Leaves",

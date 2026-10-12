@@ -1,6 +1,7 @@
 ---
 import { renderLegacyPage } from "../legacy.tsx";
 import Layout from "../layouts/Layout.astro";
+import IslandSegments from "../components/IslandSegments.astro";
 
 const result = await renderLegacyPage(Astro.request);
 let responseBody = "";
@@ -24,4 +25,8 @@ if (result.kind === "response") {
 
 { result.kind === "response"
   ? <Fragment set:html={responseBody} />
-  : <Layout title={result.title} head={result.headHtml} content={result.bodyHtml} /> }
+  : (
+    <Layout title={result.title} head={result.headHtml}>
+      <IslandSegments segments={result.segments} />
+    </Layout>
+  ) }
