@@ -14,9 +14,5 @@ export const onRequest = defineMiddleware(async (context, next) => {
     });
   }
   const url = new URL(context.request.url);
-  if (url.hostname === "leaves.deno.dev" || url.hostname === "leaves.ct.deno.net") {
-    url.hostname = "leaves.chiba.dev";
-    return Response.redirect(url, 301);
-  }
   return response;
 });
