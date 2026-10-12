@@ -1,10 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageFrame from "../../components/PageFrame.astro";
-import PostView from "../../../islands/PostView.tsx";
-import { getAuthUrl, getSession } from "../../../server/auth.ts";
-import { selectPost } from "../../../server/db.ts";
-import { getTitle } from "../../../server/getTitle.ts";
+import PostView from "~/islands/PostView.tsx";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { selectPost } from "~/server/db.ts";
+import { getTitle } from "~/server/getTitle.ts";
 
 const postId = Number(Astro.params.postId);
 const post = Number.isSafeInteger(postId) && postId > 0

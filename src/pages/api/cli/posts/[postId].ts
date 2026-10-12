@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { selectPost } from "../../../../../server/db.ts";
+import { selectPost } from "~/server/db.ts";
 
 export const GET: APIRoute = async ({ params }) => {
   const postId = Number(params.postId);

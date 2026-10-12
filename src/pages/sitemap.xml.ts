@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { selectPostIds, selectUsers } from "../../server/db.ts";
+import { selectPostIds, selectUsers } from "~/server/db.ts";
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);

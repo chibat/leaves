@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import { getSession } from "../../server/auth.ts";
-import { deleteSession } from "../../server/db.ts";
+import { getSession } from "~/server/auth.ts";
+import { deleteSession } from "~/server/db.ts";
 
 export const GET: APIRoute = async ({ request }) => {
   const session = await getSession(request);

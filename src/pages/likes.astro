@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageFrame from "../components/PageFrame.astro";
-import LikePosts from "../../islands/LikePosts.tsx";
-import { getSession } from "../../server/auth.ts";
-import { getPagePosts } from "../../server/page_posts.ts";
+import LikePosts from "~/islands/LikePosts.tsx";
+import { getSession } from "~/server/auth.ts";
+import { getPagePosts } from "~/server/page_posts.ts";
 
 const session = await getSession(Astro.request);
 if (!session) return Astro.redirect("/", 307);

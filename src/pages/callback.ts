@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
-import { env } from "../../server/env.ts";
-import { createSession, getCallbackUrl } from "../../server/auth.ts";
-import { selectUserByGoogleId, upsertUser } from "../../server/db.ts";
+import { env } from "~/server/env.ts";
+import { createSession, getCallbackUrl } from "~/server/auth.ts";
+import { selectUserByGoogleId, upsertUser } from "~/server/db.ts";
 
 type Token = { access_token: string };
 type GoogleUser = { id: string; name: string; picture: string };

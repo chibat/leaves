@@ -1,10 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import PageFrame from "../../components/PageFrame.astro";
-import UserPosts from "../../../islands/UserPosts.tsx";
-import { getAuthUrl, getSession } from "../../../server/auth.ts";
-import { selectUser } from "../../../server/db.ts";
-import { getPagePosts } from "../../../server/page_posts.ts";
+import UserPosts from "~/islands/UserPosts.tsx";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { selectUser } from "~/server/db.ts";
+import { getPagePosts } from "~/server/page_posts.ts";
 
 const session = await getSession(Astro.request);
 const authUrl = session ? undefined : getAuthUrl(Astro.request.url);

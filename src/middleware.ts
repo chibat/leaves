@@ -1,6 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { env } from "cloudflare:workers";
-import { withEnvironment } from "../server/env.ts";
+import { withEnvironment } from "./server/env.ts";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const response = await withEnvironment(

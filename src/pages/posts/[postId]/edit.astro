@@ -1,9 +1,9 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import PageFrame from "../../../components/PageFrame.astro";
-import PostEdit from "../../../../islands/PostEdit.tsx";
-import { getSession } from "../../../../server/auth.ts";
-import { selectPost } from "../../../../server/db.ts";
+import PostEdit from "~/islands/PostEdit.tsx";
+import { getSession } from "~/server/auth.ts";
+import { selectPost } from "~/server/db.ts";
 
 const session = await getSession(Astro.request);
 if (!session) {

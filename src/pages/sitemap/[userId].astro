@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { selectUserPostIds } from "../../../server/db.ts";
+import { selectUserPostIds } from "~/server/db.ts";
 
 const userId = Number(Astro.params.userId);
 if (!Number.isSafeInteger(userId) || userId <= 0) {

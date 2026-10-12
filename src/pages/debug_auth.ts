@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { createSession } from "../../server/auth.ts";
+import { createSession } from "~/server/auth.ts";
 
 export const GET: APIRoute = async () => {
   if (

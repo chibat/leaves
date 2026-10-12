@@ -3,7 +3,7 @@ import cloudflare from "@astrojs/cloudflare";
 import preact from "@astrojs/preact";
 import { defineConfig } from "astro/config";
 
-const root = fileURLToPath(new URL(".", import.meta.url));
+const src = fileURLToPath(new URL("./src", import.meta.url));
 
 export default defineConfig({
   srcDir: "./src",
@@ -18,6 +18,6 @@ export default defineConfig({
   }),
   integrations: [preact()],
   alias: {
-    "~": root,
+    "~": src,
   },
 });

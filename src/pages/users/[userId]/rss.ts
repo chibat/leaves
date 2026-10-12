@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import { getTitle } from "../../../../server/getTitle.ts";
-import { selectUser, selectUserPost } from "../../../../server/db.ts";
+import { getTitle } from "~/server/getTitle.ts";
+import { selectUser, selectUserPost } from "~/server/db.ts";
 
 export const GET: APIRoute = async ({ params }) => {
   const userId = params.userId ?? "";

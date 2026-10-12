@@ -9,17 +9,13 @@
     "baseUrl": ".",
     "paths": {
       "~/*": [
-        "./*"
+        "./src/*"
       ]
     }
   },
   "include": [
     ".astro/types.d.ts",
-    "src/**/*",
-    "server/**/*",
-    "islands/**/*",
-    "components/**/*",
-    "common/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

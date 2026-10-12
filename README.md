@@ -11,6 +11,9 @@ Source code for <https://leaves.chiba.dev/>.
 Pages and API endpoints use Astro's file-based routing under `src/pages/`.
 Interactive Preact components are rendered as Astro islands; page data needed
 for the initial post lists is loaded on the server and included in the HTML.
+Application code is organized under `src/`: shared UI in `components/`,
+interactive islands in `islands/`, browser code in `client/`, and server/data
+code in `server/`. The `~` import alias points to `src/`.
 
 ## Development
 

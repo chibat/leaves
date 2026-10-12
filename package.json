@@ -5,12 +5,12 @@
   "scripts": {
     "dev": "astro dev --host 0.0.0.0 --port 8000",
     "build": "astro build",
-    "build:cli": "tsc cli.ts --target ES2022 --module NodeNext --moduleResolution NodeNext --types node --skipLibCheck --outDir cli-package --rootDir .",
+    "build:cli": "tsc cli-package/src/cli.ts --target ES2022 --module NodeNext --moduleResolution NodeNext --types node --skipLibCheck --outDir cli-package --rootDir cli-package/src",
     "preview": "astro preview --host 0.0.0.0 --port 8000",
     "check": "astro check",
-    "cli": "node --experimental-strip-types cli.ts",
-    "test": "node --experimental-strip-types --test server/query_builder_test.ts",
-    "sb-gen": "set -a && . ./.env && set +a && : \"${SUPABASE_PROJECT_ID:?SUPABASE_PROJECT_ID must be set in .env}\" && supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > server/database.types.ts",
+    "cli": "node --experimental-strip-types cli-package/src/cli.ts",
+    "test": "node --experimental-strip-types --test src/server/query_builder_test.ts",
+    "sb-gen": "set -a && . ./.env && set +a && : \"${SUPABASE_PROJECT_ID:?SUPABASE_PROJECT_ID must be set in .env}\" && supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > src/server/database.types.ts",
     "deploy": "npm run build && wrangler deploy --keep-vars",
     "upload": "npm run build && wrangler versions upload --keep-vars --preview-alias staging"
   },

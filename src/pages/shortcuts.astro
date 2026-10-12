@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageFrame from "../components/PageFrame.astro";
-import { getAuthUrl, getSession } from "../../server/auth.ts";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
 const session = await getSession(Astro.request);
 const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
 const shortcuts = [

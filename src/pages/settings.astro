@@ -1,8 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageFrame from "../components/PageFrame.astro";
-import DeleteAccount from "../../islands/DeleteAccount.tsx";
-import { getAuthUrl, getSession } from "../../server/auth.ts";
+import DeleteAccount from "~/islands/DeleteAccount.tsx";
+import { getAuthUrl, getSession } from "~/server/auth.ts";
 
 const session = await getSession(Astro.request);
 if (!session) return Astro.redirect("/", 307);
