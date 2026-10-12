@@ -17,6 +17,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.4",
     "@astrojs/preact": "^6.0.6",
+    "@preact/signals": "^2.11.3",
     "@supabase/supabase-js": "^2.38.4",
     "@trpc/client": "^10.18.0",
     "@trpc/server": "^10.18.0",
