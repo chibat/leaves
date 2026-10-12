@@ -36,7 +36,7 @@ export default defineRoute(async (req, ctx) => {
             name="value"
             value={searchParams}
             placeholder="Input search words"
-            autoFocus={!searchParams}
+            autofocus={!searchParams}
           />
         </form>
         {searchParams &&
