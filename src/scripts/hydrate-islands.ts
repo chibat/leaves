@@ -54,6 +54,12 @@ function unmountIslands() {
   );
 }
 
+function focusAutofocus() {
+  document.querySelector<HTMLElement>("[autofocus]")?.focus();
+}
+
 document.addEventListener("astro:page-load", hydrateIslands);
+document.addEventListener("astro:page-load", focusAutofocus);
 document.addEventListener("astro:before-swap", unmountIslands);
 hydrateIslands();
+focusAutofocus();
