@@ -1,0 +1,40 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageFrame from "../../../components/PageFrame.astro";
+import PostEdit from "../../../../islands/PostEdit.tsx";
+import { getSession } from "../../../../server/auth.ts";
+import { selectPost } from "../../../../server/db.ts";
+
+const session = await getSession(Astro.request);
+if (!session) {
+  return Astro.redirect("/", 307);
+}
+const postId = Number(Astro.params.postId);
+const post =
+  Number.isSafeInteger(postId) && postId > 0 ? await selectPost(postId) : null;
+if (!post) {
+  Astro.response.status = 404;
+}
+if (post && post.user_id !== session.user.id) {
+  return Astro.redirect("/", 307);
+}
+---
+
+<Layout title={post ? "Edit - Leaves" : "Not Found - Leaves"}>
+  <PageFrame user={session.user}>
+    <main class="container">
+      {
+        post ? (
+          <>
+            <>
+              <h1>Edit Post</h1>
+              <PostEdit post={post} client:load />
+            </>
+          </>
+        ) : (
+          <h1>404 Not Found</h1>
+        )
+      }
+    </main>
+  </PageFrame>
+</Layout>

@@ -5,12 +5,16 @@ import { PAGE_ROWS } from "~/common/constants.ts";
 import { trpc } from "~/client/trpc.ts";
 import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
-export default function LikePosts(props: { loginUserId?: number }) {
+export default function LikePosts(
+  props: { loginUserId?: number; initialPosts?: GetPostsOutput[] },
+) {
 
-  const posts = useSignal<Array<GetPostsOutput>>([]);
-  const spinning = useSignal<boolean>(true);
+  const posts = useSignal<Array<GetPostsOutput>>(props.initialPosts ?? []);
+  const spinning = useSignal<boolean>(props.initialPosts === undefined);
   const requesting = useSignal<boolean>(false);
-  const allLoaded = useSignal(false);
+  const allLoaded = useSignal(
+    props.initialPosts !== undefined && props.initialPosts.length < PAGE_ROWS,
+  );
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {

@@ -1,0 +1,12 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { selectUsers } from "../../../server/db.ts";
+const users = await selectUsers();
+---
+
+<Layout title="Sitemap Users - Leaves">
+  <main class="container" style="word-break: break-word">
+    <h1>Sitemap Users</h1>
+    {users.map((user) => <><a href={`/sitemap/${user.user_id}`}>{user.user_id}</a>&nbsp;</>)}
+  </main>
+</Layout>

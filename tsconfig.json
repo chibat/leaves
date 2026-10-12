@@ -17,14 +17,12 @@
     ".astro/types.d.ts",
     "src/**/*",
     "server/**/*",
-    "routes/**/*",
     "islands/**/*",
     "components/**/*",
     "common/**/*"
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "_fresh"
+    "dist"
   ]
 }

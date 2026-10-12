@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageFrame from "../components/PageFrame.astro";
+import { getAuthUrl, getSession } from "../../server/auth.ts";
+const session = await getSession(Astro.request);
+const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const shortcuts = [
+  ["Keyboard Shortcuts", "?"], ["Search", "/"], ["New Post", "n"],
+  ["Scroll to top", "."], ["Next Post", "j"], ["Previous Post", "k"],
+  ["Open Post", "o"], ["Edit Post", "e"], ["About", "ga"], ["Home", "gh"],
+  ["Notification", "gn"], ["Liked", "gl"], ["Following", "gf"], ["Profile", "gp"],
+  ["Send/Save Post", "(CTRL|⌘)+Enter, (CTRL|⌘)+s"],
+  ["Switch between Preview and Edit", "(CTRL|⌘)+p"],
+];
+---
+
+<Layout title="Keyboard Shortcuts - Leaves">
+  <Fragment slot="head">
+    <meta property="og:url" content="https://leaves.chiba.dev/" />
+    <meta property="og:title" content="Leaves" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@tomofummy" />
+    <meta name="twitter:creator" content="@tomofummy" />
+    <meta name="twitter:image" content="https://leaves.chiba.dev/assets/img/icon-192x192.png" />
+  </Fragment>
+  <PageFrame user={session?.user} authUrl={authUrl}>
+    <main class="container">
+      <h1><img src="/assets/img/question-circle-fill.svg" alt="Edit" width="32" height="32" class="me-2" />Keyboard Shortcuts</h1>
+      <div class="post">
+        <table>
+          <thead><tr><th>Action</th><th>Mappings</th></tr></thead>
+          <tbody>{shortcuts.map(([action, mapping]) => <tr><td>{action}</td><td>{mapping}</td></tr>)}</tbody>
+        </table>
+      </div>
+    </main>
+  </PageFrame>
+</Layout>

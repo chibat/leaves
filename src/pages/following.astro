@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageFrame from "../components/PageFrame.astro";
+import FollowingPosts from "../../islands/FollowingPosts.tsx";
+import { getSession } from "../../server/auth.ts";
+import { getPagePosts } from "../../server/page_posts.ts";
+
+const session = await getSession(Astro.request);
+if (!session) return Astro.redirect("/", 307);
+const posts = await getPagePosts(session, { following: true });
+---
+
+<Layout title="Following - Leaves">
+  <PageFrame user={session.user}>
+    <main class="container">
+      <FollowingPosts loginUserId={session.user.id} initialPosts={posts} client:load />
+    </main>
+  </PageFrame>
+</Layout>

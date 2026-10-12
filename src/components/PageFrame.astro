@@ -1,0 +1,18 @@
+---
+import Header from "../../islands/Header.tsx";
+
+interface Props {
+  user?: {
+    id: number;
+    picture: string | null;
+    notification: boolean;
+    account: string | null;
+  };
+  authUrl?: string;
+}
+
+const { user, authUrl } = Astro.props;
+---
+
+<Header user={user} authUrl={authUrl} client:load />
+<slot />

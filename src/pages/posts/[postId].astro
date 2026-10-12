@@ -1,0 +1,43 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageFrame from "../../components/PageFrame.astro";
+import PostView from "../../../islands/PostView.tsx";
+import { getAuthUrl, getSession } from "../../../server/auth.ts";
+import { selectPost } from "../../../server/db.ts";
+import { getTitle } from "../../../server/getTitle.ts";
+
+const postId = Number(Astro.params.postId);
+const post = Number.isSafeInteger(postId) && postId > 0
+  ? await selectPost(postId)
+  : null;
+if (!post) {
+  Astro.response.status = 404;
+}
+const session = await getSession(Astro.request);
+if (post?.draft && post.user_id !== session?.user.id) {
+  return Astro.redirect("/", 307);
+}
+const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const title = post ? `${getTitle(post.source)} | Leaves` : "Not Found - Leaves";
+---
+
+<Layout title={title}>
+  {post && (
+    <Fragment slot="head">
+      <meta name="description" content={title} />
+      <meta property="og:url" content="https://leaves.chiba.dev/" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={post.source.replace(/^#+/, "").replaceAll("```", "").trim().substring(0, 1000).replaceAll("\n", " ")} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:site" content="@tomofummy" />
+      <meta name="twitter:image" content={post.picture ?? ""} />
+    </Fragment>
+  )}
+  <PageFrame user={session?.user} authUrl={authUrl}>
+    <main class="container">
+      {post
+        ? <PostView post={post} postTitle={title} userId={session?.user.id} client:load />
+        : <h1>404 Not Found</h1>}
+    </main>
+  </PageFrame>
+</Layout>

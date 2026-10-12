@@ -1,0 +1,27 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageFrame from "../components/PageFrame.astro";
+import DeleteAccount from "../../islands/DeleteAccount.tsx";
+import { getAuthUrl, getSession } from "../../server/auth.ts";
+
+const session = await getSession(Astro.request);
+if (!session) return Astro.redirect("/", 307);
+const authUrl = getAuthUrl(Astro.request.url);
+---
+
+<Layout title="Settings - Leaves">
+  <Fragment slot="head">
+    <meta property="og:url" content="https://leaves.chiba.dev/" />
+    <meta property="og:title" content="Leaves" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@tomofummy" />
+    <meta name="twitter:creator" content="@tomofummy" />
+    <meta name="twitter:image" content="https://leaves.chiba.dev/assets/img/icon-192x192.png" />
+  </Fragment>
+  <PageFrame user={session.user} authUrl={authUrl}>
+    <main class="container">
+      <h1><img src="/assets/img/gear-fill.svg" alt="Likes" width="32" height="32" class="me-2" />Settings</h1>
+      <DeleteAccount userName={session.user.name} client:load />
+    </main>
+  </PageFrame>
+</Layout>

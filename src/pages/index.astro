@@ -1,0 +1,53 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageFrame from "../components/PageFrame.astro";
+import AllPosts from "../../islands/AllPosts.tsx";
+import { getAuthUrl, getSession } from "../../server/auth.ts";
+import { getPagePosts } from "../../server/page_posts.ts";
+
+const session = await getSession(Astro.request);
+const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const posts = await getPagePosts(session);
+const title = "Leaves - Microblog with Markdown";
+---
+
+<Layout title={title}>
+  <Fragment slot="head">
+    <meta name="description" content={title} />
+    <meta property="og:url" content="https://leaves.chiba.dev/" />
+    <meta property="og:title" content={title} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@tomofummy" />
+    <meta name="twitter:creator" content="@tomofummy" />
+    <meta name="twitter:image" content="https://leaves.chiba.dev/assets/img/icon-192x192.png" />
+  </Fragment>
+  <PageFrame user={session?.user} authUrl={authUrl}>
+    <main class="container">
+      {!session?.user && authUrl && (
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="px-4 py-5 my-5 text-center">
+              <img class="d-block mx-auto mb-4" src="/assets/img/icon-192x192.png" alt="Leaves" width="100" />
+              <h1 class="display-5 fw-bold text-body-emphasis">Leaves</h1>
+              <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">This website is a Microblog that allows you to post in <b>Markdown</b>.<br />Sign in with your Google account and use it.</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                  <div style="text-align: center">
+                    <a href={authUrl}><input type="image" src="/btn_google_signin_dark_pressed_web.png" /></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div class="card mb-3">
+        <div class="card-body">
+          {session?.user?.picture && <img src={session.user.picture} alt="mdo" width="32" height="32" referrerpolicy="no-referrer" class="rounded-circle me-2" />}
+          <a href="/posts/new"><input class="form-control" type="text" placeholder="Write with Markdown" aria-label="Post" readonly style="cursor: pointer; width: 90%; display: inline" /></a>
+        </div>
+      </div>
+      <AllPosts loginUserId={session?.user.id} initialPosts={posts} client:load />
+    </main>
+  </PageFrame>
+</Layout>

@@ -8,6 +8,10 @@ sign-in.
 
 Source code for <https://leaves.chiba.dev/>.
 
+Pages and API endpoints use Astro's file-based routing under `src/pages/`.
+Interactive Preact components are rendered as Astro islands; page data needed
+for the initial post lists is loaded on the server and included in the HTML.
+
 ## Development
 
 1. Install Node.js 22.12 or later and run `npm install`.

@@ -6,12 +6,16 @@ import { useSignal } from "@preact/signals";
 import { trpc } from "~/client/trpc.ts";
 import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
-export default function AllPosts(props: { loginUserId?: number }) {
+export default function AllPosts(
+  props: { loginUserId?: number; initialPosts?: GetPostsOutput[] },
+) {
 
-  const posts = useSignal<GetPostsOutput[]>([]);
+  const posts = useSignal<GetPostsOutput[]>(props.initialPosts ?? []);
   const requesting = useSignal<boolean>(false);
-  const spinning = useSignal<boolean>(true);
-  const allLoaded = useSignal(false);
+  const spinning = useSignal<boolean>(props.initialPosts === undefined);
+  const allLoaded = useSignal(
+    props.initialPosts !== undefined && props.initialPosts.length < PAGE_ROWS,
+  );
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {

@@ -1,0 +1,40 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageFrame from "../../components/PageFrame.astro";
+import UserPosts from "../../../islands/UserPosts.tsx";
+import { getAuthUrl, getSession } from "../../../server/auth.ts";
+import { selectUser } from "../../../server/db.ts";
+import { getPagePosts } from "../../../server/page_posts.ts";
+
+const session = await getSession(Astro.request);
+const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const pageUser = await selectUser(Astro.params.userId ?? "");
+if (!pageUser) Astro.response.status = 404;
+const posts = pageUser
+  ? await getPagePosts(session, { userId: pageUser.id })
+  : [];
+const picture = pageUser?.picture ?? "";
+const title = pageUser ? `${pageUser.name} - Leaves` : "Not Found - Leaves";
+---
+
+<Layout title={title}>
+  {pageUser && (
+    <Fragment slot="head">
+      <meta name="description" content={title} />
+      <meta property="og:url" content="https://leaves.chiba.dev/" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={title} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:site" content="@tomofummy" />
+      <meta name="twitter:image" content={picture} />
+      <link rel="alternate" type="application/rss+xml" href={`https://leaves.chiba.dev/users/${Astro.params.userId}/rss`} />
+    </Fragment>
+  )}
+  <PageFrame user={session?.user} authUrl={authUrl}>
+    <main class="container">
+      {pageUser
+        ? <><h1><img src={picture} class="img-thumbnail" alt="" referrerpolicy="no-referrer" /> {pageUser.name}</h1><UserPosts pageUserId={pageUser.id} loginUserId={session?.user.id} initialPosts={posts} client:load /></>
+        : <h1>404 Not Found</h1>}
+    </main>
+  </PageFrame>
+</Layout>

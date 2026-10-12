@@ -9,15 +9,21 @@ import { trpc } from "~/client/trpc.ts";
 import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
 export default function UserPosts(
-  props: { pageUserId: number; loginUserId?: number },
+  props: {
+    pageUserId: number;
+    loginUserId?: number;
+    initialPosts?: GetPostsOutput[];
+  },
 ) {
   const loginUserId = props.loginUserId;
   const userId = props.pageUserId;
-  const allLoaded = useSignal(false);
+  const allLoaded = useSignal(
+    props.initialPosts !== undefined && props.initialPosts.length < PAGE_ROWS,
+  );
 
-  const posts = useSignal<Array<GetPostsOutput>>([]);
+  const posts = useSignal<Array<GetPostsOutput>>(props.initialPosts ?? []);
   const requesting = useSignal<boolean>(false);
-  const spinning = useSignal<boolean>(true);
+  const spinning = useSignal<boolean>(props.initialPosts === undefined);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
   const [following, setFollowing] = useState<string>("");
   const [followers, setFollowers] = useState<string>("");

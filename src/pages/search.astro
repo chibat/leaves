@@ -1,0 +1,34 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageFrame from "../components/PageFrame.astro";
+import SearchedPosts from "../../islands/SearchedPosts.tsx";
+import { getAuthUrl, getSession } from "../../server/auth.ts";
+import { getPagePosts } from "../../server/page_posts.ts";
+
+const session = await getSession(Astro.request);
+const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const searchWord = Astro.url.searchParams.get("value") ?? "";
+const posts = searchWord
+  ? await getPagePosts(session, { searchWord })
+  : undefined;
+const title = `Search:${searchWord} - Leaves`;
+---
+
+<Layout title={title}>
+  <Fragment slot="head">
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={title} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@tomofummy" />
+    <meta name="twitter:image" content="https://leaves.chiba.dev/assets/img/icon-192x192.png" />
+  </Fragment>
+  <PageFrame user={session?.user} authUrl={authUrl}>
+    <main class="container">
+      <h1>Search</h1>
+      <form class="mb-3" method="GET" action="/search">
+        <input class="form-control" type="text" name="value" value={searchWord} placeholder="Input search words" autofocus={!searchWord} />
+      </form>
+      {searchWord && posts && <SearchedPosts searchWord={searchWord} loginUserId={session?.user.id} initialPosts={posts} client:load />}
+    </main>
+  </PageFrame>
+</Layout>

@@ -5,13 +5,23 @@ import { useSignal } from "@preact/signals";
 import { trpc } from "~/client/trpc.ts";
 import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
 
-export default function SearchedPosts(props: { searchWord: string, loginUserId?: number }) {
+export default function SearchedPosts(
+  props: {
+    searchWord: string;
+    loginUserId?: number;
+    initialPosts?: GetPostsOutput[];
+  },
+) {
 
-  const posts = useSignal<Array<GetPostsOutput>>([]);
+  const posts = useSignal<Array<GetPostsOutput>>(props.initialPosts ?? []);
   const requesting = useSignal<boolean>(false);
-  const spinning = useSignal<boolean>(true);
+  const spinning = useSignal<boolean>(props.initialPosts === undefined);
   const allLoaded = useSignal(false);
   const notFound = useSignal(false);
+  if (props.initialPosts && props.initialPosts.length < PAGE_ROWS) {
+    allLoaded.value = true;
+    notFound.value = props.initialPosts.length === 0;
+  }
 
   useEffect(() => {
     const io = new IntersectionObserver(entries => {
