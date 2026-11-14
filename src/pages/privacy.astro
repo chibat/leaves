@@ -7,45 +7,45 @@ const session = await getSession(Astro.request);
 const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
 ---
 
-<Layout title="プライバシーポリシー - Leaves">
+<Layout title="Privacy Policy - Leaves">
   <PageFrame user={session?.user} authUrl={authUrl}>
     <main class="container">
-      <h1>プライバシーポリシー</h1>
-      <p>chibat（以下「運営者」）は、Leaves（以下「本サービス」）における利用者の情報を、以下のとおり取り扱います。</p>
+      <h1>Privacy Policy</h1>
+      <p>chibat (the "Operator") handles information relating to users of Leaves (the "Service") as described in this Privacy Policy.</p>
 
-      <h2>1. 取得する情報</h2>
+      <h2>1. Information We Collect</h2>
       <ul>
-        <li>Googleログイン時にGoogleから受け取るGoogleアカウント識別子、表示名、プロフィール画像</li>
-        <li>利用者が作成した投稿、コメント、アカウント名等のプロフィール情報</li>
-        <li>フォロー、いいね、通知等、本サービスの利用に伴って記録される情報</li>
-        <li>ログイン状態を維持するためのセッション情報を含むCookie</li>
+        <li>Your Google account identifier, display name, and profile picture received from Google when you sign in</li>
+        <li>Posts, comments, and profile information such as your account name that you provide</li>
+        <li>Information recorded through your use of the Service, such as follows, likes, and notifications</li>
+        <li>Cookies, including session information used to keep you signed in</li>
       </ul>
-      <p>本サービスのGoogleログインでは、Googleのプロフィール情報を取得します。Googleアカウントのメールアドレスは取得しません。</p>
+      <p>When you sign in with Google, the Service collects your Google profile information. It does not collect your Google account email address.</p>
 
-      <h2>2. 利用目的</h2>
-      <p>取得した情報は、利用者の認証、本サービスの提供・維持・改善、不正利用の防止、お問い合わせへの対応のために利用します。</p>
+      <h2>2. How We Use Information</h2>
+      <p>We use the information collected to authenticate users, provide, maintain, and improve the Service, prevent misuse, and respond to inquiries.</p>
 
-      <h2>3. 投稿の公開範囲</h2>
-      <p>公開状態の投稿、コメント、プロフィール情報は、本サービス上で他の利用者や第三者に公開されます。下書きは投稿者本人にのみ表示されます。公開した情報は、第三者に複製・保存される場合があります。</p>
+      <h2>3. Visibility of Content</h2>
+      <p>Public posts, comments, and profile information are visible to other users and third parties through the Service. Drafts are visible only to their authors. Third parties may copy or save information you make public.</p>
 
-      <h2>4. Cookie</h2>
-      <p>本サービスはログイン状態の管理にCookieを使用します。セッションCookieはHttpOnlyおよびSecure属性を設定し、発行から約1か月で有効期限を迎えます。Cookieを無効にすると、ログインが必要な機能を利用できない場合があります。</p>
+      <h2>4. Cookies</h2>
+      <p>The Service uses cookies to manage your sign-in state. The session cookie is set with the HttpOnly and Secure attributes and expires approximately one month after it is issued. If you disable cookies, features that require sign-in may not be available.</p>
 
-      <h2>5. 外部サービスへの提供</h2>
-      <p>本サービスの運営にはGoogle（ログイン）、Supabase（データの保存）、Cloudflare（サイトの配信）を利用しています。認証やサービスの提供に必要な情報が各サービスを通じて処理されることがあります。各サービスにおける情報の取り扱いは、それぞれのプライバシーポリシーをご確認ください。</p>
-      <p>投稿内にYouTube等の外部コンテンツが表示される場合、当該コンテンツの提供元にアクセス情報が送信されることがあります。</p>
+      <h2>5. Third-Party Services</h2>
+      <p>The Service uses Google for sign-in, Supabase for data storage, and Cloudflare for website delivery. Information necessary for authentication and providing the Service may be processed through these services. Please refer to each provider's privacy policy for details about its handling of information.</p>
+      <p>If third-party content such as YouTube is displayed in a post, information about your access may be sent to that content provider.</p>
 
-      <h2>6. 保存と削除</h2>
-      <p>情報は利用目的の達成に必要な期間保存します。利用者は設定画面からアカウントを削除できます。削除後も、バックアップ等に一時的に情報が残る場合があります。</p>
+      <h2>6. Retention and Deletion</h2>
+      <p>We retain information for as long as necessary to fulfill the purposes for which it was collected. You can delete your account from the Settings page. Information may remain temporarily in backups after deletion.</p>
 
-      <h2>7. ポリシーの変更</h2>
-      <p>本ポリシーは、法令の改正や本サービスの変更等に応じて改定することがあります。変更後の内容は本ページに掲載した時点から適用されます。</p>
+      <h2>7. Changes to This Policy</h2>
+      <p>This Policy may be revised in response to changes in applicable laws or the Service. Revisions take effect when posted on this page.</p>
 
-      <h2>8. 運営者・お問い合わせ</h2>
-      <p>運営者：chibat（<a href="https://chiba.dev" target="_blank" rel="noreferrer">プロフィール</a>）</p>
-      <p>本ポリシーに関するお問い合わせは、運営者のプロフィールに記載された連絡先からご連絡ください。</p>
+      <h2>8. Operator and Contact</h2>
+      <p>Operator: chibat (<a href="https://chiba.dev" target="_blank" rel="noreferrer">profile</a>)</p>
+      <p>For inquiries about this Policy, please use the contact information listed on the Operator's profile.</p>
 
-      <p class="text-muted">制定日：2026年11月14日</p>
+      <p class="text-muted">Effective date: November 14, 2026</p>
     </main>
   </PageFrame>
 </Layout>
