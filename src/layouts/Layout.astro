@@ -1,4 +1,6 @@
 ---
+import "github-markdown-css/github-markdown-light.css";
+
 import { ClientRouter } from "astro:transitions";
 
 interface Props {
@@ -26,7 +28,7 @@ const { title } = Astro.props;
     />
     <link
       rel="stylesheet"
-      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/tomorrow-night.min.css"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/github.min.css"
     />
     <link rel="stylesheet" href="/app.css" />
     <link rel="manifest" href="/manifest.json" />

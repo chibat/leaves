@@ -115,13 +115,13 @@ export default function Edit(props: { post: PostViewType }) {
             )}
           {preview.value &&
             (
-              <span
-                class="post"
+              <div
+                class="markdown-body"
                 dangerouslySetInnerHTML={{
                   __html: sanitizedHtml.value,
                 }}
               >
-              </span>
+              </div>
             )}
         </div>
         <div class="card-footer text-end bg-transparent">

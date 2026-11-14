@@ -26,7 +26,7 @@ const shortcuts = [
   <PageFrame user={session?.user} authUrl={authUrl}>
     <main class="container">
       <h1><img src="/assets/img/question-circle-fill.svg" alt="Edit" width="32" height="32" class="me-2" />Keyboard Shortcuts</h1>
-      <div class="post">
+      <div class="markdown-body">
         <table>
           <thead><tr><th>Action</th><th>Mappings</th></tr></thead>
           <tbody>{shortcuts.map(([action, mapping]) => <tr><td>{action}</td><td>{mapping}</td></tr>)}</tbody>

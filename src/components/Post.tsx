@@ -76,13 +76,13 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
                 🔒 PRIVATE
               </span>
             )}
-          <span
-            class="post"
+          <div
+            class="markdown-body"
             dangerouslySetInnerHTML={{
               __html: post.value.source,
             }}
           >
-          </span>
+          </div>
           <div class="d-flex justify-content-between">
             <div>
               <a

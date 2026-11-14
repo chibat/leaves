@@ -20,4 +20,9 @@ export default defineConfig({
   alias: {
     "~": src,
   },
+  vite: {
+    optimizeDeps: {
+      include: ["preact", "preact/hooks", "preact/devtools"],
+    },
+  },
 });

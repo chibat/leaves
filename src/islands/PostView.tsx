@@ -222,11 +222,11 @@ export default function PostView(
                     </span>
                   )}
                 <section>
-                  <span
-                    class="post"
+                  <div
+                    class="markdown-body"
                     dangerouslySetInnerHTML={{ __html: postSource }}
                   >
-                  </span>
+                  </div>
                   <div class="d-flex justify-content-between">
                     <div>
                       <img
@@ -376,13 +376,13 @@ export default function PostView(
                           )}
                       </div>
                       <div>
-                        <span
-                          class="post"
+                        <div
+                          class="markdown-body"
                           dangerouslySetInnerHTML={{
                             __html: comment.source,
                           }}
                         >
-                        </span>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -430,13 +430,13 @@ export default function PostView(
                           )}
                         {preview.value &&
                           (
-                            <span
-                              class="post"
+                            <div
+                              class="markdown-body"
                               dangerouslySetInnerHTML={{
                                 __html: sanitizedCommentHtml.value,
                               }}
                             >
-                            </span>
+                            </div>
                           )}
                       </div>
                       <div class="mt-2">
