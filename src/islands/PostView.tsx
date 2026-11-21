@@ -95,7 +95,7 @@ export default function PostView(
   }
 
   useEffect(() => {
-    (hljs as any).highlightAll();
+    hljs.highlightAll();
   });
 
   useEffect(() => {

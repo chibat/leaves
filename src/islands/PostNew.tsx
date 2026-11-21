@@ -25,7 +25,7 @@ export default function Post() {
   }
 
   useEffect(() => {
-    (hljs as any).highlightAll();
+    hljs.highlightAll();
   });
 
   useEffect(() => {
