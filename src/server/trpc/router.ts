@@ -1,5 +1,4 @@
-import { z } from "zod";
-import { publicProcedure, router } from "./context.ts";
+import { router } from "./context.ts";
 import { getComments } from "~/server/trpc/procedures/getComments.ts";
 import { createComment } from "~/server/trpc/procedures/createComment.ts";
 import { getPosts } from "~/server/trpc/procedures/getPosts.ts";
@@ -20,8 +19,6 @@ import { updatePost } from "~/server/trpc/procedures/updatePost.ts";
 import { md2html } from "~/server/trpc/procedures/md2html.ts";
 import { getFollowingUsers } from "~/server/trpc/procedures/getFollowingUsers.ts";
 import { deleteUser } from "~/server/trpc/procedures/deleteUser.ts";
-
-const posts = [{ name: "first post" }];
 
 export const appRouter = router({
   createComment,
@@ -44,13 +41,6 @@ export const appRouter = router({
   getLikedPosts,
   updatePost,
   md2html,
-  postGet: publicProcedure.query(() => posts),
-  postCreate: publicProcedure.input(z.object({
-    name: z.string(),
-  })).mutation((req) => {
-    posts.push(req.input);
-    return req.input;
-  }),
 });
 
 export type AppRouter = typeof appRouter;
