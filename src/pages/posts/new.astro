@@ -2,10 +2,10 @@
 import Layout from "../../layouts/Layout.astro";
 import PageFrame from "../../components/PageFrame.astro";
 import PostNew from "~/islands/PostNew.tsx";
-import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { getSession } from "~/server/auth.ts";
 
 const session = await getSession(Astro.request);
-if (!session) return Astro.redirect(getAuthUrl(Astro.request.url));
+if (!session) return Astro.redirect("/auth");
 ---
 
 <Layout title="New - Leaves">

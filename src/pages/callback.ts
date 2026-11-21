@@ -1,18 +1,32 @@
 import type { APIRoute } from "astro";
 import { env } from "~/server/env.ts";
-import { createSession, getCallbackUrl } from "~/server/auth.ts";
+import {
+  clearOAuthStateCookie,
+  createSession,
+  getCallbackUrl,
+  validateOAuthState,
+} from "~/server/auth.ts";
 import { selectUserByGoogleId, upsertUser } from "~/server/db.ts";
 
 type Token = { access_token: string };
 type GoogleUser = { id: string; name: string; picture: string };
 
 export const GET: APIRoute = async ({ request }) => {
+  if (!validateOAuthState(request)) {
+    return new Response("Invalid OAuth state", {
+      status: 400,
+      headers: { "Set-Cookie": clearOAuthStateCookie() },
+    });
+  }
   const code = new URL(request.url).searchParams.get("code");
   const response = new Response(
     "<!doctype html><html><head><meta charset=\"utf-8\"></head><body><script>location.href = '/';</script></body></html>",
     { headers: { "content-type": "text/html; charset=utf-8" } },
   );
-  if (!code) return response;
+  if (!code) {
+    response.headers.append("Set-Cookie", clearOAuthStateCookie());
+    return response;
+  }
 
   const tokenResponse = await fetch("https://accounts.google.com/o/oauth2/token", {
     method: "POST",
@@ -54,5 +68,6 @@ export const GET: APIRoute = async ({ request }) => {
       picture: googleUser.picture,
     });
   await createSession(response, user.id);
+  response.headers.append("Set-Cookie", clearOAuthStateCookie());
   return response;
 };

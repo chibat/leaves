@@ -2,11 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import PageFrame from "../components/PageFrame.astro";
 import SearchedPosts from "~/islands/SearchedPosts.tsx";
-import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { getSession } from "~/server/auth.ts";
 import { getPagePosts } from "~/server/page_posts.ts";
 
 const session = await getSession(Astro.request);
-const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const authUrl = session ? undefined : "/auth";
 const searchWord = Astro.url.searchParams.get("value") ?? "";
 const posts = searchWord
   ? await getPagePosts(session, { searchWord })

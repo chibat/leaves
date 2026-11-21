@@ -6,5 +6,8 @@ export const GET: APIRoute = async ({ params }) => {
   const post = Number.isSafeInteger(postId) && postId > 0
     ? await selectPost(postId)
     : null;
-  return Response.json(post ? { source: post.source } : []);
+  if (!post || post.draft) {
+    return Response.json({ error: "Not Found" }, { status: 404 });
+  }
+  return Response.json({ source: post.source });
 };

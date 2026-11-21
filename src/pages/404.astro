@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageFrame from "../components/PageFrame.astro";
-import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { getSession } from "~/server/auth.ts";
 const session = await getSession(Astro.request);
-const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const authUrl = session ? undefined : "/auth";
 ---
 
 <Layout title="Not Found - Leaves">

@@ -28,6 +28,40 @@ export async function createSession(response: Response, userId: number) {
   );
 }
 
+export function createOAuthState(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+export function getCookieValue(request: Request, name: string): string | undefined {
+  const prefix = `${name}=`;
+  const cookie = request.headers.get("cookie")
+    ?.split(";")
+    .map((value) => value.trim())
+    .find((value) => value.startsWith(prefix));
+  if (!cookie) return undefined;
+  try {
+    return decodeURIComponent(cookie.slice(prefix.length));
+  } catch {
+    return undefined;
+  }
+}
+
+export function getOAuthStateCookie(state: string): string {
+  return `oauth_state=${encodeURIComponent(state)}; Max-Age=600; Path=/callback; HttpOnly; Secure; SameSite=Lax`;
+}
+
+export function clearOAuthStateCookie(): string {
+  return "oauth_state=; Max-Age=0; Path=/callback; HttpOnly; Secure; SameSite=Lax";
+}
+
+export function validateOAuthState(request: Request): boolean {
+  const state = new URL(request.url).searchParams.get("state");
+  const cookieState = getCookieValue(request, "oauth_state");
+  return Boolean(state && cookieState && state === cookieState);
+}
+
 export function getCallbackUrl(requestUrl: string) {
   const url = new URL(requestUrl);
   const protocol = url.hostname === "localhost" || url.hostname === "127.0.0.1"
@@ -36,7 +70,7 @@ export function getCallbackUrl(requestUrl: string) {
   return `${protocol}://${url.host}/callback`;
 }
 
-export function getAuthUrl(requestUrl: string): string {
+export function getAuthUrl(requestUrl: string, state: string): string {
   const redirectUri = getCallbackUrl(requestUrl);
   if (!env.clientId) {
     throw new Error("clientId is undefined");
@@ -48,5 +82,6 @@ export function getAuthUrl(requestUrl: string): string {
       ["scope", "https://www.googleapis.com/auth/userinfo.profile"],
       ["access_type", "offline"],
       ["response_type", "code"],
+      ["state", state],
     ]).toString();
 }

@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import PageFrame from "../../components/PageFrame.astro";
 import PostView from "~/islands/PostView.tsx";
-import { getAuthUrl, getSession } from "~/server/auth.ts";
+import { getSession } from "~/server/auth.ts";
 import { selectPost } from "~/server/db.ts";
 import { getTitle } from "~/server/getTitle.ts";
 
@@ -17,7 +17,7 @@ const session = await getSession(Astro.request);
 if (post?.draft && post.user_id !== session?.user.id) {
   return Astro.redirect("/", 307);
 }
-const authUrl = session ? undefined : getAuthUrl(Astro.request.url);
+const authUrl = session ? undefined : "/auth";
 const title = post ? `${getTitle(post.source)} | Leaves` : "Not Found - Leaves";
 ---
 
