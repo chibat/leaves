@@ -1,14 +1,8 @@
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { protectedProcedure } from "~/server/trpc/context.ts";
 import * as db from "~/server/db.ts";
 
-import { getSession } from "~/server/auth.ts";
-
-export const deleteUser = publicProcedure.mutation(async ({ ctx }) => {
-  const session = await getSession(ctx.req);
-  if (!session) {
-    return null;
-  }
-  await db.deleteUser(session.user.id);
-  await db.deleteSession(session);
-  return { userId: session.user.id };
+export const deleteUser = protectedProcedure.mutation(async ({ ctx }) => {
+  await db.deleteUser(ctx.session.user.id);
+  await db.deleteSession(ctx.session);
+  return { userId: ctx.session.user.id };
 });

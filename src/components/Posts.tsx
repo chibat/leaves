@@ -30,7 +30,7 @@ export default function Posts(props: Props) {
   }, []);
 
   useEffect(() => {
-    (hljs as any).highlightAll();
+    hljs.highlightAll();
   });
 
   function registerJumpElements(elements: HTMLCollectionOf<Element>) {

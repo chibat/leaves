@@ -21,7 +21,7 @@ export default function PostView(
   const preview = useSignal(false);
   const text = useSignal("");
   const sanitizedCommentHtml = useSignal("");
-  const postSource = render(props.post.source!, {});
+  const postSource = render(props.post.source, {});
   const [likes, setLikes] = useState<number>(0);
   const [liked, setLiked] = useState<boolean>();
   const [comments, setComments] = useState<Comments>();
@@ -107,9 +107,8 @@ export default function PostView(
   useEffect(() => {
     setLikes(post.likes);
     (async () => {
-      const maybeliked = await trpc.isLiked.query({ postId: post.id });
-      if (maybeliked) {
-        setLiked(maybeliked);
+      if (userId !== undefined) {
+        setLiked(await trpc.isLiked.query({ postId: post.id }));
       }
       await readComments();
     })();
@@ -423,7 +422,7 @@ export default function PostView(
                               maxLength={5000}
                               value={text.value}
                               onInput={(event) =>
-                                text.value = (event.target as any).value}
+                                text.value = event.currentTarget.value}
                               placeholder="Write a comment with markdown"
                             >
                             </textarea>

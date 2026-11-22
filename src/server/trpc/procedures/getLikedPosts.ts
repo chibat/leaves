@@ -1,19 +1,14 @@
 import { z } from "zod";
-import { getSession } from "~/server/auth.ts";
 import { selectLikedPosts } from "~/server/db.ts";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { protectedProcedure } from "~/server/trpc/context.ts";
 import { render } from "~/server/markdown.ts";
 
-export const getLikedPosts = publicProcedure.input(
+export const getLikedPosts = protectedProcedure.input(
   z.object({
     postId: z.number().nullable(),
   }),
 ).query(async ({ input, ctx }) => {
-  const session = await getSession(ctx.req);
-  if (!session) {
-    return [];
-  }
-  const user = session.user;
+  const user = ctx.session.user;
 
   const posts = (await selectLikedPosts({
     userId: user.id,

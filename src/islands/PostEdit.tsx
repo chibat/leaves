@@ -28,7 +28,7 @@ export default function Edit(props: { post: PostViewType }) {
   }
 
   useEffect(() => {
-    (hljs as any).highlightAll();
+    hljs.highlightAll();
   });
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function Edit(props: { post: PostViewType }) {
                 maxLength={10000}
                 value={text.value}
                 autofocus
-                onInput={(e) => text.value = (e.target as any).value}
+                onInput={(e) => text.value = e.currentTarget.value}
               >
               </textarea>
             )}

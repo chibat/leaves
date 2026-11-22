@@ -1,16 +1,10 @@
 import { z } from "zod";
-import { publicProcedure } from "~/server/trpc/context.ts";
+import { protectedProcedure } from "~/server/trpc/context.ts";
 import * as db from "~/server/db.ts";
 
-import { getSession } from "~/server/auth.ts";
-
-export const deletePost = publicProcedure.input(
+export const deletePost = protectedProcedure.input(
   z.object({ postId: z.number() }),
 ).mutation(async ({ input, ctx }) => {
-  const session = await getSession(ctx.req);
-  if (!session) {
-    return null;
-  }
-  await db.deletePost({ id: input.postId, userId: session.user.id });
+  await db.deletePost({ id: input.postId, userId: ctx.session.user.id });
   return { postId: input.postId };
 });
