@@ -1,6 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "[astro]": {
-    "editor.defaultFormatter": "astro-build.astro-vscode"
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }

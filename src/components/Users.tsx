@@ -1,4 +1,6 @@
 
+import { Link } from "@void/react";
+
 type Props = {
   users: { id: number; name: string; picture?: string }[];
 };
@@ -8,11 +10,11 @@ export default function Users(props: Props) {
   return (
     <>
       {props.users.map(user =>
-        <div class="mb-3" key={user.id}>
+        <div className="mb-3" key={user.id}>
           {user.picture &&
-            <img src={user.picture} alt="mdo" width="32" height="32" class="rounded-circle me-2" referrerpolicy="no-referrer" />
+            <img src={user.picture} alt="mdo" width="32" height="32" className="rounded-circle me-2" referrerPolicy="no-referrer" />
           }
-          <a href={`/users/${user.id}`} class="noDecoration">{user.name}</a>
+          <Link href={`/users/${user.id}`} className="noDecoration">{user.name}</Link>
         </div>
       )}
     </>

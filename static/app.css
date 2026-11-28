@@ -94,6 +94,10 @@ body {
   font-family: "YakuHanJPs","-apple-system","BlinkMacSystemFont","Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
 }
 
+.markdown-body.shortcuts-content {
+  background-color: transparent;
+}
+
 img {
   max-width: 100%;
   height: auto;

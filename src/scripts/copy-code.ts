@@ -34,3 +34,5 @@ document.addEventListener("click", async (event) => {
     resetTimers.delete(button);
   }, 1500));
 });
+
+export {};

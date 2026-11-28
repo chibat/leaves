@@ -1,12 +1,15 @@
 {
-  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "jsx": "react-jsx",
-    "jsxImportSource": "preact",
     "verbatimModuleSyntax": false,
     "allowImportingTsExtensions": true,
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["void/env", "node"],
     "paths": {
       "~/*": [
         "./src/*"
@@ -14,7 +17,9 @@
     }
   },
   "include": [
-    ".astro/types.d.ts",
+    ".void/**/*.d.ts",
+    "vite.config.ts",
+    "void.config.ts",
     "src/**/*"
   ],
   "exclude": [

@@ -1,7 +1,10 @@
-import { AppUser, insertSession, selectSession } from "~/server/db.ts";
-import { env } from "~/server/env.ts";
+import { insertSession, selectSession } from "~/server/db.ts";
+import { env } from "void/env";
 
-export type SessionType = { id: string; user: AppUser };
+export type SessionType = {
+  id: string;
+  user: NonNullable<Awaited<ReturnType<typeof selectSession>>>;
+};
 export async function getSession(req: Request) {
   const sessionId = req.headers.get("cookie")
     ?.split(";")
@@ -72,12 +75,9 @@ export function getCallbackUrl(requestUrl: string) {
 
 export function getAuthUrl(requestUrl: string, state: string): string {
   const redirectUri = getCallbackUrl(requestUrl);
-  if (!env.clientId) {
-    throw new Error("clientId is undefined");
-  }
   return "https://accounts.google.com/o/oauth2/auth?" +
     new URLSearchParams([
-      ["client_id", env.clientId],
+      ["client_id", env.LEAVES_AUTH_CLIENT_ID],
       ["redirect_uri", redirectUri],
       ["scope", "https://www.googleapis.com/auth/userinfo.profile"],
       ["access_type", "offline"],

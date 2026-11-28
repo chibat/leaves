@@ -1,27 +1,26 @@
-import { useSignal } from "@preact/signals";
 import hljs from "highlight.js";
-import { createRef } from "preact";
+import { useRef, useState } from "react";
 import Mousetrap from "mousetrap";
-import { useEffect } from "preact/hooks";
-import { trpc } from "~/client/trpc.ts";
+import { useEffect } from "react";
+import { api } from "~/client/api.ts";
+import { Form, useForm } from "@void/react";
 
 export default function Post() {
-  const preview = useSignal(false);
-  const loading = useSignal(false);
-  const draft = useSignal(false);
-  const text = useSignal("");
-  const sanitizedHtml = useSignal("");
-  const textarea = createRef();
+  const form = useForm("/posts/new", { source: "", draft: false });
+  const [preview, setPreview] = useState(false);
+  const [sanitizedHtml, setSanitizedHtml] = useState("");
+  const textarea = useRef<HTMLTextAreaElement>(null);
+  const submitButton = useRef<HTMLButtonElement>(null);
 
   function displayEdit() {
-    preview.value = false;
+    setPreview(false);
   }
 
-  async function displayPreview() {
-    sanitizedHtml.value = await trpc.md2html.query({
-      source: text.value,
-    });
-    preview.value = true;
+  async function displayPreview(source = form.data.source) {
+    setSanitizedHtml(await api.md2html({
+      source,
+    }));
+    setPreview(true);
   }
 
   useEffect(() => {
@@ -32,10 +31,10 @@ export default function Post() {
     if (textarea.current) {
       textarea.current.focus();
     }
-  }, textarea.current);
+  }, []);
 
   useEffect(() => {
-    if (preview.value) {
+    if (preview) {
       Mousetrap.bind(
         "mod+p",
         () => {
@@ -44,112 +43,113 @@ export default function Post() {
         },
       );
     } else {
-      Mousetrap(textarea.current).bind(
-        ["mod+enter", "mod+s"],
-        () => {
-          post();
-          return false;
-        },
-      );
-      Mousetrap(textarea.current).bind(
-        "mod+p",
-        () => {
-          displayPreview();
-          return false;
-        },
-      );
+      if (textarea.current) {
+        Mousetrap(textarea.current).bind(
+          ["mod+enter", "mod+s"],
+          () => {
+            post();
+            return false;
+          },
+        );
+        Mousetrap(textarea.current).bind(
+          "mod+p",
+          () => {
+            displayPreview(textarea.current?.value ?? "");
+            return false;
+          },
+        );
+      }
     }
-  }, [preview.value]);
+    return () => {
+      Mousetrap.unbind("mod+p");
+      if (textarea.current) {
+        const editorKeys = Mousetrap(textarea.current);
+        editorKeys.unbind("mod+enter");
+        editorKeys.unbind("mod+s");
+        editorKeys.unbind("mod+p");
+      }
+    };
+  }, [preview]);
 
-  async function post() {
-    loading.value = true;
-    const result = await trpc.createPost.mutate({
-      source: text.value,
-      draft: draft.value,
-    });
-    loading.value = false;
-    if (result?.postId) {
-      location.href = `/posts/${result.postId}?posted`;
-      return;
-    }
+  function post() {
+    submitButton.current?.click();
   }
 
   return (
-    <>
-      <div class="card mb-3">
-        <div class="card-body">
-          <ul class="nav nav-tabs" style={{ marginBottom: "20px" }}>
-            <li class="nav-item">
+    <Form form={form}>
+      <div className="card mb-3">
+        <div className="card-body">
+          <ul className="nav nav-tabs" style={{ marginBottom: "20px" }}>
+            <li className="nav-item">
               <a
-                class={!preview.value ? "nav-link active" : "nav-link"}
+                className={!preview ? "nav-link active" : "nav-link"}
                 style={{ cursor: "pointer" }}
                 onClick={displayEdit}
               >
                 Edit
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class={preview.value ? "nav-link active" : "nav-link"}
+                className={preview ? "nav-link active" : "nav-link"}
                 style={{ cursor: "pointer" }}
-                onClick={displayPreview}
+                onClick={() => void displayPreview()}
               >
                 Preview
               </a>
             </li>
           </ul>
-          {!preview.value &&
+          {!preview &&
             (
               <textarea
                 ref={textarea}
-                class="form-control mt-3"
+                className="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}
-                value={text.value}
-                autofocus
-                onInput={(e) => text.value = e.currentTarget.value}
+                value={form.data.source}
+                autoFocus
+                onInput={(e) => form.setData("source", e.currentTarget.value)}
                 placeholder="Write with Markdown"
               >
               </textarea>
             )}
-          {preview.value &&
+          {preview &&
             (
               <div
-                class="markdown-body"
+                className="markdown-body"
                 dangerouslySetInnerHTML={{
-                  __html: sanitizedHtml.value,
+                  __html: sanitizedHtml,
                 }}
               >
               </div>
             )}
         </div>
-        <div class="card-footer text-end bg-transparent">
+        <div className="card-footer text-end bg-transparent">
           <input
-            class="form-check-input align-middle"
+            className="form-check-input align-middle"
             style={{ marginRight: "5px", marginTop: "0px" }}
             type="checkbox"
-            checked={draft.value}
+            checked={form.data.draft}
             id="flexCheckDefault"
-            onChange={(e) => {
-              draft.value = !draft.value;
-            }}
+            onChange={(e) => form.setData("draft", e.currentTarget.checked)}
           />
           <label
-            class="form-check-label"
-            for="flexCheckDefault"
+            className="form-check-label"
+            htmlFor="flexCheckDefault"
             style={{ marginRight: "10px" }}
           >
             Private
           </label>
           <button
-            class="btn btn-primary"
-            onClick={post}
-            disabled={loading.value || text.value.length === 0}
+            ref={submitButton}
+            className="btn btn-primary"
+            type="submit"
+            disabled={form.pending || form.data.source.length === 0}
           >
-            {loading.value &&
+            {form.pending &&
               (
                 <span
-                  class="spinner-border spinner-border-sm me-2"
+                  className="spinner-border spinner-border-sm me-2"
                   role="status"
                   aria-hidden="true"
                 >
@@ -159,6 +159,6 @@ export default function Post() {
           </button>
         </div>
       </div>
-    </>
+    </Form>
   );
 }

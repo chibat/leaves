@@ -1,7 +1,7 @@
 import Users from '~/components/Users.tsx';
-import { useState, useEffect } from "preact/hooks";
-import { trpc } from "~/client/trpc.ts";
-import { User } from "~/server/trpc/procedures/getFollowerUsers.ts";
+import { useState, useEffect } from "react";
+import { api } from "~/client/api.ts";
+import type { User } from "~/common/types.ts";
 
 export default function FollowingUsersModal(props: { userId: number, setModal: (modal: boolean) => void }) {
 
@@ -14,32 +14,32 @@ export default function FollowingUsersModal(props: { userId: number, setModal: (
 
   useEffect(() => {
     setLoading(true);
-    trpc.getFollowingUsers.query({ userId: props.userId }).then(results => {
+    api.getFollowingUsers({ userId: props.userId }).then(results => {
       setLoading(false);
       setUsers(results);
     });
   }, []);
 
   return (
-    <div class="d-block modal" tabIndex={-1}>
-      <div class="modal-dialog" style={{ boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)" }}>
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Following</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeModal}></button>
+    <div className="d-block modal" tabIndex={-1}>
+      <div className="modal-dialog" style={{ boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 15%)" }}>
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Following</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeModal}></button>
           </div>
-          <div class="modal-body">
+          <div className="modal-body">
             {loading &&
-              <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                  <span class="visually-hidden">Loading...</span>
+              <div className="d-flex justify-content-center">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
             }
             <Users users={users} />
           </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" onClick={closeModal}>Close</button>
+          <div className="modal-footer">
+            <button className="btn btn-secondary" onClick={closeModal}>Close</button>
           </div>
         </div>
       </div></div>

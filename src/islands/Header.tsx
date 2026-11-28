@@ -1,4 +1,5 @@
-import { useEffect } from "preact/hooks";
+import { useEffect } from "react";
+import { Link, useRouter } from "@void/react";
 import { shortcut } from "~/client/shortcut.ts";
 import { DEFAULT_AVATOR } from "~/common/constants.ts";
 
@@ -13,13 +14,18 @@ export default function Header(
     authUrl?: string;
   },
 ) {
+  const router = useRouter();
+  const profilePath = props.user
+    ? `/users/${props.user.account ?? props.user.id}`
+    : undefined;
+
   useEffect(() => {
-    shortcut();
-  }, []);
+    return shortcut((path) => void router.visit(path), profilePath);
+  }, [profilePath, router]);
 
   return (
     <nav
-      class="navbar navbar-expand-lg mb-3"
+      className="navbar navbar-expand-lg mb-3"
       style={{
         backgroundColor: "#ffffff",
         borderBottomStyle: "solid",
@@ -27,16 +33,16 @@ export default function Header(
         borderBottomColor: "var(--bs-border-color-translucent)",
       }}
     >
-      <div class="container-fluid">
+      <div className="container-fluid">
         <img
           src="/assets/img/icon-192x192.png"
           width="39"
-          class="me-2"
+          className="me-2"
           alt="Leaves"
         />
-        <a class="navbar-brand" href="/">Leaves</a>
+        <Link className="navbar-brand" href="/">Leaves</Link>
         <button
-          class="navbar-toggler"
+          className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -44,29 +50,29 @@ export default function Header(
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link noDecoration" href="/">Home</a>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link className="nav-link noDecoration" href="/">Home</Link>
             </li>
             {props.user &&
               (
-                <li class="nav-item">
-                  <a class="nav-link noDecoration" href="/following">
+                <li className="nav-item">
+                  <Link className="nav-link noDecoration" href="/following">
                     Following
-                  </a>
+                  </Link>
                 </li>
               )}
             <li>
-              <a class="nav-link noDecoration" href="/about">About</a>
+              <Link className="nav-link noDecoration" href="/about">About</Link>
             </li>
           </ul>
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a
-                class="noDecoration nav-link"
+          <ul className="navbar-nav mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link
+                className="noDecoration nav-link"
                 href="/search"
                 title="Search"
                 aria-label="Search"
@@ -76,18 +82,18 @@ export default function Header(
                   width="20"
                   height="20"
                   fill="currentColor"
-                  class="bi bi-search"
+                  className="bi bi-search"
                   viewBox="0 0 16 16"
                   aria-hidden="true"
                 >
                   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                 </svg>
-                <span class="d-lg-none ms-2">Search</span>
-              </a>
+                <span className="d-lg-none ms-2">Search</span>
+              </Link>
             </li>
-            <li class="nav-item">
-              <a
-                class="noDecoration nav-link"
+            <li className="nav-item">
+              <Link
+                className="noDecoration nav-link"
                 href="/shortcuts"
                 title="Keyboard Shortcuts"
                 aria-label="Keyboard Shortcuts"
@@ -99,12 +105,12 @@ export default function Header(
                   height="20"
                 >
                 </img>
-                <span class="d-lg-none ms-2">Keyboard Shortcuts</span>
-              </a>
+                <span className="d-lg-none ms-2">Keyboard Shortcuts</span>
+              </Link>
             </li>
-            <li class="nav-item">
-              <a
-                class="noDecoration nav-link"
+            <li className="nav-item">
+              <Link
+                className="noDecoration nav-link"
                 href="/posts/new"
                 title="New Post"
                 aria-label="New Post"
@@ -114,21 +120,21 @@ export default function Header(
                   width="20"
                   height="20"
                   fill="currentColor"
-                  class="bi bi-file-earmark-plus-fill"
+                  className="bi bi-file-earmark-plus-fill"
                   viewBox="0 0 16 16"
                   aria-hidden="true"
                 >
                   <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0z" />
                 </svg>
-                <span class="d-lg-none ms-2">New Post</span>
-              </a>
+                <span className="d-lg-none ms-2">New Post</span>
+              </Link>
             </li>
             {props.user &&
               (
                 <>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link noDecoration"
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link noDecoration"
                       href="/notification"
                       title="Notification"
                       aria-label="Notification"
@@ -139,7 +145,7 @@ export default function Header(
                             alt=""
                             src="/assets/img/bell.png"
                             width="20px"
-                            class="me-2 me-lg-3"
+                            className="me-2 me-lg-3"
                           />
                         )}
                       {props.user.notification &&
@@ -148,15 +154,15 @@ export default function Header(
                             alt=""
                             src="/assets/img/bell2.png"
                             width="20px"
-                            class="me-2 me-lg-3"
+                            className="me-2 me-lg-3"
                           />
                         )}
-                      <span class="d-lg-none">Notification</span>
-                    </a>
+                      <span className="d-lg-none">Notification</span>
+                    </Link>
                   </li>
-                  <li class="nav-item dropdown">
+                  <li className="nav-item dropdown">
                     <a
-                      class="nav-link dropdown-toggle"
+                      className="nav-link dropdown-toggle"
                       href="#"
                       id="navbarDropdown"
                       role="button"
@@ -168,17 +174,17 @@ export default function Header(
                         alt="mdo"
                         width="32"
                         height="32"
-                        class="rounded-circle"
-                        referrerpolicy="no-referrer"
+                        className="rounded-circle"
+                        referrerPolicy="no-referrer"
                       />
                     </a>
                     <ul
-                      class="dropdown-menu dropdown-menu-end"
+                      className="dropdown-menu dropdown-menu-end"
                       aria-labelledby="navbarDropdown"
                     >
                       <li>
-                        <a
-                          class="dropdown-item"
+                        <Link
+                          className="dropdown-item"
                           href={`/users/${props.user.account ?? props.user.id}`}
                         >
                           <svg
@@ -186,52 +192,52 @@ export default function Header(
                             width="16"
                             height="16"
                             fill="currentColor"
-                            class="bi bi-person-fill me-2"
+                            className="bi bi-person-fill me-2"
                             viewBox="0 0 16 16"
                           >
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                           </svg>
                           Profile
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a class="dropdown-item" href="/likes">
+                        <Link className="dropdown-item" href="/likes">
                           <img
                             src="/assets/img/heart-fill.svg"
                             alt="Edit"
                             width="16"
                             height="16"
-                            class="me-2"
+                            className="me-2"
                           >
                           </img>
                           Likes
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a class="dropdown-item" href="/settings">
+                        <Link className="dropdown-item" href="/settings">
                           <img
                             src="/assets/img/gear-fill.svg"
                             alt="Settings"
                             width="16"
                             height="16"
-                            class="me-2"
+                            className="me-2"
                           />
                           Settings
-                        </a>
+                        </Link>
                       </li>
                       <li>
                       </li>
                       <li>
-                        <hr class="dropdown-divider" />
+                        <hr className="dropdown-divider" />
                       </li>
                       <li>
-                        <a class="dropdown-item" href="/signout">
+                        <a className="dropdown-item" href="/signout">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
                             height="16"
                             fill="currentColor"
-                            class="bi bi-door-closed-fill me-2"
+                            className="bi bi-door-closed-fill me-2"
                             viewBox="0 0 16 16"
                           >
                             <path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
@@ -245,8 +251,8 @@ export default function Header(
               )}
             {!props.user &&
               (
-                <li class="nav-item">
-                  <a class="nav-link noDecoration" href={props.authUrl}>
+                <li className="nav-item">
+                  <a className="nav-link noDecoration" href={props.authUrl}>
                     Sign in
                   </a>
                 </li>

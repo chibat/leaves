@@ -1,39 +1,58 @@
-import { useEffect } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import Posts from "~/components/Posts.tsx";
 
 import { PAGE_ROWS } from "~/common/constants.ts";
-import { useSignal } from "@preact/signals";
-import { trpc } from "~/client/trpc.ts";
-import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
+import { api } from "~/client/api.ts";
+import type { GetPostsOutput } from "~/common/types.ts";
 
 export default function AllPosts(
   props: { loginUserId?: number; initialPosts?: GetPostsOutput[] },
 ) {
-
-  const posts = useSignal<GetPostsOutput[]>(props.initialPosts ?? []);
-  const requesting = useSignal<boolean>(false);
-  const spinning = useSignal<boolean>(props.initialPosts === undefined);
-  const allLoaded = useSignal(
+  const [posts, setPosts] = useState<GetPostsOutput[]>(
+    props.initialPosts ?? [],
+  );
+  const [spinning, setSpinning] = useState(props.initialPosts === undefined);
+  const postsRef = useRef(posts);
+  const requesting = useRef(false);
+  const allLoaded = useRef(
     props.initialPosts !== undefined && props.initialPosts.length < PAGE_ROWS,
   );
 
+  function removePost(postId: number) {
+    const nextPosts = postsRef.current.filter((post) => post.id !== postId);
+    postsRef.current = nextPosts;
+    setPosts(nextPosts);
+  }
+
   useEffect(() => {
-    const io = new IntersectionObserver(entries => {
-      if (!requesting.value && entries[0].intersectionRatio !== 0 && !allLoaded.value) {
-        const postId = posts.value.length === 0 ? null : posts.value[posts.value.length - 1].id;
-        requesting.value = true;
-        spinning.value = true;
-        trpc.getPosts.query({ postId }).then(results => {
+    const io = new IntersectionObserver((entries) => {
+      if (
+        requesting.current || allLoaded.current ||
+        entries[0].intersectionRatio === 0
+      ) {
+        return;
+      }
+      requesting.current = true;
+      setSpinning(true);
+      void (async () => {
+        try {
+          const lastPost = postsRef.current.at(-1);
+          const results = await api.getPosts({
+            postId: lastPost?.id ?? null,
+          });
           if (results.length > 0) {
-            posts.value = posts.value.concat(results);
+            const nextPosts = postsRef.current.concat(results);
+            postsRef.current = nextPosts;
+            setPosts(nextPosts);
           }
           if (results.length < PAGE_ROWS) {
-            allLoaded.value = true;
+            allLoaded.current = true;
           }
-          requesting.value = false;
-          spinning.value = false;
-        });
-      }
+        } finally {
+          requesting.current = false;
+          setSpinning(false);
+        }
+      })();
     });
     const bottom = document.getElementById("bottom");
     if (bottom) {
@@ -48,13 +67,17 @@ export default function AllPosts(
 
   return (
     <div>
-      <Posts posts={posts} userId={props.loginUserId} />
+      <Posts
+        posts={posts}
+        userId={props.loginUserId}
+        onPostDeleted={removePost}
+      />
       <br />
       <br />
-      {spinning.value &&
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+      {spinning &&
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       }

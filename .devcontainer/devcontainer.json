@@ -8,7 +8,7 @@
   ],
   "portsAttributes": {
     "8000": {
-      "label": "Astro dev server",
+      "label": "Void dev server",
       "onAutoForward": "notify"
     }
   },
@@ -20,7 +20,7 @@
       "settings": {},
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
-        "astro-build.astro-vscode"
+        "dsznajder.es7-react-js-snippets"
       ]
     }
   }

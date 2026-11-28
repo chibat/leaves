@@ -2,7 +2,9 @@
 /node_modules/
 /dist/
 /cli-package/cli.js
-/.astro/
+/.void/
+/.void-wrangler.jsonc
+/.cloudflare/
 /.wrangler/
 /.dev.vars
 /static/build.txt

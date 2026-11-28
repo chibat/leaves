@@ -3,10 +3,10 @@ import { PAGE_ROWS } from "~/common/constants.ts";
 import FollowingUsersModal from "~/components/FollowingUsersModal.tsx";
 import FollowerUsersModal from "~/components/FollowerUsersModal.tsx";
 
-import { useEffect, useState } from "preact/hooks";
-import { useSignal } from "@preact/signals";
-import { trpc } from "~/client/trpc.ts";
-import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
+import { useEffect, useRef, useState } from "react";
+import { api } from "~/client/api.ts";
+import type { GetPostsOutput } from "~/common/types.ts";
+import { Link } from "@void/react";
 
 export default function UserPosts(
   props: {
@@ -17,13 +17,16 @@ export default function UserPosts(
 ) {
   const loginUserId = props.loginUserId;
   const userId = props.pageUserId;
-  const allLoaded = useSignal(
+  const [posts, setPosts] = useState<GetPostsOutput[]>(
+    props.initialPosts ?? [],
+  );
+  const [spinning, setSpinning] = useState(props.initialPosts === undefined);
+  const postsRef = useRef(posts);
+  const allLoaded = useRef(
     props.initialPosts !== undefined && props.initialPosts.length < PAGE_ROWS,
   );
 
-  const posts = useSignal<Array<GetPostsOutput>>(props.initialPosts ?? []);
-  const requesting = useSignal<boolean>(false);
-  const spinning = useSignal<boolean>(props.initialPosts === undefined);
+  const requesting = useRef(false);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
   const [following, setFollowing] = useState<string>("");
   const [followers, setFollowers] = useState<string>("");
@@ -31,32 +34,52 @@ export default function UserPosts(
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
 
+  function removePost(postId: number) {
+    const nextPosts = postsRef.current.filter((post) => post.id !== postId);
+    postsRef.current = nextPosts;
+    setPosts(nextPosts);
+  }
+
   useEffect(() => {
-    trpc.getFollowInfo.query({ userId }).then((result) => {
+    const initialPosts = props.initialPosts ?? [];
+    postsRef.current = initialPosts;
+    setPosts(initialPosts);
+    setSpinning(props.initialPosts === undefined);
+    allLoaded.current = props.initialPosts !== undefined &&
+      props.initialPosts.length < PAGE_ROWS;
+    requesting.current = false;
+    setFollowing("");
+    setFollowers("");
+    setIsFollowing(undefined);
+
+    api.getFollowInfo({ userId }).then((result) => {
       setFollowing(result.following);
       setFollowers(result.followers);
       setIsFollowing(result.isFollowing);
     });
+  }, [props.initialPosts, userId]);
 
+  useEffect(() => {
     const io = new IntersectionObserver((entries) => {
       if (
-        !allLoaded.value && !requesting.value &&
+        !allLoaded.current && !requesting.current &&
         entries[0].intersectionRatio !== 0
       ) {
-        const postId = posts.value.length === 0
-          ? null
-          : posts.value[posts.value.length - 1].id;
-        requesting.value = true;
-        spinning.value = true;
-        trpc.getPosts.query({ postId, userId }).then((results) => {
+        const postId = postsRef.current.at(-1)?.id ?? null;
+        requesting.current = true;
+        setSpinning(true);
+        api.getPosts({ postId, userId }).then((results) => {
           if (results.length > 0) {
-            posts.value = posts.value.concat(results);
+            const nextPosts = postsRef.current.concat(results);
+            postsRef.current = nextPosts;
+            setPosts(nextPosts);
           }
           if (results.length < PAGE_ROWS) {
-            allLoaded.value = true;
+            allLoaded.current = true;
           }
-          requesting.value = false;
-          spinning.value = false;
+        }).finally(() => {
+          requesting.current = false;
+          setSpinning(false);
         });
       }
     });
@@ -69,11 +92,11 @@ export default function UserPosts(
         io.unobserve(bottom);
       }
     };
-  }, []);
+  }, [userId]);
 
   async function follow() {
     setFollowLoading(true);
-    await trpc.createFollow.mutate({ followingUserId: props.pageUserId });
+    await api.createFollow({ followingUserId: props.pageUserId });
     setFollowers((Number(followers) + 1).toString());
     setIsFollowing(!isFollowing);
     setFollowLoading(false);
@@ -81,7 +104,7 @@ export default function UserPosts(
 
   async function unfollow() {
     setFollowLoading(true);
-    await trpc.deleteFollow.mutate({ followingUserId: props.pageUserId });
+    await api.deleteFollow({ followingUserId: props.pageUserId });
     const _followers = Number(followers) - 1;
     setFollowers((_followers < 0 ? 0 : _followers).toString());
     setIsFollowing(!isFollowing);
@@ -104,7 +127,7 @@ export default function UserPosts(
             {isFollowing === false &&
               (
                 <button
-                  class="btn btn-secondary me-2 mb-2"
+                  className="btn btn-secondary me-2 mb-2"
                   onClick={follow}
                   style={{ width: "150px" }}
                   disabled={followLoading}
@@ -112,10 +135,10 @@ export default function UserPosts(
                   {followLoading &&
                     (
                       <div
-                        class="spinner-border spinner-border-sm me-2"
+                        className="spinner-border spinner-border-sm me-2"
                         role="status"
                       >
-                        <span class="visually-hidden">Loading...</span>
+                        <span className="visually-hidden">Loading...</span>
                       </div>
                     )}
                   Follow
@@ -126,7 +149,7 @@ export default function UserPosts(
                 <>
                   Following
                   <button
-                    class="btn btn-danger ms-2 me-2 mb-2"
+                    className="btn btn-danger ms-2 me-2 mb-2"
                     onClick={unfollow}
                     style={{ width: "150px" }}
                     disabled={followLoading}
@@ -134,10 +157,10 @@ export default function UserPosts(
                     {followLoading &&
                       (
                         <div
-                          class="spinner-border spinner-border-sm me-2"
+                          className="spinner-border spinner-border-sm me-2"
                           role="status"
                         >
-                          <span class="visually-hidden">Loading...</span>
+                          <span className="visually-hidden">Loading...</span>
                         </div>
                       )}
                     Unfollow
@@ -146,11 +169,11 @@ export default function UserPosts(
               )}
           </>
         )}
-      <div class="mb-3">
+      <div className="mb-3">
         {following &&
-          (following === "0" ? <span class="me-3">0 Following</span> : (
+          (following === "0" ? <span className="me-3">0 Following</span> : (
             <a
-              class="noDecoration me-3"
+              className="noDecoration me-3"
               onClick={displayFollowingUsers}
               style={{ cursor: "pointer" }}
             >
@@ -158,9 +181,9 @@ export default function UserPosts(
             </a>
           ))}
         {followers &&
-          (followers === "0" ? <span class="me-3">0 Followers</span> : (
+          (followers === "0" ? <span className="me-3">0 Followers</span> : (
             <a
-              class="noDecoration me-3"
+              className="noDecoration me-3"
               onClick={displayFollowerUsers}
               style={{ cursor: "pointer" }}
             >
@@ -168,20 +191,24 @@ export default function UserPosts(
             </a>
           ))}
         {(loginUserId && props.pageUserId === loginUserId) &&
-          <a class="noDecoration" href="/likes">Likes</a>}
+          <Link className="noDecoration" href="/likes">Likes</Link>}
       </div>
       {followingModal &&
         <FollowingUsersModal userId={userId} setModal={setFollowingModal} />}
       {followerModal &&
         <FollowerUsersModal userId={userId} setModal={setFollowerModal} />}
-      <Posts posts={posts} userId={loginUserId} />
+      <Posts
+        posts={posts}
+        userId={loginUserId}
+        onPostDeleted={removePost}
+      />
       <br />
       <br />
-      {spinning.value &&
+      {spinning &&
         (
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
             </div>
           </div>
         )}
