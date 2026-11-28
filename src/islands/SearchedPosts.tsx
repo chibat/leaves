@@ -24,6 +24,12 @@ export default function SearchedPosts(
     props.initialPosts !== undefined && props.initialPosts.length < PAGE_ROWS,
   );
 
+  function removePost(postId: number) {
+    const nextPosts = postsRef.current.filter((post) => post.id !== postId);
+    postsRef.current = nextPosts;
+    setPosts(nextPosts);
+  }
+
   useEffect(() => {
     const initialPosts = props.initialPosts ?? [];
     postsRef.current = initialPosts;
@@ -84,7 +90,11 @@ export default function SearchedPosts(
   return (
     <div>
       {notFound && <span>Not Found</span>}
-      <Posts posts={posts} userId={props.loginUserId} />
+      <Posts
+        posts={posts}
+        userId={props.loginUserId}
+        onPostDeleted={removePost}
+      />
       <br />
       <br />
       {spinning &&

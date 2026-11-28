@@ -17,6 +17,12 @@ export default function FollowingPosts(
   );
   const requesting = useRef(false);
 
+  function removePost(postId: number) {
+    const nextPosts = postsRef.current.filter((post) => post.id !== postId);
+    postsRef.current = nextPosts;
+    setPosts(nextPosts);
+  }
+
   useEffect(() => {
     const io = new IntersectionObserver((entries) => {
       if (
@@ -62,7 +68,11 @@ export default function FollowingPosts(
   return (
     <div>
       <h1>Following</h1>
-      <Posts posts={posts} userId={props.loginUserId} />
+      <Posts
+        posts={posts}
+        userId={props.loginUserId}
+        onPostDeleted={removePost}
+      />
       <br />
       <br />
       {spinning &&

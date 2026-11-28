@@ -25,7 +25,7 @@ export default function Search({
             className="form-control"
             type="text"
             name="value"
-            value={searchWord}
+            defaultValue={searchWord}
             placeholder="Input search words"
             autoFocus={!searchWord}
           />

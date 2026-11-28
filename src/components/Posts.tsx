@@ -8,6 +8,7 @@ import type { GetPostsOutput } from "~/common/types.ts";
 type Props = {
   posts: GetPostsOutput[];
   userId?: number;
+  onPostDeleted: (postId: number) => void;
 };
 
 export default function Posts(props: Props) {
@@ -85,7 +86,12 @@ export default function Posts(props: Props) {
   return (
     <>
       {props.posts.map((post) =>
-        <Post key={post.id} post={post} userId={props.userId} />
+        <Post
+          key={post.id}
+          post={post}
+          userId={props.userId}
+          onPostDeleted={props.onPostDeleted}
+        />
       )}
     </>
   );

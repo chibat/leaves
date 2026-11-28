@@ -18,6 +18,12 @@ export default function AllPosts(
     props.initialPosts !== undefined && props.initialPosts.length < PAGE_ROWS,
   );
 
+  function removePost(postId: number) {
+    const nextPosts = postsRef.current.filter((post) => post.id !== postId);
+    postsRef.current = nextPosts;
+    setPosts(nextPosts);
+  }
+
   useEffect(() => {
     const io = new IntersectionObserver((entries) => {
       if (
@@ -61,7 +67,11 @@ export default function AllPosts(
 
   return (
     <div>
-      <Posts posts={posts} userId={props.loginUserId} />
+      <Posts
+        posts={posts}
+        userId={props.loginUserId}
+        onPostDeleted={removePost}
+      />
       <br />
       <br />
       {spinning &&

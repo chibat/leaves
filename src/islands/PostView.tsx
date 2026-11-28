@@ -6,6 +6,7 @@ import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import { render } from "~/server/markdown.ts";
 import { api } from "~/client/api.ts";
 import { useRef } from "react";
+import { formatHydrationSafeDateTime } from "~/common/date_format.ts";
 import { Link, useRouter } from "@void/react";
 
 type Comments = Awaited<ReturnType<typeof api.getComments>>;
@@ -30,6 +31,10 @@ export default function PostView(
   const [message, setMessage] = useState("");
   const textarea = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
+  const [dateDisplay, setDateDisplay] = useState(() => ({
+    createdAt: formatHydrationSafeDateTime(new Date(post.created_at)),
+    updatedAt: formatHydrationSafeDateTime(new Date(post.updated_at)),
+  }));
 
   function displayEdit() {
     setPreview(false);
@@ -104,6 +109,13 @@ export default function PostView(
   }, []);
 
   useEffect(() => {
+    setDateDisplay({
+      createdAt: new Date(post.created_at).toLocaleString(),
+      updatedAt: new Date(post.updated_at).toLocaleString(),
+    });
+  }, [post.created_at, post.updated_at]);
+
+  useEffect(() => {
     setLikes(post.likes);
     (async () => {
       if (userId !== undefined) {
@@ -166,9 +178,6 @@ export default function PostView(
     };
   }, [preview]);
 
-  const createdAt = new Date(post.created_at).toLocaleString();
-  const updatedAt = new Date(post.updated_at).toLocaleString();
-
   function tweet() {
     const url = "https://twitter.com/intent/tweet?text=" +
       encodeURIComponent(props.postTitle + "\n" + location.href);
@@ -221,9 +230,9 @@ export default function PostView(
                   </Link>
                 </div>
                 <div
-                  title={`Created at: ${createdAt} , Updated at: ${updatedAt}`}
+                  title={`Created at: ${dateDisplay.createdAt} , Updated at: ${dateDisplay.updatedAt}`}
                 >
-                  {updatedAt}
+                  {dateDisplay.updatedAt}
                 </div>
               </div>
               <article className="card-body">

@@ -2,21 +2,43 @@ import { api } from "~/client/api.ts";
 import { useState } from "react";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
 import type { GetPostsOutput } from "~/common/types.ts";
+import {
+  formatHydrationSafeDate,
+  formatHydrationSafeDateTime,
+} from "~/common/date_format.ts";
 import { Link, useRouter } from "@void/react";
+import { useEffect } from "react";
 
-export default function Post(props: { post: GetPostsOutput; userId?: number }) {
+export default function Post(props: {
+  post: GetPostsOutput;
+  userId?: number;
+  onPostDeleted: (postId: number) => void;
+}) {
   const router = useRouter();
   const [post, setPost] = useState(props.post);
-  const now = new Date();
   const createdDate = new Date(post.created_at);
   const updatedDate = new Date(post.updated_at);
+  const [dateDisplay, setDateDisplay] = useState(() => ({
+    title:
+      `Created at: ${formatHydrationSafeDateTime(createdDate)} , Updated at: ${formatHydrationSafeDateTime(updatedDate)}`,
+    text: formatHydrationSafeDate(updatedDate),
+  }));
 
   const [modal, setModal] = useState<boolean>(false);
   const [selectedPostId, setSelectedPostId] = useState<number>();
 
+  useEffect(() => {
+    setDateDisplay({
+      title:
+        `Created at: ${createdDate.toLocaleString()} , Updated at: ${updatedDate.toLocaleString()}`,
+      text: formatDate(new Date(), updatedDate),
+    });
+  }, [post.created_at, post.updated_at]);
+
   async function deletePost(postId: number) {
     if (confirm("Delete the post?")) {
       await api.deletePost({ postId });
+      props.onPostDeleted(postId);
       await router.refresh({ preserveState: false });
     }
   }
@@ -64,9 +86,9 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
             <Link
               href={`/posts/${post.id}`}
               className="ms-2 noDecoration"
-              title={`Created at: ${createdDate.toLocaleString()} , Updated at: ${updatedDate.toLocaleString()}`}
+              title={dateDisplay.title}
             >
-              {formatDate(now, updatedDate)}
+              {dateDisplay.text}
             </Link>
           </div>
         </div>

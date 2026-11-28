@@ -34,6 +34,12 @@ export default function UserPosts(
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
 
+  function removePost(postId: number) {
+    const nextPosts = postsRef.current.filter((post) => post.id !== postId);
+    postsRef.current = nextPosts;
+    setPosts(nextPosts);
+  }
+
   useEffect(() => {
     const initialPosts = props.initialPosts ?? [];
     postsRef.current = initialPosts;
@@ -191,7 +197,11 @@ export default function UserPosts(
         <FollowingUsersModal userId={userId} setModal={setFollowingModal} />}
       {followerModal &&
         <FollowerUsersModal userId={userId} setModal={setFollowerModal} />}
-      <Posts posts={posts} userId={loginUserId} />
+      <Posts
+        posts={posts}
+        userId={loginUserId}
+        onPostDeleted={removePost}
+      />
       <br />
       <br />
       {spinning &&
