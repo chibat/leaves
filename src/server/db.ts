@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { PAGE_ROWS } from "~/common/constants.ts";
-import * as env from "~/server/env.ts";
+import { env } from "void/env";
 import { Database } from "~/server/database.types.ts";
 
 export type AppUser = Database["public"]["Tables"]["app_user"]["Row"];
@@ -27,15 +27,19 @@ export type UserViewType = {
   account: string | null;
 };
 
-const supabaseClientKey = Symbol("supabase-client");
+type SupabaseDatabaseClient = ReturnType<typeof createClient<Database>>;
+let supabaseClient: SupabaseDatabaseClient | undefined;
+
+function getSupabaseClient() {
+  return supabaseClient ??= createClient<Database>(
+    "https://" + env.SUPABASE_HOST,
+    env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+}
+
 const supabase = new Proxy({} as SupabaseClient<Database>, {
   get(_target, property) {
-    const client = env.getRequestValue(supabaseClientKey, () =>
-      createClient<Database>(
-        "https://" + env.get("SUPABASE_HOST"),
-        env.get("SUPABASE_SERVICE_ROLE_KEY"),
-      )
-    );
+    const client = getSupabaseClient();
     const value = Reflect.get(client, property, client);
     return typeof value === "function" ? value.bind(client) : value;
   },

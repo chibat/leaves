@@ -1,45 +1,57 @@
 import hljs from "highlight.js";
-
-import { useEffect } from "preact/hooks";
-import { Signal } from "@preact/signals-core";
+import { useEffect, useRef } from "react";
 import Mousetrap from "mousetrap";
-import { useSignal } from "@preact/signals";
-import { navigate } from "astro:transitions/client";
+import { useRouter } from "@void/react";
 import Post from "~/components/Post.tsx";
-import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
+import type { GetPostsOutput } from "~/common/types.ts";
 
 type Props = {
-  posts: Signal<GetPostsOutput[]>;
+  posts: GetPostsOutput[];
   userId?: number;
 };
 
 export default function Posts(props: Props) {
-  const selectedIndex = useSignal<number>(0);
+  const selectedIndex = useRef(0);
+  const postsRef = useRef(props.posts);
+  postsRef.current = props.posts;
+  const router = useRouter();
 
   useEffect(() => {
-    registerJumpElements(document.getElementsByClassName("postCard"));
+    const removeJumpListener = registerJumpElements(
+      document.getElementsByClassName("postCard"),
+    );
     Mousetrap.bind("o", () => {
-      void navigate(`/posts/${props.posts.value[selectedIndex.value].id}`);
+      const post = postsRef.current[selectedIndex.current];
+      if (post) void router.visit(`/posts/${post.id}`);
     });
     Mousetrap.bind("e", () => {
-      const post = props.posts.value[selectedIndex.value];
+      const post = postsRef.current[selectedIndex.current];
+      if (!post) return;
       if (props.userId === post.user_id) {
-        void navigate(`/posts/${post.id}/edit`);
+        void router.visit(`/posts/${post.id}/edit`);
       }
     });
+    return () => {
+      removeJumpListener();
+      Mousetrap.unbind("o");
+      Mousetrap.unbind("e");
+    };
   }, []);
 
   useEffect(() => {
     hljs.highlightAll();
   });
 
-  function registerJumpElements(elements: HTMLCollectionOf<Element>) {
+  function registerJumpElements(
+    elements: HTMLCollectionOf<Element>,
+  ): () => void {
     const KEYCODE_J = "j";
     const KEYCODE_K = "k";
 
     let currentIndex = -1;
 
     const scollElement = (event: KeyboardEvent) => {
+      if (elements.length === 0) return;
       if (event.key == ".") {
         currentIndex = -1;
       } else if (event.key != KEYCODE_J && event.key != KEYCODE_K) {
@@ -57,7 +69,7 @@ export default function Posts(props: Props) {
       // 要素が表示されるようにスクロール
       elements[nextIndex].scrollIntoView();
       currentIndex = nextIndex;
-      selectedIndex.value = currentIndex;
+      selectedIndex.current = currentIndex;
     };
 
     if (document.addEventListener) {
@@ -67,12 +79,13 @@ export default function Posts(props: Props) {
         false,
       );
     }
+    return () => document.removeEventListener("keydown", scollElement, false);
   }
 
   return (
     <>
-      {props.posts.value && props.posts.value.map((post) =>
-        <Post post={post} userId={props.userId} />
+      {props.posts.map((post) =>
+        <Post key={post.id} post={post} userId={props.userId} />
       )}
     </>
   );

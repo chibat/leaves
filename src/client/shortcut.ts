@@ -1,40 +1,53 @@
-import { trpc } from "./trpc.ts";
-import { bind } from "mousetrap";
-import { navigate } from "astro:transitions/client";
+import { bind, unbind } from "mousetrap";
 
-export function shortcut() {
+export function shortcut(
+  navigate: (path: string) => void,
+  profilePath?: string,
+): () => void {
   bind("/", () => {
-    void navigate("/search");
+    navigate("/search");
   });
   bind("n", () => {
-    void navigate("/posts/new");
+    navigate("/posts/new");
   });
   bind("?", () => {
-    void navigate("/shortcuts");
+    navigate("/shortcuts");
   });
   bind(".", () => {
     window.scroll({ top: 0, behavior: "smooth" });
   });
   bind("g a", () => {
-    void navigate("/about");
+    navigate("/about");
   });
   bind("g h", () => {
-    void navigate("/");
+    navigate("/");
   });
   bind("g n", () => {
-    void navigate("/notification");
+    navigate("/notification");
   });
   bind("g l", () => {
-    void navigate("/likes");
+    navigate("/likes");
   });
   bind("g f", () => {
-    void navigate("/following");
+    navigate("/following");
   });
-  bind("g p", () => {
-    trpc.getSession.query().then((session) => {
-      if (session?.user.id) {
-        void navigate(`/users/${session.user.account ?? session.user.id}`);
-      }
-    });
-  });
+  if (profilePath) bind("g p", () => navigate(profilePath));
+  return () => {
+    for (
+      const key of [
+        "/",
+        "n",
+        "?",
+        ".",
+        "g a",
+        "g h",
+        "g n",
+        "g l",
+        "g f",
+        "g p",
+      ]
+    ) {
+      unbind(key);
+    }
+  };
 }

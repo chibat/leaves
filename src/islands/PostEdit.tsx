@@ -1,30 +1,33 @@
-import { useSignal } from "@preact/signals";
 import hljs from "highlight.js";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import { PostViewType } from "~/server/db.ts";
-import { trpc } from "~/client/trpc.ts";
+import { api } from "~/client/api.ts";
 import Mousetrap from "mousetrap";
-import { createRef } from "preact";
+import { Form, useForm, useRouter } from "@void/react";
 
 export default function Edit(props: { post: PostViewType }) {
+  const router = useRouter();
   const postId = props.post.id;
 
-  const preview = useSignal(false);
-  const text = useSignal(props.post.source);
-  const draft = useSignal(props.post.draft);
-  const sanitizedHtml = useSignal("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const textarea = createRef();
+  const form = useForm(
+    "/posts/[postId]/edit?update",
+    { source: props.post.source, draft: props.post.draft },
+    { params: { postId: String(postId) } },
+  );
+  const [preview, setPreview] = useState(false);
+  const [sanitizedHtml, setSanitizedHtml] = useState("");
+  const textarea = useRef<HTMLTextAreaElement>(null);
+  const submitButton = useRef<HTMLButtonElement>(null);
 
   function displayEdit() {
-    preview.value = false;
+    setPreview(false);
   }
 
-  async function displayPreview() {
-    sanitizedHtml.value = await trpc.md2html.query({
-      source: text.value,
-    });
-    preview.value = true;
+  async function displayPreview(source = form.data.source) {
+    setSanitizedHtml(await api.md2html({
+      source,
+    }));
+    setPreview(true);
   }
 
   useEffect(() => {
@@ -35,10 +38,10 @@ export default function Edit(props: { post: PostViewType }) {
     if (textarea.current) {
       textarea.current.focus();
     }
-  }, textarea.current);
+  }, []);
 
   useEffect(() => {
-    if (preview.value) {
+    if (preview) {
       Mousetrap.bind(
         "mod+p",
         () => {
@@ -47,116 +50,117 @@ export default function Edit(props: { post: PostViewType }) {
         },
       );
     } else {
-      Mousetrap(textarea.current).bind(
-        ["mod+enter", "mod+s"],
-        () => {
-          save();
-          return false;
-        },
-      );
-      Mousetrap(textarea.current).bind(
-        "mod+p",
-        () => {
-          displayPreview();
-          return false;
-        },
-      );
+      if (textarea.current) {
+        Mousetrap(textarea.current).bind(
+          ["mod+enter", "mod+s"],
+          () => {
+            save();
+            return false;
+          },
+        );
+        Mousetrap(textarea.current).bind(
+          "mod+p",
+          () => {
+            displayPreview(textarea.current?.value ?? "");
+            return false;
+          },
+        );
+      }
     }
-  }, [preview.value]);
+    return () => {
+      Mousetrap.unbind("mod+p");
+      if (textarea.current) {
+        const editorKeys = Mousetrap(textarea.current);
+        editorKeys.unbind("mod+enter");
+        editorKeys.unbind("mod+s");
+        editorKeys.unbind("mod+p");
+      }
+    };
+  }, [preview]);
 
-  async function save() {
-    setLoading(true);
-    await trpc.updatePost.mutate({
-      postId: postId,
-      source: text.value,
-      draft: draft.value,
-    });
-    setLoading(false);
-    location.href = `/posts/${postId}?updated`;
+  function save() {
+    submitButton.current?.click();
   }
 
   return (
-    <>
-      <head>
-        <title>Edit - Leaves</title>
-      </head>
-      <div class="card mb-3">
-        <div class="card-body">
-          <ul class="nav nav-tabs" style={{ marginBottom: "20px" }}>
-            <li class="nav-item">
+    <Form form={form}>
+      <div className="card mb-3">
+        <div className="card-body">
+          <ul className="nav nav-tabs" style={{ marginBottom: "20px" }}>
+            <li className="nav-item">
               <a
-                class={!preview.value ? "nav-link active" : "nav-link"}
+                className={!preview ? "nav-link active" : "nav-link"}
                 onClick={displayEdit}
               >
                 Edit
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class={preview.value ? "nav-link active" : "nav-link"}
-                onClick={displayPreview}
+                className={preview ? "nav-link active" : "nav-link"}
+                onClick={() => void displayPreview()}
               >
                 Preview
               </a>
             </li>
           </ul>
-          {!preview.value &&
+          {!preview &&
             (
               <textarea
                 ref={textarea}
-                class="form-control mt-3"
+                className="form-control mt-3"
                 style={{ height: "500px" }}
                 maxLength={10000}
-                value={text.value}
-                autofocus
-                onInput={(e) => text.value = e.currentTarget.value}
+                value={form.data.source}
+                autoFocus
+                onInput={(e) => form.setData("source", e.currentTarget.value)}
               >
               </textarea>
             )}
-          {preview.value &&
+          {preview &&
             (
               <div
-                class="markdown-body"
+                className="markdown-body"
                 dangerouslySetInnerHTML={{
-                  __html: sanitizedHtml.value,
+                  __html: sanitizedHtml,
                 }}
               >
               </div>
             )}
         </div>
-        <div class="card-footer text-end bg-transparent">
+        <div className="card-footer text-end bg-transparent">
           <input
-            class="form-check-input align-middle"
+            className="form-check-input align-middle"
             style={{ marginRight: "5px", marginTop: "0px" }}
             type="checkbox"
-            checked={draft.value}
+            checked={form.data.draft}
             id="flexCheckDefault"
-            onChange={(e) => {
-              draft.value = !draft.value;
-            }}
+            onChange={(e) => form.setData("draft", e.currentTarget.checked)}
           />
           <label
-            class="form-check-label"
-            for="flexCheckDefault"
+            className="form-check-label"
+            htmlFor="flexCheckDefault"
             style={{ marginRight: "10px" }}
           >
             Private
           </label>
           <button
-            class="btn btn-light me-2"
-            onClick={() => location.href = `/posts/${postId}`}
+            className="btn btn-light me-2"
+            type="button"
+            onClick={() => void router.visit(`/posts/${postId}`)}
           >
             Cancel
           </button>
           <button
-            class="btn btn-primary"
-            onClick={save}
-            disabled={loading || text.value.length === 0}
+            ref={submitButton}
+            className="btn btn-primary"
+            type="submit"
+            disabled={form.pending || form.data.source.length === 0}
           >
-            {loading &&
+            {form.pending &&
               (
                 <span
-                  class="spinner-border spinner-border-sm me-2"
+                  className="spinner-border spinner-border-sm me-2"
                   role="status"
                   aria-hidden="true"
                 >
@@ -166,6 +170,6 @@ export default function Edit(props: { post: PostViewType }) {
           </button>
         </div>
       </div>
-    </>
+    </Form>
   );
 }

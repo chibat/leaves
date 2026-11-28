@@ -1,22 +1,23 @@
-import { trpc } from "~/client/trpc.ts";
-import { useState } from "preact/hooks";
-import { useSignal } from "@preact/signals";
+import { api } from "~/client/api.ts";
+import { useState } from "react";
 import { LikeUsersModal } from "~/components/LikeUsersModal.tsx";
-import { GetPostsOutput } from "~/server/trpc/procedures/getPosts.ts";
+import type { GetPostsOutput } from "~/common/types.ts";
+import { Link, useRouter } from "@void/react";
 
 export default function Post(props: { post: GetPostsOutput; userId?: number }) {
-  const post = useSignal(props.post);
+  const router = useRouter();
+  const [post, setPost] = useState(props.post);
   const now = new Date();
-  const createdDate = new Date(post.value.created_at);
-  const updatedDate = new Date(post.value.updated_at);
+  const createdDate = new Date(post.created_at);
+  const updatedDate = new Date(post.updated_at);
 
   const [modal, setModal] = useState<boolean>(false);
   const [selectedPostId, setSelectedPostId] = useState<number>();
 
   async function deletePost(postId: number) {
     if (confirm("Delete the post?")) {
-      await trpc.deletePost.mutate({ postId });
-      location.reload();
+      await api.deletePost({ postId });
+      await router.refresh({ preserveState: false });
     }
   }
 
@@ -25,13 +26,13 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
       location.href = "/auth";
       return;
     }
-    await trpc.createLike.mutate({ postId: post.value.id });
-    post.value = { ...post.value, liked: true, likes: post.value.likes + 1 };
+    await api.createLike({ postId: post.id });
+    setPost((current) => ({ ...current, liked: true, likes: current.likes + 1 }));
   }
 
   async function cancelLike() {
-    await trpc.cancelLike.mutate({ postId: post.value.id });
-    post.value = { ...post.value, liked: false, likes: post.value.likes - 1 };
+    await api.cancelLike({ postId: post.id });
+    setPost((current) => ({ ...current, liked: false, likes: current.likes - 1 }));
   }
 
   function openModal(postId: number) {
@@ -41,66 +42,72 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
 
   return (
     <>
-      <div class="card mb-3 postCard" key={post.value.id}>
-        <div class="card-header bg-transparent d-flex justify-content-between">
+      <div className="card mb-3 postCard" key={post.id}>
+        <div className="card-header bg-transparent d-flex justify-content-between">
           <div>
             <img
-              src={post.value.picture!}
+              src={post.picture!}
               alt="mdo"
               width="32"
               height="32"
-              class="rounded-circle"
-              referrerpolicy="no-referrer"
+              className="rounded-circle"
+              referrerPolicy="no-referrer"
             />
-            <a
-              href={`/users/${post.value.account ?? post.value.user_id}`}
-              class="ms-2 noDecoration"
+            <Link
+              href={`/users/${post.account ?? post.user_id}`}
+              className="ms-2 noDecoration"
             >
-              {post.value.name}
-            </a>
+              {post.name}
+            </Link>
           </div>
           <div>
-            <a
-              href={`/posts/${post.value.id}`}
-              class="ms-2 noDecoration"
+            <Link
+              href={`/posts/${post.id}`}
+              className="ms-2 noDecoration"
               title={`Created at: ${createdDate.toLocaleString()} , Updated at: ${updatedDate.toLocaleString()}`}
             >
               {formatDate(now, updatedDate)}
-            </a>
+            </Link>
           </div>
         </div>
-        <div class="card-body">
-          {post.value.draft &&
+        <div className="card-body">
+          {post.draft &&
             (
-              <span class="badge bg-danger mb-2">
+              <span className="badge bg-danger mb-2">
                 🔒 PRIVATE
               </span>
             )}
           <div
-            class="markdown-body"
+            className="markdown-body"
             dangerouslySetInnerHTML={{
-              __html: post.value.source,
+              __html: post.source,
             }}
           >
           </div>
-          <div class="d-flex justify-content-between">
+          <div className="d-flex justify-content-between">
             <div>
-              <a
-                class="btn btn-outline-secondary btn-sm"
-                href={props.userId
-                  ? `/posts/${post.value.id}#comment`
-                  : "/auth"}
-              >
-                Comment
-              </a>
-              {BigInt(post.value.comments) > 0 &&
-                (
-                  <a class="ms-2 noDecoration" href={`/posts/${post.value.id}`}>
-                    {post.value.comments}{" "}
-                    Comment{post.value.comments === 1 ? "" : "s"}
+              {props.userId
+                ? (
+                  <Link
+                    className="btn btn-outline-secondary btn-sm"
+                    href={`/posts/${post.id}#comment`}
+                  >
+                    Comment
+                  </Link>
+                )
+                : (
+                  <a className="btn btn-outline-secondary btn-sm" href="/auth">
+                    Comment
                   </a>
                 )}
-              {props.userId && post.value.liked &&
+              {BigInt(post.comments) > 0 &&
+                (
+                  <Link className="ms-2 noDecoration" href={`/posts/${post.id}`}>
+                    {post.comments}{" "}
+                    Comment{post.comments === 1 ? "" : "s"}
+                  </Link>
+                )}
+              {props.userId && post.liked &&
                 (
                   <img
                     src="/assets/img/heart-fill.svg"
@@ -108,11 +115,11 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
                     width="20"
                     height="20"
                     onClick={() => cancelLike()}
-                    class="ms-3"
+                    className="ms-3"
                     style={{ cursor: "pointer" }}
                   />
                 )}
-              {!post.value.liked &&
+              {!post.liked &&
                 (
                   <img
                     src="/assets/img/heart.svg"
@@ -120,29 +127,29 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
                     width="20"
                     height="20"
                     onClick={() => like()}
-                    class="ms-3"
+                    className="ms-3"
                     style={{ cursor: "pointer" }}
                   />
                 )}
-              {BigInt(post.value.likes) > 0n &&
+              {BigInt(post.likes) > 0n &&
                 (
                   <span
-                    class="noDecoration ms-2"
-                    onClick={() => openModal(post.value.id)}
+                    className="noDecoration ms-2"
+                    onClick={() => openModal(post.id)}
                     style={{ cursor: "pointer" }}
                   >
-                    {post.value.likes} Like{post.value.likes === 1 ? "" : "s"}
+                    {post.likes} Like{post.likes === 1 ? "" : "s"}
                   </span>
                 )}
             </div>
-            {props.userId === post.value.user_id &&
+            {props.userId === post.user_id &&
               (
                 <div>
                   <a
                     href={void (0)}
-                    class="me-2"
+                    className="me-2"
                     style={{ cursor: "pointer" }}
-                    onClick={() => deletePost(post.value.id)}
+                    onClick={() => deletePost(post.id)}
                   >
                     <img
                       src="/assets/img/trash-fill.svg"
@@ -152,7 +159,7 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
                     >
                     </img>
                   </a>
-                  <a href={`/posts/${post.value.id}/edit`}>
+                  <Link href={`/posts/${post.id}/edit`}>
                     <img
                       src="/assets/img/pencil-fill.svg"
                       alt="Edit"
@@ -160,7 +167,7 @@ export default function Post(props: { post: GetPostsOutput; userId?: number }) {
                       height="20"
                     >
                     </img>
-                  </a>
+                  </Link>
                 </div>
               )}
           </div>
