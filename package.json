@@ -24,7 +24,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sanitize-html": "^2.8.1",
-    "zod": "^3.20.2"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/marked": "^4.3.2",
